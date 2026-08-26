@@ -1,0 +1,19 @@
+# ---- Video: 206MB across 13 clips ----
+# These belong on Cloudflare R2, the way the portfolio serves its reels from
+# video.jkmry.com. GitHub Pages is a poor place to serve 206MB of mp4 and the
+# repo should not carry it either. Masters stay in this folder locally.
+assets/*.mp4
+
+# ---- Client review artifacts ----
+# 70MB of before/after screenshots, generated for review rather than shipped.
+comparison/
+
+# ---- Build artifact ----
+# The single-file share bundle: every page, video and font base64'd into one
+# 20MB html. Regenerated on demand, never edited by hand.
+big-apple-greeter-SHARE.html
+
+# ---- OS noise ----
+.DS_Store
+Thumbs.db
+desktop.ini

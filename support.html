@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support Us - Big Apple Greeter</title>
+  <meta name="description" content="Every greet is free for visitors, but not free to run. Why give, ways to give, and the Big Apple CORE monthly giving community.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --red:#de5447;
+      --red-bright:#c23a2d;
+      --ink:#292929;
+      --ink-soft:#464646;
+      --muted:#b1b1b1;
+      --line:#e6e6e6;
+      --panel:#fafafa;
+      --bg:#ffffff;
+      --maxw:1120px;
+      --radius:2px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    @media (prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      *,*::before,*::after{animation:none!important;transition:none!important}
+    }
+    body{
+      font-family:'Inclusive Sans',Arial,sans-serif;
+      color:var(--ink);
+      background:var(--bg);
+      font-size:17px;
+      font-weight:420;
+      line-height:1.62;
+      -webkit-font-smoothing:antialiased;
+    }
+    img{max-width:100%;display:block}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{letter-spacing:-.015em}
+    h5{letter-spacing:.14em}
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+    .btn{
+      display:inline-block;
+      background:var(--red);
+      color:#fff;
+      font-weight:600;
+      font-size:.95rem;
+      letter-spacing:.02em;
+      padding:14px 30px;
+      border-radius:var(--radius);
+      white-space:nowrap;
+      transition:background .2s ease;
+    }
+    .btn:hover{background:var(--red-bright)}
+    .btn-outline{
+      background:transparent;
+      color:var(--red);
+      border:2px solid var(--red);
+    }
+    .btn-outline:hover{background:var(--red);color:#fff}
+
+    /* ---------- Header / Nav (matches index.html) ---------- */
+    header{
+      position:sticky;top:0;z-index:2000;
+      background:rgba(255,255,255,.97);
+      border-bottom:1px solid var(--line);
+      backdrop-filter:saturate(180%) blur(6px);
+    }
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;
+      height:84px;
+    }
+    .logo{flex:0 0 auto}
+    /* logo-nav.mp4 is the reel cropped to the lockup band, so it sizes naturally */
+    .logo-video{height:70px;width:auto;display:block;mix-blend-mode:multiply}
+    .logo-svg{height:46px;width:auto;display:none}
+    @media (prefers-reduced-motion:reduce){
+      .logo-video{display:none}
+      .logo-svg{display:block}
+    }
+    .logo-svg text{font-family:'Libre Franklin',Arial,sans-serif;fill:#000}
+    .lg-name{font-size:236px;font-weight:700}
+    .lg-tag{font-size:115px;font-weight:400;font-style:italic}
+    .menu{display:flex;align-items:center;gap:6px;list-style:none;margin-left:auto}
+    .menu>li{position:relative}
+    .menu>li>a,.menu>li>span{
+      display:block;padding:12px 13px;font-weight:500;font-size:.95rem;cursor:pointer;
+      white-space:nowrap;
+    }
+    .menu>li>a:hover,.menu>li>span:hover{color:var(--red)}
+    .menu>li>a.is-here{color:var(--red);font-weight:600}
+    .dropdown{
+      position:absolute;top:100%;left:0;min-width:220px;
+      background:#fff;border:1px solid var(--line);border-radius:4px;
+      box-shadow:0 12px 30px rgba(0,0,0,.08);
+      padding:8px 0;opacity:0;visibility:hidden;transform:translateY(6px);
+      transition:all .18s ease;list-style:none;
+    }
+    .menu>li:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+    .dropdown li a{display:block;padding:10px 20px;font-size:.9rem}
+    .dropdown li a:hover{background:#f6f6f6;color:var(--red)}
+    .nav-actions{display:flex;align-items:center;gap:6px;margin-left:8px}
+    .nav-actions .btn{padding:12px 20px;font-size:.9rem}
+    .nav-social{display:flex;align-items:center;gap:4px;margin-left:6px}
+    .nav-social a{
+      width:34px;height:34px;display:grid;place-items:center;border-radius:50%;
+      color:var(--ink);transition:color .2s,background .2s;
+    }
+    .nav-social a:hover{color:var(--red);background:#f4f4f4}
+    .nav-social svg{width:18px;height:18px;fill:currentColor;display:block}
+    /* Designer credit: pinned to the page's right edge, clear of the nav */
+    .credit-link{
+      position:absolute;right:0;top:50%;transform:translateY(-50%);
+      background:#0039a6;color:#fff;
+      padding:6px 10px;border-radius:2px 0 0 2px;
+      font-size:.6rem;font-weight:700;letter-spacing:.1em;
+      white-space:nowrap;transition:background .2s;
+    }
+    .credit-link:hover{background:#00287a}
+    @media (max-width:1260px){ .credit-link{display:none} }
+    .hamburger{display:none;background:none;border:0;font-size:1.6rem;cursor:pointer;color:var(--ink)}
+
+    /* ---------- Wide container, shared with the other hubs ---------- */
+    .wide{max-width:1800px;margin:0 auto;padding:0 clamp(24px,4vw,64px)}
+
+    /* ---------- Hero: full-screen support reel, same player as the
+       visitors/volunteers pages (pitch overlay = paused state) ---------- */
+    .sup-hero{
+      position:relative;overflow:hidden;
+      min-height:calc(100vh - 84px);
+      min-height:calc(100svh - 84px);
+      display:flex;align-items:center;justify-content:center;
+      background:#fff;
+    }
+    .hero-video{
+      width:100%;height:100%;
+      position:absolute;inset:0;
+      object-fit:contain;display:block;
+    }
+    /* Overlay spans the reel's displayed 16:9 frame; pitch sits bottom-left */
+    .hero-overlay{
+      position:absolute;inset:0;z-index:2;cursor:pointer;
+      margin:0 auto;
+      width:min(100%, calc((100vh - 84px) * 1.7778));
+      width:min(100%, calc((100svh - 84px) * 1.7778));
+      display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;
+      padding:0 6.8% 104px; /* left edge matches the poster's baked-in title */
+      text-align:left;
+      transition:opacity .45s ease,visibility .45s ease;
+    }
+    .sup-hero.is-watching .hero-overlay{opacity:0;visibility:hidden;pointer-events:none}
+    .eyebrow{
+      font-size:.8rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--red-bright);margin-bottom:12px;
+    }
+    .hero-overlay .intro{
+      color:var(--ink-soft);max-width:52ch;font-size:1.08rem;
+    }
+    .hero-cta{display:flex;gap:14px;justify-content:flex-start;flex-wrap:wrap;margin-top:28px}
+    .hero-cta .btn{font-size:1.05rem;padding:17px 44px}
+    .hero-cta .btn-outline{font-size:1.05rem;padding:15px 36px}
+    .btn-watch{
+      display:inline-flex;align-items:center;gap:11px;
+      background:transparent;color:var(--red);border:2px solid var(--red);
+      font:inherit;font-weight:600;font-size:1.05rem;letter-spacing:.02em;
+      padding:15px 36px;border-radius:var(--radius);cursor:pointer;
+      white-space:nowrap;
+      transition:background .2s,color .2s;
+    }
+    .btn-watch::before{
+      content:"";display:block;
+      border-left:12px solid currentColor;
+      border-top:8px solid transparent;border-bottom:8px solid transparent;
+    }
+    .btn-watch:hover{background:var(--red);color:#fff}
+    .hero-controls{position:absolute;right:20px;bottom:20px;z-index:3;display:flex;gap:8px}
+    .hero-btn{
+      width:40px;height:40px;border-radius:50%;cursor:pointer;
+      border:1px solid rgba(0,0,0,.15);background:rgba(255,255,255,.85);
+      color:var(--ink);font-size:.75rem;line-height:1;
+      display:grid;place-items:center;transition:background .2s,transform .2s;
+      backdrop-filter:blur(4px);
+    }
+    .hero-btn:hover{background:#fff;transform:scale(1.06)}
+    /* ---------- Why we greet: Lester's story ---------- */
+    .story-quote{padding:84px 24px 80px;text-align:center}
+    .sq-eyebrow{
+      font-size:.8rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--red-bright);margin-bottom:20px;
+    }
+    .sq-body{
+      max-width:64ch;margin:0 auto;
+      font-size:1.12rem;line-height:1.8;color:var(--ink-soft);
+    }
+    .sq-final{
+      display:block;margin-top:24px;
+      font-size:clamp(1.3rem,2.6vw,1.7rem);font-weight:700;line-height:1.4;
+      color:var(--ink);letter-spacing:-.01em;
+    }
+    .sq-cite{
+      display:block;margin-top:18px;
+      font-size:.78rem;font-weight:600;font-style:normal;
+      letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);
+    }
+    .scroll-cue{
+      position:absolute;left:50%;bottom:26px;z-index:3;
+      width:26px;height:26px;margin-left:-13px;
+      border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);
+      transform:rotate(45deg);opacity:.45;
+      animation:cue 1.8s ease-in-out infinite;
+    }
+    .scroll-cue:hover{opacity:.8}
+    @keyframes cue{
+      0%,100%{transform:rotate(45deg) translate(0,0);opacity:.4}
+      50%{transform:rotate(45deg) translate(5px,5px);opacity:.75}
+    }
+    @media (prefers-reduced-motion:reduce){ .scroll-cue{animation:none} }
+    .sup-hero + .wide{padding-top:76px}
+
+    /* ---------- Groups & rows (same ledger as the other hubs) ---------- */
+    .group{margin-bottom:84px;scroll-margin-top:110px}
+    .group-head{
+      display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+      border-bottom:2px solid var(--ink);padding-bottom:14px;
+    }
+    .group-head h2{
+      font-size:.82rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+      line-height:1.3;
+    }
+    .group-head a{font-size:.85rem;font-weight:600;color:var(--red);white-space:nowrap}
+    .group-head a:hover{color:var(--red-bright)}
+    .rows{list-style:none}
+    .rows>li{
+      display:grid;grid-template-columns:minmax(200px,340px) minmax(0,1fr);
+      gap:clamp(24px,4vw,72px);
+      padding:26px 0;border-bottom:1px solid var(--line);
+    }
+    .rows b{display:block;font-size:1.1rem;font-weight:700;letter-spacing:-.01em;line-height:1.35}
+    .rows p{color:var(--ink-soft);font-size:.95rem;max-width:80ch}
+    .rows p a{color:var(--red);font-weight:600}
+    .rows p a:hover{color:var(--red-bright)}
+    @media (max-width:760px){
+      .rows>li{grid-template-columns:1fr;gap:8px}
+    }
+
+    /* ---------- Tax note band ---------- */
+    .tax-band{
+      background:var(--panel);
+      border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+      padding:56px 24px;text-align:center;margin-bottom:84px;
+    }
+    .tax-band p{color:var(--ink-soft);max-width:72ch;margin:0 auto;font-size:.92rem}
+
+    /* ---------- Closing CTA ---------- */
+    .story-cta{text-align:center;padding:8px 24px 110px}
+    .story-cta h2{font-size:clamp(1.9rem,3.4vw,2.7rem);font-weight:800;margin-bottom:14px}
+    .story-cta p{color:var(--ink-soft);max-width:56ch;margin:0 auto 30px}
+    .story-cta .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+    .story-cta .btn{font-size:1.05rem;padding:17px 44px}
+    .story-cta .btn-outline{font-size:1.05rem;padding:15px 36px}
+
+    /* ---------- Scroll fade-in, same cascade as the homepage ---------- */
+    .reveal{opacity:0;transition:opacity .9s ease;transition-delay:var(--fade-delay,0s)}
+    .reveal.in{opacity:1}
+    @media (prefers-reduced-motion:reduce){
+      .reveal{opacity:1 !important;transition:none}
+    }
+
+    /* ---------- Footer (matches index.html) ---------- */
+    footer{background:var(--ink);color:#cfcfcf;padding:72px 0 40px;font-size:.9rem}
+    .foot-top{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:40px;margin-bottom:50px}
+    .foot-brand img{height:70px;margin-bottom:18px;filter:brightness(0) invert(1);opacity:.9}
+    footer h5{color:#fff;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px;font-weight:600}
+    footer ul{list-style:none}
+    footer ul li{margin-bottom:10px}
+    footer ul li a:hover{color:#fff}
+    .foot-bottom{margin-top:4px;padding-top:24px;border-top:1px solid #3a3a3a;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:.8rem}
+    .foot-bottom a{text-decoration:underline}
+
+    /* ---------- Responsive nav (collapse matches the homepage) ---------- */
+    @media (max-width:1080px){
+      .menu{
+        position:fixed;inset:84px 0 auto 0;flex-direction:column;background:#fff;
+        border-bottom:1px solid var(--line);padding:10px 0;gap:0;margin:0;
+        display:none;box-shadow:0 20px 30px rgba(0,0,0,.08);
+      }
+      .menu.open{display:flex}
+      .menu>li{width:100%}
+      .dropdown{position:static;opacity:1;visibility:visible;transform:none;box-shadow:none;border:0;padding:0 0 8px 16px}
+      .menu>li:not(:hover) .dropdown{opacity:1;visibility:visible}
+      .hamburger{display:block}
+      .nav-actions{margin-left:auto;margin-right:4px}
+      .nav-actions .btn-outline,.nav-actions .nav-social{display:none}
+      .nav-actions .btn{padding:11px 20px;font-size:.88rem}
+    }
+    @media (max-width:900px){
+      .foot-top{grid-template-columns:1fr 1fr}
+      .foot-brand{grid-column:1/-1}
+    }
+    @media (max-width:560px){
+      .logo-video{height:54px}
+      .logo-svg{height:38px}
+      .foot-top{grid-template-columns:1fr}
+    }
+  
+    /* Inclusive Sans maxes out at weight 700; a hairline stroke adds
+       the missing step so titles hold their display weight */
+    h1,h2,h3,.headline{-webkit-text-stroke:.5px currentColor}
+  </style>
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header>
+    <nav class="wrap nav">
+      <a class="logo" href="index.html" aria-label="Big Apple Greeter home">
+        <video class="logo-video" src="assets/logo-nav.mp4" autoplay muted playsinline aria-hidden="true"></video>
+        <svg class="logo-svg" viewBox="0 0 2693.39 624.82" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Big Apple Greeter — A Welcoming Friend in New York City">
+          <text class="lg-name" x="553.78" y="326.31" textLength="2068" lengthAdjust="spacing">Big Apple Greeter</text>
+          <text class="lg-tag" x="595.64" y="521.7" textLength="1990" lengthAdjust="spacing">A Welcoming Friend in New York City</text>
+          <g>
+            <path fill="#d1483d" d="M344.52,405.78c3.95,3.69,3.85,9.81.78,14.2-2.59,3.7-10.17,6.45-14.48,2.78l-15.51-13.19-9.31,9.91,13.82,12.74c3.85,3.55,3.89,10.14,1.54,13.81-3.13,4.89-10.89,7.17-15.65,2.98-7.5-6.6-17.17-13.55-22.72-21.71-5.92-8.71-11.02-15.52-21.22-17.85.9-7.69-.42-16.77-5.43-22.29-5.03-5.55-12.23-8.34-20.72-9.07-1.4-14.19-12.52-24.69-26.95-24.01-.38-12.69-9.14-21.37-19.18-23.84-13.15-3.24-22.01,4.56-30.27,13.66-8.12,8.95-15.42,17.42-12.15,30.27,2.72,10.66,12.27,19.5,25.98,19.12.99,14.34,11.91,24.97,26.87,24.25.4,14.24,11.48,24.67,26.44,24.56,1.1,8.99,5.36,17,12.29,20.8,17.52,9.6,30.17-.08,42.35-17.2l12.11,11.31c8.15,7.61,18.45,10.56,29,5.94,9.04-3.96,15.21-12.99,14.9-24.52,14.34-1.04,24.95-11.77,24.22-26.8,15.01-.53,24.59-12.13,24.48-26.56,9.33-1.17,18.84-6.18,22.42-15.01,4.1-10.11,2.59-21.01-5.91-28.77l-90.42-82.59c-8.04-7.34-22.93-7.08-30.41.16-19.96,19.32-33.16,42.9-44.63,29.47-4.68-5.48-2.52-11.78,2.17-17.32,23.19-27.38,45.2-54.58,71.12-79.42,38.36-36.76,90.02-49,131.35-11.41,25.13,22.85,35.75,51.83,36.01,86.01.44,58.33-4.7,116.02-23.74,171.29-8.66,25.15-18.6,47.81-33.5,69.16-25.79,36.95-69.52,50.58-112.17,34.36-22.8-11.17-47.21-10.07-68.38,5.78-32.77,11.72-71.26,1.16-94.27-25.36-14.13-16.29-26.39-32.75-36.54-51.84-35.44-66.69-64.9-166.61-43.74-239.63,12.86-44.38,57.26-71.05,102.03-65.82,15.92,1.86,28.89,8.65,40.2,19.26l48.72,45.66-30.56,36.69c-8.72,10.47-6.46,25.86,3.53,34.4s25.32,8.02,34.96-2.44l25.41-27.57c4.34-4.7,11.82-2.54,16.04,1.34l89.25,81.97c4.15,3.81.62,13.29-2.73,15.36-4.42,2.74-11.06,2.19-15.24-1.65l-11.3-10.42-9.89,9.68,12.99,12.16c4.35,4.08,4.21,11.23.52,15.45-3.65,4.18-10.88,4.81-15.25.93l-14.07-12.5-9.17,10.26,13.99,13.05Z"/>
+            <path fill="#d1483d" d="M179.16,376.06c-4.05,4.62-11.57,3.6-15.24.48-3.59-3.05-5.15-11.27-1.68-15.02l13.34-14.43c3.71-4.01,10.35-4.51,14.82-1.54,3.57,2.37,6.27,10.57,2.91,14.4l-14.15,16.11Z"/>
+            <path fill="#d1483d" d="M233.69,424.03c-4.63,5.08-11.78,4.96-16.03,1.45-4.49-3.71-5.02-11.64-.94-16.06l12.36-13.4c4.47-4.85,12.33-4.42,16.42.15,4.44,4.97,3.02,11.61-1.36,16.41l-10.45,11.46Z"/>
+            <path fill="#d1483d" d="M206.41,400.08c-4.4,4.79-11.58,4.02-15.35.86-4.99-4.19-5.58-11.52-.81-16.44l14.24-14.68c3.58-3.69,12.74-.8,14.96,2.7,3,4.71,2.24,10.92-1.73,15.24l-11.31,12.34Z"/>
+            <path fill="#d1483d" d="M268.45,431.26c2.71,9.25-9.39,21.68-17.73,21.41-3.89-.12-8.94-4.16-9.84-8.15-2.12-9.4,10.41-20.68,16.29-21.06,5.14-.33,10.08,3.73,11.27,7.8Z"/>
+            <path fill="#6baa64" d="M161.18,35.76c4.72,6.25,11.84,10.02,19.84,12.76,21.45,7.29,45.93,16.23,63.24,30.36,22.12,21.37,30.81,47.83,32.84,78.15l51.89-51.11,10.39,9.28-34.58,34.21c-10.56,10.44-18.35,22.49-26.59,34.79-5.59,8.32-9.9,16.94-14.66,26.34-4.76-7.54-11.26-13.71-18.76-19.13l-33.13-24.19c-19.3-14.08-34.87-30.44-45.8-51.85-7.04-13.83-10.73-28.91-12.96-44.19-1.74-12.13.33-24.19,3.48-35.37h4.76l.04-.04ZM258.54,181.2c6.13-22.24,4.35-45.18-6.25-65.19-15.99-30.11-50.73-48.12-83.78-55.7-3.93,15.12,3.98,33.63,11.68,47.09,6.25,10.89,13.54,20.5,21.37,30.32,15.86,17.27,36.32,30.65,56.99,43.53v-.04Z"/>
+          </g>
+        </svg>
+      </a>
+
+      <ul class="menu" id="menu">
+        <li>
+          <a href="visitors.html">Visitors</a>
+        </li>
+        <li>
+          <a href="volunteers.html">Volunteers</a>
+        </li>
+        <li>
+          <a href="about.html">About Us</a>
+        </li>
+        <li>
+          <a class="is-here" href="support.html">Support Us</a>
+        </li>
+      </ul>
+
+      <div class="nav-actions">
+        <a class="btn btn-outline" href="register.html">Request a Greeter</a>
+        <a class="btn" href="https://bigapplegreeter.kindful.com" target="_blank" rel="noopener">Donate</a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Open menu">&#9776;</button>
+    </nav>
+    <a class="credit-link" href="https://jkmry.com" target="_blank" rel="noopener">JKMRY.COM</a>
+  </header>
+
+  <!-- ============ HERO: THE ASK, AS A REEL (pitch overlay = paused state) ============ -->
+  <section class="sup-hero">
+    <video class="hero-video" id="supVideo" src="assets/subway.mp4" playsinline preload="metadata"
+           poster="assets/subway-poster.jpg"
+           aria-label="Big Apple Greeter support reel"></video>
+
+    <div class="hero-overlay" id="supOverlay">
+      <p class="eyebrow">Support Us</p>
+      <div class="hero-cta">
+        <a class="btn" href="https://bigapplegreeter.kindful.com" target="_blank" rel="noopener">Donate Now</a>
+        <a class="btn btn-outline" href="#monthly">Make It Monthly</a>
+        <button class="btn-watch" id="watchBtn" type="button">Watch the Reel</button>
+      </div>
+      <a class="scroll-cue" href="#why" aria-label="Scroll to why give"></a>
+    </div>
+
+    <div class="hero-controls">
+      <button class="hero-btn" id="heroSound" aria-label="Mute video" title="Mute video">&#128266;</button>
+      <button class="hero-btn" id="heroToggle" aria-label="Play video" title="Play video">&#9654;</button>
+    </div>
+  </section>
+
+  <!-- ============ WHY WE GREET: LESTER'S STORY ============ -->
+  <section class="story-quote">
+    <div class="wrap">
+      <p class="sq-eyebrow">Why We Greet &middot; Lester Barnett</p>
+      <blockquote class="sq-body">
+        He recalled a couple who wanted to have a glass of wine at each of a series of New York bars. &ldquo;They wanted a rich bar, they wanted a poor bar, they wanted an Irish bar,&rdquo; he said. Toward the end of the night, the woman went to the ladies&rsquo; room and her husband told Barnett that she had a terminal illness. &ldquo;All she wanted to do was go to New York and toast each other all over the city,&rdquo; Barnett said.
+        <span class="sq-final">&ldquo;That&rsquo;s why I&rsquo;m a Greeter. You enter people&rsquo;s lives in a way that is astounding.&rdquo;</span>
+        <cite class="sq-cite">As published in The New Yorker</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <div class="wide">
+
+    <!-- ============ WHY GIVE ============ -->
+    <div class="group" id="why">
+      <div class="group-head">
+        <h2>Why Give</h2>
+      </div>
+      <ul class="rows">
+        <li><b>Small nonprofit, worldwide impact</b><p>Big Apple Greeter has been welcoming the world since 1992: over 150,000 visitors, guided by New Yorkers through the neighborhoods of all five boroughs. A gift here is an investment in the city&rsquo;s economy, its communities, and its people.</p></li>
+        <li><b>Tourism, spread wider</b><p>Your gift promotes tourism across the whole city and sends visitors beyond the postcard stops, into lesser-known neighborhoods that are every bit as compelling.</p></li>
+        <li><b>First days, made easy</b><p>Donations put Greeters beside first-time visitors: orienting them, decoding the subway, sharing favorite corners, and turning day one in New York into a good story instead of a hard one.</p></li>
+        <li><b>A friendlier New York, worldwide</b><p>Every greet helps position New York City as a friendly, inviting, and manageable place to visit, and that reputation travels home with every guest.</p></li>
+        <li><b>Civic pride, activated</b><p>Your support creates volunteer opportunities for New Yorkers to do what they already do naturally: show off where they live.</p></li>
+      </ul>
+    </div>
+
+    <!-- ============ WAYS TO GIVE ============ -->
+    <div class="group" id="ways">
+      <div class="group-head">
+        <h2>Ways to Give</h2>
+        <a href="https://bigapplegreeter.kindful.com" target="_blank" rel="noopener">Donate now &rarr;</a>
+      </div>
+      <ul class="rows">
+        <li><b>Give online</b><p>The fastest way: a secure gift through our donation page at <a href="https://bigapplegreeter.kindful.com" target="_blank" rel="noopener">bigapplegreeter.kindful.com</a>.</p></li>
+        <li><b>Make it monthly</b><p>Join the <a href="#monthly">Big Apple CORE</a>, our monthly giving community. Steady support, lower costs, more of every dollar to the mission.</p></li>
+        <li><b>By check</b><p>Payable to Big Apple Greeter, mailed to One Centre Street, New York, NY 10007.</p></li>
+        <li><b>In your will</b><p>Put us in your will and welcome visitors for generations. Details on <a href="https://www.bigapplegreeter.org/inheritance-giving" target="_blank" rel="noopener">planned giving</a>.</p></li>
+        <li><b>Everything else</b><p>Corporate sponsorships, workplace giving and matching gifts, in-kind support, or stock transfers: contact Alicia Pierro at <a href="tel:+12126692364">212-669-2364</a> or <a href="mailto:apierro@bigapplegreeter.org">apierro@bigapplegreeter.org</a>.</p></li>
+      </ul>
+    </div>
+
+    <!-- ============ MONTHLY GIVING ============ -->
+    <div class="group" id="monthly">
+      <div class="group-head">
+        <h2>Monthly Giving &middot; The Big Apple CORE</h2>
+        <a href="https://bigapplegreeter.kindful.com" target="_blank" rel="noopener">Join the CORE &rarr;</a>
+      </div>
+      <ul class="rows">
+        <li><b>What it is</b><p>A very special community of New Yorkers and friends of New York whose steady monthly gifts keep the welcome running all year long.</p></li>
+        <li><b>What you get</b><p>A Certificate of Appreciation, a spot in our Meet Our CORE Members gallery, and your own volunteer concierge: Cheryl Fleisher, at <a href="mailto:cfleisher@bigapplegreeter.org">cfleisher@bigapplegreeter.org</a> or <a href="tel:+12126697583">212-669-7583</a>.</p></li>
+        <li><b>What we get</b><p>Predictable support with lower administrative costs, which means more of your gift goes straight to the mission.</p></li>
+        <li><b>On your terms</b><p>Choose the 1st or 15th of the month, adjust your amount or billing anytime through your own donor account, and cancel whenever you need to. Payments are encrypted and secure, and you&rsquo;ll get one tidy year-end tax receipt.</p></li>
+        <li><b>The company you&rsquo;d keep</b><p>CORE members like Jerry Rumain, Karen Tenser, Danielle LeCompte, and Allen Weingast are already holding the door open.</p></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ============ TAX NOTE ============ -->
+  <section class="tax-band">
+    <p>Big Apple Greeter is tax-exempt under section 501(c)(3) of the Internal Revenue Code. Donations to Big Apple Greeter are tax deductible to the extent allowed by law.</p>
+  </section>
+
+  <!-- ============ CLOSING CTA ============ -->
+  <section class="story-cta">
+    <h2>Keep the welcome free.</h2>
+    <p>Every greet costs a visitor nothing. Your gift is the reason it can stay that way.</p>
+    <div class="cta-row">
+      <a class="btn" href="https://bigapplegreeter.kindful.com" target="_blank" rel="noopener">Donate Now</a>
+      <a class="btn btn-outline" href="volunteers.html">Give Your Time Instead</a>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <img src="assets/iga-logo.png" alt="International Greeter Association">
+          <p>A free welcome-visitor service from NYC volunteers.</p>
+        </div>
+        <div>
+          <h5>Visitors</h5>
+          <ul>
+            <li><a href="register.html">Request a Greeter</a></li>
+            <li><a href="visitors.html#faqs">Visitor FAQs</a></li>
+            <li><a href="visitors.html#nyc">About NYC</a></li>
+            <li><a href="visitors.html#blog">Blog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Get Involved</h5>
+          <ul>
+            <li><a href="volunteers.html">Become a Greeter</a></li>
+            <li><a href="#">Volunteer FAQs</a></li>
+            <li><a href="support.html#why">Why Give</a></li>
+            <li><a href="support.html#ways">Ways to Give</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>About</h5>
+          <ul>
+            <li><a href="about.html#mission">Our Mission &amp; History</a></li>
+            <li><a href="about.html#board">Board of Directors</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="about.html#iga">International Greeter Association</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="foot-bottom">
+        <span>&copy; Big Apple Greeter. All rights reserved.</span>
+        <span><a href="#">Greeter Log-In</a> &nbsp;&middot;&nbsp; <a href="#">Visitor Log-In</a></span>
+      </div>
+    </div>
+  </footer>
+
+<script>
+  // Mobile menu toggle
+  document.getElementById('hamburger').addEventListener('click', function(){
+    document.getElementById('menu').classList.toggle('open');
+  });
+
+  // Scroll fade-in: hero cascades, groups fade in on scroll
+  (function(){
+    var heroItems = document.querySelectorAll('.hero-overlay .eyebrow, .hero-cta .btn, .hero-cta .btn-watch');
+    heroItems.forEach(function(el, i){
+      el.classList.add('reveal');
+      el.style.setProperty('--fade-delay', (i * 0.12) + 's');
+    });
+    document.querySelectorAll('.group, .story-quote, .tax-band, .story-cta').forEach(function(el){
+      el.classList.add('reveal');
+    });
+
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -8% 0px' });
+      document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+    } else {
+      document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+    }
+  })();
+</script>
+<script>
+  // ---- Support reel: same player as the visitors/volunteers heroes ----
+  // Watch button (or a click anywhere on the overlay) starts the reel with
+  // sound; the overlay fades out during playback and returns on pause/end.
+  (function(){
+    var hero = document.querySelector('.sup-hero');
+    var v = document.getElementById('supVideo');
+    var overlay = document.getElementById('supOverlay');
+    var watch = document.getElementById('watchBtn');
+    var ht = document.getElementById('heroToggle');
+    var hs = document.getElementById('heroSound');
+    if (!hero || !v || !overlay) return;
+
+    var syncPlay = function(){
+      var paused = v.paused;
+      hero.classList.toggle('is-watching', !paused);
+      ht.innerHTML = paused ? '&#9654;' : '&#10073;&#10073;';
+      var label = (paused ? 'Play' : 'Pause') + ' video';
+      ht.setAttribute('aria-label', label);
+      ht.setAttribute('title', label);
+    };
+    var syncSound = function(){
+      hs.innerHTML = v.muted ? '&#128263;' : '&#128266;';
+      var label = (v.muted ? 'Unmute' : 'Mute') + ' video';
+      hs.setAttribute('aria-label', label);
+      hs.setAttribute('title', label);
+    };
+
+    watch.addEventListener('click', function(){ v.play(); });
+    // The whole overlay starts the reel, but links and buttons keep their jobs
+    overlay.addEventListener('click', function(e){
+      if (e.target.closest('a,button')) return;
+      v.play();
+    });
+    ht.addEventListener('click', function(){
+      if (v.paused) { v.play(); } else { v.pause(); }
+    });
+    hs.addEventListener('click', function(){
+      v.muted = !v.muted;
+      syncSound();
+    });
+
+    // When the reel finishes, bring the pitch back with its full cascade
+    v.addEventListener('ended', function(){
+      var items = overlay.querySelectorAll('.reveal');
+      items.forEach(function(el){ el.classList.remove('in'); });
+      void overlay.offsetWidth;
+      items.forEach(function(el){ el.classList.add('in'); });
+    });
+
+    v.addEventListener('play', syncPlay);
+    v.addEventListener('pause', syncPlay);
+    v.addEventListener('ended', syncPlay);
+    v.addEventListener('volumechange', syncSound);
+    syncPlay(); syncSound();
+
+    // The reel "ends" at exactly 15s: stop there with the same mechanics as
+    // the other hero reels (pitch returns with its cascade), and rewind so
+    // the next play starts from the top. rAF, not timeupdate, so the cut
+    // lands frame-accurately instead of up to a quarter-second late.
+    var STOP_AT = 15;
+    var stopTick = function(){
+      if (!v.paused && v.currentTime >= STOP_AT) {
+        v.pause();
+        v.currentTime = 0;
+        var items = overlay.querySelectorAll('.reveal');
+        items.forEach(function(el){ el.classList.remove('in'); });
+        void overlay.offsetWidth;
+        items.forEach(function(el){ el.classList.add('in'); });
+      }
+      requestAnimationFrame(stopTick);
+    };
+    requestAnimationFrame(stopTick);
+  })();
+</script>
+<script>
+  // Nav logo: play one full cycle on load, then animate only while hovering the nav.
+  // No loop attribute, so every cycle parks on the last frame.
+  (function(){
+    var v = document.querySelector('.logo-video');
+    var bar = document.querySelector('header');
+    if (!v || !bar) return;
+    var over = false;
+    bar.addEventListener('mouseenter', function(){ over = true; if (v.ended) v.play(); });
+    bar.addEventListener('mouseleave', function(){ over = false; });
+    v.addEventListener('ended', function(){ if (over) v.play(); });
+  })();
+</script>
+</body>
+</html>

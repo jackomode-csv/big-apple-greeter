@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Request a Greeter - Big Apple Greeter</title>
+  <meta name="description" content="Request a free walk around New York City with a volunteer Greeter. Tell us your dates, interests, and language, and we'll match you with a local.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --red:#de5447;
+      --red-bright:#c23a2d;
+      --ink:#292929;
+      --ink-soft:#464646;
+      --muted:#b1b1b1;
+      --line:#e6e6e6;
+      --panel:#fafafa;
+      --green:#00933c;  /* 4·5·6 line green: arrival & success only */
+      --bg:#ffffff;
+      --maxw:1120px;
+      --radius:2px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    @media (prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      *,*::before,*::after{animation:none!important;transition:none!important}
+    }
+    body{
+      font-family:'Inclusive Sans',Arial,sans-serif;
+      color:var(--ink);
+      background:var(--bg);
+      font-size:17px;
+      font-weight:420;
+      line-height:1.62;
+      -webkit-font-smoothing:antialiased;
+    }
+    img{max-width:100%;display:block}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{letter-spacing:-.015em}
+    h5{letter-spacing:.14em}
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+    .btn{
+      display:inline-block;
+      background:var(--red);
+      color:#fff;
+      font-weight:600;
+      font-size:.95rem;
+      letter-spacing:.02em;
+      padding:14px 30px;
+      border-radius:var(--radius);
+      white-space:nowrap;
+      transition:background .2s ease;
+    }
+    .btn:hover{background:var(--red-bright)}
+    .btn-outline{
+      background:transparent;
+      color:var(--red);
+      border:2px solid var(--red);
+    }
+    .btn-outline:hover{background:var(--red);color:#fff}
+
+    /* ---------- Header / Nav (matches index.html) ---------- */
+    header{
+      position:sticky;top:0;z-index:2000;
+      background:rgba(255,255,255,.97);
+      border-bottom:1px solid var(--line);
+      backdrop-filter:saturate(180%) blur(6px);
+    }
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;
+      height:84px;
+    }
+    .logo{flex:0 0 auto}
+    /* Animated logo film in the nav; static SVG only for reduced motion */
+    /* logo-nav.mp4 is the reel cropped to the lockup band, so it sizes naturally */
+    .logo-video{height:70px;width:auto;display:block;mix-blend-mode:multiply}
+    .logo-svg{height:46px;width:auto;display:none}
+    @media (prefers-reduced-motion:reduce){
+      .logo-video{display:none}
+      .logo-svg{display:block}
+    }
+    .logo-svg text{font-family:'Libre Franklin',Arial,sans-serif;fill:#000}
+    .lg-name{font-size:236px;font-weight:700}
+    .lg-tag{font-size:115px;font-weight:400;font-style:italic}
+    .menu{display:flex;align-items:center;gap:6px;list-style:none;margin-left:auto}
+    .menu>li{position:relative}
+    .menu>li>a,.menu>li>span{
+      display:block;padding:12px 13px;font-weight:500;font-size:.95rem;cursor:pointer;
+      white-space:nowrap;
+    }
+    .menu>li>a:hover,.menu>li>span:hover{color:var(--red)}
+    .dropdown{
+      position:absolute;top:100%;left:0;min-width:220px;
+      background:#fff;border:1px solid var(--line);border-radius:4px;
+      box-shadow:0 12px 30px rgba(0,0,0,.08);
+      padding:8px 0;opacity:0;visibility:hidden;transform:translateY(6px);
+      transition:all .18s ease;list-style:none;
+    }
+    .menu>li:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+    .dropdown li a{display:block;padding:10px 20px;font-size:.9rem}
+    .dropdown li a:hover{background:#f6f6f6;color:var(--red)}
+    .nav-actions{display:flex;align-items:center;gap:6px;margin-left:8px}
+    .nav-actions .btn{padding:12px 20px;font-size:.9rem}
+    .nav-social{display:flex;align-items:center;gap:4px;margin-left:6px}
+    .nav-social a{
+      width:34px;height:34px;display:grid;place-items:center;border-radius:50%;
+      color:var(--ink);transition:color .2s,background .2s;
+    }
+    .nav-social a:hover{color:var(--red);background:#f4f4f4}
+    .nav-social svg{width:18px;height:18px;fill:currentColor;display:block}
+    /* Designer credit: pinned to the page's right edge, clear of the nav */
+    .credit-link{
+      position:absolute;right:0;top:50%;transform:translateY(-50%);
+      background:#0039a6;color:#fff;
+      padding:6px 10px;border-radius:2px 0 0 2px;
+      font-size:.6rem;font-weight:700;letter-spacing:.1em;
+      white-space:nowrap;transition:background .2s;
+    }
+    .credit-link:hover{background:#00287a}
+    @media (max-width:1260px){ .credit-link{display:none} }
+    .hamburger{display:none;background:none;border:0;font-size:1.6rem;cursor:pointer;color:var(--ink)}
+
+    /* ---------- Page head ---------- */
+    .shell{max-width:800px;margin:0 auto;padding:0 24px}
+    .page-head{padding:64px 24px 40px;text-align:center}
+    .eyebrow{
+      font-size:.8rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--red-bright);margin-bottom:12px;
+    }
+    .page-head h1{font-size:clamp(2rem,4.4vw,2.9rem);font-weight:800;line-height:1.12}
+    .page-head .intro{
+      color:var(--ink-soft);max-width:56ch;margin:16px auto 0;font-size:1.08rem;
+    }
+
+    /* ---------- Subway-line stepper: 7 stops on the route map ---------- */
+    .stepper{margin:0 0 14px;position:relative}
+    .stepper ol{
+      list-style:none;display:flex;justify-content:space-between;
+      position:relative;
+    }
+    .stepper ol::before{
+      content:"";position:absolute;top:13px;left:13px;right:13px;
+      height:6px;background:var(--line);border-radius:3px;
+    }
+    .stepper .track{
+      position:absolute;top:13px;left:13px;height:6px;
+      background:var(--red);border-radius:3px;width:0;
+      transition:width .45s cubic-bezier(.25,.75,.3,1);
+    }
+    /* the apple rides the line and sits centered on the current station */
+    .stepper .train{
+      position:absolute;top:13px;left:13px;z-index:2;
+      width:34px;height:41px;
+      margin:-20px 0 0 -17px;
+      transition:left .45s cubic-bezier(.25,.75,.3,1);
+      pointer-events:none;
+      filter:drop-shadow(0 3px 4px rgba(0,0,0,.25));
+    }
+    .stepper li{position:relative;z-index:1;text-align:center;flex:1;cursor:pointer}
+    .stepper .dot{
+      width:26px;height:26px;border-radius:50%;
+      background:var(--bg);border:3px solid var(--line);
+      margin:0 auto;display:grid;place-items:center;
+      font-size:11px;font-weight:700;color:var(--ink-soft);
+      transition:border-color .25s,background .25s,color .25s;
+    }
+    .stepper li.done .dot{background:var(--green);border-color:var(--green);color:#fff}
+    .stepper li.current .dot{
+      border-color:var(--red);color:var(--red);
+      animation:arrive 1.6s ease-in-out infinite;
+    }
+    @keyframes arrive{
+      0%,100%{box-shadow:0 0 0 0 rgba(180,0,0,.35)}
+      50%{box-shadow:0 0 0 8px rgba(180,0,0,0)}
+    }
+    .stepper .lbl{
+      display:block;margin-top:8px;
+      font-size:10px;text-transform:uppercase;letter-spacing:.12em;
+      color:var(--ink-soft);font-weight:600;
+    }
+    .stepper li.current .lbl{color:var(--red);font-weight:700}
+    .conductor{
+      display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      margin:0 0 36px;
+      font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+      color:var(--ink-soft);
+    }
+    .conductor b{color:var(--red-bright);font-weight:700}
+    @media (max-width:640px){
+      .stepper .lbl{display:none}
+      .stepper li.current .lbl{display:block;position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap}
+      .stepper{margin-bottom:46px}
+    }
+
+    /* ---------- Station signage: vintage enamel transit sign ----------
+       White painted caps on black, framed like the old IRT entrance signs.
+       Franklin is compressed with scaleX to fake the condensed lettering;
+       no glow or texture, so contrast stays crisp. */
+    .station{
+      display:flex;align-items:center;gap:14px;
+      background:#131316;
+      border:3px solid #2b2b30;
+      border-radius:3px;
+      box-shadow:inset 0 0 0 1px #000;
+      padding:12px 16px;margin:0 0 24px;
+    }
+    .station .bullet{
+      width:30px;height:30px;border-radius:50%;flex:none;
+      background:var(--red-bright);color:#fff;
+      display:grid;place-items:center;font-weight:700;font-size:14px;
+    }
+    .station h2{
+      font-size:1.3rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+      color:#fff;line-height:1.05;
+      transform:scaleX(.82);transform-origin:left center;
+    }
+    .station .sub{
+      margin-left:auto;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+      color:#e2e2e7;font-weight:600;text-align:right;
+    }
+    @media (max-width:640px){.station .sub{display:none}}
+
+    /* ---------- Panels & fields ---------- */
+    /* Panels pull in like a train: fast out of the tunnel, gentle brake */
+    .panel{display:none}
+    .panel.active{display:block;animation:pull-in .4s cubic-bezier(.2,.8,.3,1)}
+    .panel.active.rev{animation-name:pull-in-rev}
+    @keyframes pull-in{from{opacity:0;transform:translateX(56px)}to{opacity:1;transform:none}}
+    @keyframes pull-in-rev{from{opacity:0;transform:translateX(-56px)}to{opacity:1;transform:none}}
+    .lede{color:var(--ink-soft);font-size:.95rem;margin:-8px 0 26px;max-width:62ch}
+    fieldset{border:0;margin:0 0 30px}
+    legend{
+      font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;
+      color:var(--ink);margin-bottom:14px;padding:0;
+      display:flex;align-items:center;gap:10px;width:100%;
+    }
+    legend::after{content:"";flex:1;height:1px;background:var(--line)}
+    .grid{display:grid;gap:14px}
+    .g2{grid-template-columns:1fr 1fr}
+    .g3{grid-template-columns:1fr 1fr 1fr}
+    @media (max-width:560px){.g2,.g3{grid-template-columns:1fr}}
+    .field label{
+      display:block;font-size:.82rem;font-weight:600;margin-bottom:6px;
+    }
+    .field label .req{color:var(--red-bright)}
+    .field .hint{font-size:.78rem;color:var(--ink-soft);margin-top:6px;font-weight:420}
+    input[type=text],input[type=email],input[type=tel],input[type=date],
+    select,textarea{
+      width:100%;
+      font:inherit;font-size:.92rem;color:var(--ink);
+      background:var(--bg);
+      border:1px solid #c9c9c9;border-radius:var(--radius);
+      padding:12px 13px;
+      transition:border-color .15s;
+    }
+    textarea{min-height:96px;resize:vertical}
+    input:hover,select:hover,textarea:hover{border-color:var(--ink-soft)}
+    input:focus-visible,select:focus-visible,textarea:focus-visible,
+    button:focus-visible,.chip input:focus-visible + span{
+      outline:2px solid var(--red-bright);outline-offset:1px;border-color:var(--red-bright);
+    }
+    .field.invalid input,.field.invalid select,.field.invalid textarea{border-color:var(--red-bright)}
+    .err{display:none;font-size:.78rem;color:var(--red-bright);font-weight:600;margin-top:6px}
+    .field.invalid .err{display:block}
+
+    /* chips (checkbox / radio) */
+    .chips{display:flex;flex-wrap:wrap;gap:10px}
+    .chip{position:relative}
+    .chip input{position:absolute;inset:0;opacity:0;cursor:pointer}
+    .chip span{
+      display:inline-block;padding:10px 18px;border-radius:var(--radius);
+      border:1px solid #c9c9c9;font-size:.85rem;font-weight:600;letter-spacing:.02em;
+      background:var(--bg);cursor:pointer;user-select:none;
+      transition:background .15s,border-color .15s,color .15s;
+    }
+    .chip input:checked + span{background:var(--red);border-color:var(--red);color:#fff}
+    .chip:hover span{border-color:var(--red)}
+
+    /* counters */
+    .counter{display:flex;align-items:center;gap:0;border:1px solid #c9c9c9;border-radius:var(--radius);width:max-content;overflow:hidden}
+    .counter button{
+      width:44px;height:44px;border:0;background:var(--panel);
+      font-size:20px;font-weight:700;cursor:pointer;color:var(--ink);
+      transition:background .15s;
+    }
+    .counter button:hover{background:#efefef}
+    .counter output{width:52px;text-align:center;font-size:1rem;font-weight:700}
+
+    /* info notes */
+    .note{
+      background:var(--panel);border-left:3px solid var(--red-bright);
+      padding:13px 16px;font-size:.82rem;color:var(--ink-soft);margin:14px 0 0;
+    }
+    .spam{font-weight:600;color:var(--ink)}
+
+    /* companion cards & visit choice rows */
+    .companion{
+      background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+      padding:16px;margin-top:12px;
+    }
+    .companion h3{font-size:.75rem;text-transform:uppercase;letter-spacing:.14em;margin-bottom:12px}
+    .choice-row{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+    .choice-row h3{font-size:.75rem;text-transform:uppercase;letter-spacing:.14em;margin-bottom:12px;display:flex;gap:8px;align-items:center}
+    .choice-row h3 .b{width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-size:11px;flex:none}
+    .choice-row.optional h3 .b{background:var(--ink-soft)}
+
+    /* doors-closing warning: shown when a stop still has empty fields */
+    .door-warn{
+      display:none;margin-top:26px;
+      background:#131316;border:3px solid #2b2b30;border-radius:3px;
+      box-shadow:inset 0 0 0 1px #000;
+      padding:12px 16px;font-size:.82rem;font-weight:700;
+      letter-spacing:.08em;text-transform:uppercase;
+      color:#fff;
+    }
+    .door-warn.show{display:flex;align-items:center;gap:10px}
+    .door-warn::before{
+      content:"";width:10px;height:10px;border-radius:50%;
+      background:#f6c243;flex:none;
+      animation:doorlight 1s ease-in-out infinite;
+    }
+    @keyframes doorlight{0%,100%{opacity:1}50%{opacity:.25}}
+
+    /* nav buttons */
+    .form-nav{display:flex;justify-content:space-between;gap:12px;margin-top:26px;border-top:1px solid var(--line);padding-top:24px}
+    @media (max-width:560px){
+      .form-nav{flex-direction:column}
+      .form-nav .btn{width:100%;white-space:normal}
+    }
+    button.btn{
+      font:inherit;font-size:.95rem;font-weight:600;letter-spacing:.02em;
+      border-radius:var(--radius);padding:14px 30px;cursor:pointer;border:2px solid transparent;
+      background:var(--red);color:#fff;
+      transition:background .2s ease,color .2s ease,transform .05s;
+    }
+    button.btn:active{transform:translateY(1px)}
+    .btn.primary{background:var(--red);color:#fff}
+    .btn.primary:hover{background:var(--red-bright)}
+    .btn.ghost{background:transparent;border-color:var(--red);color:var(--red)}
+    .btn.ghost:hover{background:var(--red);color:#fff}
+    .btn.submit{background:var(--green);color:#fff}
+    .btn.submit:hover{background:#007a32}
+    .btn.submit:disabled{opacity:.6;cursor:default}
+
+    /* review summary */
+    .review{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:22px}
+    .review dl{display:grid;grid-template-columns:180px 1fr}
+    .review dt,.review dd{padding:10px 14px;font-size:.85rem;border-top:1px solid var(--line)}
+    .review dt{font-weight:700;background:var(--panel)}
+    .review dl > dt:first-of-type,.review dl > dt:first-of-type + dd{border-top:0}
+    @media (max-width:560px){.review dl{grid-template-columns:1fr}.review dd{padding-top:0;border-top:0}}
+
+    /* ---------- success: mosaic station wall ----------
+       White subway tile in running bond (layered gradients draw the
+       grout), with the arrival announced on a tiled station tablet */
+    .success{
+      display:none;text-align:center;
+      margin-top:44px;
+      padding:64px 28px 72px;
+      border-radius:3px;
+      border:1px solid var(--line);
+      background-color:#f6f5f0;
+      background-image:
+        linear-gradient(90deg,#e2e1d8 1px,transparent 1px),
+        linear-gradient(90deg,#e2e1d8 1px,transparent 1px),
+        linear-gradient(#e2e1d8 1px,transparent 1px);
+      background-size:160px 80px,160px 80px,100% 40px;
+      background-position:0 0,80px 40px,0 0;
+    }
+    .success .ok{
+      width:72px;height:72px;border-radius:50%;background:var(--green);
+      border:5px solid #f3ecd8;
+      color:#fff;font-size:32px;display:grid;place-items:center;margin:0 auto;
+      box-shadow:0 2px 10px rgba(0,0,0,.18);
+    }
+    /* station-name tablet: dark field, cream keyline, tessera border */
+    .success .tablet{
+      display:inline-block;margin:26px auto 30px;
+      padding:13px;border-radius:2px;
+      background:repeating-conic-gradient(#bda45e 0 25%, #8d7238 0 50%);
+      background-size:14px 14px;
+      box-shadow:0 3px 14px rgba(0,0,0,.16);
+    }
+    .success .tablet-inner{
+      background:var(--red);
+      border:2px solid #f3ecd8;
+      padding:16px 32px 18px;
+    }
+    .success .stop-name{
+      font-size:.7rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;
+      color:#f0e6cd;margin-bottom:6px;
+    }
+    .success h2{
+      font-size:clamp(1.5rem,4.5vw,2.1rem);font-weight:800;letter-spacing:.07em;
+      text-transform:uppercase;color:#fff;line-height:1.1;margin:0;
+    }
+    .success p{color:var(--ink-soft);max-width:48ch;margin:0 auto 8px;font-size:.95rem}
+
+    /* test-ride toggle: dev aid, skips validation and fills sample data */
+    .test-chip{
+      position:fixed;left:16px;bottom:16px;z-index:3000;
+      font:inherit;font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+      background:#fff;color:var(--ink-soft);border:1px dashed #c6cbcd;border-radius:999px;
+      padding:8px 14px;cursor:pointer;
+    }
+    .test-chip.on{background:var(--ink);color:#fff;border-style:solid;border-color:var(--ink)}
+
+    /* util */
+    .hidden{display:none!important}
+    .form-shell{padding-bottom:96px}
+
+    /* ---------- Footer (matches index.html) ---------- */
+    footer{background:var(--ink);color:#cfcfcf;padding:72px 0 40px;font-size:.9rem}
+    .foot-top{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:40px;margin-bottom:50px}
+    .foot-brand img{height:70px;margin-bottom:18px;filter:brightness(0) invert(1);opacity:.9}
+    footer h5{color:#fff;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px;font-weight:600}
+    footer ul{list-style:none}
+    footer ul li{margin-bottom:10px}
+    footer ul li a:hover{color:#fff}
+    .foot-bottom{margin-top:4px;padding-top:24px;border-top:1px solid #3a3a3a;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:.8rem}
+    .foot-bottom a{text-decoration:underline}
+
+    /* ---------- Responsive nav ---------- */
+    /* Collapse at the same width as the homepage so the header
+       doesn't change shape when moving between pages */
+    @media (max-width:1080px){
+      .menu{
+        position:fixed;inset:84px 0 auto 0;flex-direction:column;background:#fff;
+        border-bottom:1px solid var(--line);padding:10px 0;gap:0;margin:0;
+        display:none;box-shadow:0 20px 30px rgba(0,0,0,.08);
+      }
+      .menu.open{display:flex}
+      .menu>li{width:100%}
+      .dropdown{position:static;opacity:1;visibility:visible;transform:none;box-shadow:none;border:0;padding:0 0 8px 16px}
+      .menu>li:not(:hover) .dropdown{opacity:1;visibility:visible}
+      .hamburger{display:block}
+      .nav-actions{margin-left:auto;margin-right:4px}
+      .nav-actions .btn-outline,.nav-actions .nav-social{display:none}
+      .nav-actions .btn{padding:11px 20px;font-size:.88rem}
+    }
+    @media (max-width:900px){
+      .foot-top{grid-template-columns:1fr 1fr}
+      .foot-brand{grid-column:1/-1}
+    }
+    @media (max-width:560px){
+      .logo-svg{height:38px}
+      .logo-video{height:54px}
+      .page-head{padding:44px 24px 32px}
+      .foot-top{grid-template-columns:1fr}
+    }
+  
+    /* Inclusive Sans maxes out at weight 700; a hairline stroke adds
+       the missing step so titles hold their display weight */
+    h1,h2,h3,.headline{-webkit-text-stroke:.5px currentColor}
+  </style>
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header>
+    <nav class="wrap nav">
+      <a class="logo" href="index.html" aria-label="Big Apple Greeter home">
+        <video class="logo-video" src="assets/logo-nav.mp4" autoplay muted playsinline aria-hidden="true"></video>
+        <svg class="logo-svg" viewBox="0 0 2693.39 624.82" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Big Apple Greeter — A Welcoming Friend in New York City">
+          <text class="lg-name" x="553.78" y="326.31" textLength="2068" lengthAdjust="spacing">Big Apple Greeter</text>
+          <text class="lg-tag" x="595.64" y="521.7" textLength="1990" lengthAdjust="spacing">A Welcoming Friend in New York City</text>
+          <g>
+            <path fill="#d1483d" d="M344.52,405.78c3.95,3.69,3.85,9.81.78,14.2-2.59,3.7-10.17,6.45-14.48,2.78l-15.51-13.19-9.31,9.91,13.82,12.74c3.85,3.55,3.89,10.14,1.54,13.81-3.13,4.89-10.89,7.17-15.65,2.98-7.5-6.6-17.17-13.55-22.72-21.71-5.92-8.71-11.02-15.52-21.22-17.85.9-7.69-.42-16.77-5.43-22.29-5.03-5.55-12.23-8.34-20.72-9.07-1.4-14.19-12.52-24.69-26.95-24.01-.38-12.69-9.14-21.37-19.18-23.84-13.15-3.24-22.01,4.56-30.27,13.66-8.12,8.95-15.42,17.42-12.15,30.27,2.72,10.66,12.27,19.5,25.98,19.12.99,14.34,11.91,24.97,26.87,24.25.4,14.24,11.48,24.67,26.44,24.56,1.1,8.99,5.36,17,12.29,20.8,17.52,9.6,30.17-.08,42.35-17.2l12.11,11.31c8.15,7.61,18.45,10.56,29,5.94,9.04-3.96,15.21-12.99,14.9-24.52,14.34-1.04,24.95-11.77,24.22-26.8,15.01-.53,24.59-12.13,24.48-26.56,9.33-1.17,18.84-6.18,22.42-15.01,4.1-10.11,2.59-21.01-5.91-28.77l-90.42-82.59c-8.04-7.34-22.93-7.08-30.41.16-19.96,19.32-33.16,42.9-44.63,29.47-4.68-5.48-2.52-11.78,2.17-17.32,23.19-27.38,45.2-54.58,71.12-79.42,38.36-36.76,90.02-49,131.35-11.41,25.13,22.85,35.75,51.83,36.01,86.01.44,58.33-4.7,116.02-23.74,171.29-8.66,25.15-18.6,47.81-33.5,69.16-25.79,36.95-69.52,50.58-112.17,34.36-22.8-11.17-47.21-10.07-68.38,5.78-32.77,11.72-71.26,1.16-94.27-25.36-14.13-16.29-26.39-32.75-36.54-51.84-35.44-66.69-64.9-166.61-43.74-239.63,12.86-44.38,57.26-71.05,102.03-65.82,15.92,1.86,28.89,8.65,40.2,19.26l48.72,45.66-30.56,36.69c-8.72,10.47-6.46,25.86,3.53,34.4s25.32,8.02,34.96-2.44l25.41-27.57c4.34-4.7,11.82-2.54,16.04,1.34l89.25,81.97c4.15,3.81.62,13.29-2.73,15.36-4.42,2.74-11.06,2.19-15.24-1.65l-11.3-10.42-9.89,9.68,12.99,12.16c4.35,4.08,4.21,11.23.52,15.45-3.65,4.18-10.88,4.81-15.25.93l-14.07-12.5-9.17,10.26,13.99,13.05Z"/>
+            <path fill="#d1483d" d="M179.16,376.06c-4.05,4.62-11.57,3.6-15.24.48-3.59-3.05-5.15-11.27-1.68-15.02l13.34-14.43c3.71-4.01,10.35-4.51,14.82-1.54,3.57,2.37,6.27,10.57,2.91,14.4l-14.15,16.11Z"/>
+            <path fill="#d1483d" d="M233.69,424.03c-4.63,5.08-11.78,4.96-16.03,1.45-4.49-3.71-5.02-11.64-.94-16.06l12.36-13.4c4.47-4.85,12.33-4.42,16.42.15,4.44,4.97,3.02,11.61-1.36,16.41l-10.45,11.46Z"/>
+            <path fill="#d1483d" d="M206.41,400.08c-4.4,4.79-11.58,4.02-15.35.86-4.99-4.19-5.58-11.52-.81-16.44l14.24-14.68c3.58-3.69,12.74-.8,14.96,2.7,3,4.71,2.24,10.92-1.73,15.24l-11.31,12.34Z"/>
+            <path fill="#d1483d" d="M268.45,431.26c2.71,9.25-9.39,21.68-17.73,21.41-3.89-.12-8.94-4.16-9.84-8.15-2.12-9.4,10.41-20.68,16.29-21.06,5.14-.33,10.08,3.73,11.27,7.8Z"/>
+            <path fill="#6baa64" d="M161.18,35.76c4.72,6.25,11.84,10.02,19.84,12.76,21.45,7.29,45.93,16.23,63.24,30.36,22.12,21.37,30.81,47.83,32.84,78.15l51.89-51.11,10.39,9.28-34.58,34.21c-10.56,10.44-18.35,22.49-26.59,34.79-5.59,8.32-9.9,16.94-14.66,26.34-4.76-7.54-11.26-13.71-18.76-19.13l-33.13-24.19c-19.3-14.08-34.87-30.44-45.8-51.85-7.04-13.83-10.73-28.91-12.96-44.19-1.74-12.13.33-24.19,3.48-35.37h4.76l.04-.04ZM258.54,181.2c6.13-22.24,4.35-45.18-6.25-65.19-15.99-30.11-50.73-48.12-83.78-55.7-3.93,15.12,3.98,33.63,11.68,47.09,6.25,10.89,13.54,20.5,21.37,30.32,15.86,17.27,36.32,30.65,56.99,43.53v-.04Z"/>
+          </g>
+        </svg>
+      </a>
+
+      <ul class="menu" id="menu">
+        <li>
+          <a href="visitors.html">Visitors</a>
+        </li>
+        <li>
+          <a href="volunteers.html">Volunteers</a>
+        </li>
+        <li>
+          <a href="about.html">About Us</a>
+        </li>
+        <li>
+          <a href="support.html">Support Us</a>
+        </li>
+      </ul>
+
+      <div class="nav-actions">
+        <a class="btn" href="https://bigapplegreeter.kindful.com" target="_blank" rel="noopener">Donate</a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Open menu">&#9776;</button>
+    </nav>
+    <a class="credit-link" href="https://jkmry.com" target="_blank" rel="noopener">JKMRY.COM</a>
+  </header>
+
+  <!-- ============ PAGE HEAD ============ -->
+  <div class="shell page-head">
+    <p class="eyebrow">Always Free &middot; Volunteer-Led</p>
+    <h1>Request a Greeter.</h1>
+    <p class="intro">Tell us your dates, interests, and language, and we&rsquo;ll match you with a New Yorker who can&rsquo;t wait to show you their city. It takes about five minutes.</p>
+  </div>
+
+  <div class="shell form-shell">
+
+  <nav class="stepper" aria-label="Registration progress">
+    <div class="track" id="track"></div>
+    <img class="train" id="train" src="assets/map-pin.svg" alt="">
+    <ol id="steps">
+      <li data-step="0"><span class="dot">1</span><span class="lbl">Contact</span></li>
+      <li data-step="1"><span class="dot">2</span><span class="lbl">Group</span></li>
+      <li data-step="2"><span class="dot">3</span><span class="lbl">Dates</span></li>
+      <li data-step="3"><span class="dot">4</span><span class="lbl">Staying</span></li>
+      <li data-step="4"><span class="dot">5</span><span class="lbl">Interests</span></li>
+      <li data-step="5"><span class="dot">6</span><span class="lbl">Language</span></li>
+      <li data-step="6"><span class="dot">7</span><span class="lbl">Finish</span></li>
+    </ol>
+  </nav>
+  <p class="conductor"><span id="conductorMsg" aria-live="polite"></span><span>7 stops &middot; about 5 minutes</span></p>
+
+  <form id="regForm" novalidate>
+
+  <!-- ============ STEP 1 · CONTACT ============ -->
+  <section class="panel" data-panel="0">
+    <div class="station"><span class="bullet">1</span><h2>Contact information</h2><span class="sub">How we reach you</span></div>
+    <p class="lede">A volunteer will use these details to confirm your visit and answer any questions before you arrive in New York City.</p>
+
+    <fieldset>
+      <legend>Your name</legend>
+      <div class="grid g3">
+        <div class="field">
+          <label for="title">Title</label>
+          <select id="title" name="title">
+            <option value="">&mdash;</option><option>Mr.</option><option>Mrs.</option><option>Ms.</option><option>Mx.</option>
+          </select>
+        </div>
+        <div class="field" data-required>
+          <label for="firstName">First name <span class="req">*</span></label>
+          <input type="text" id="firstName" name="firstName" autocomplete="given-name">
+          <p class="err">Please enter your first name.</p>
+        </div>
+        <div class="field" data-required>
+          <label for="lastName">Last name <span class="req">*</span></label>
+          <input type="text" id="lastName" name="lastName" autocomplete="family-name">
+          <p class="err">Please enter your last name.</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Email</legend>
+      <div class="grid g2">
+        <div class="field" data-required data-type="email">
+          <label for="email">Email <span class="req">*</span></label>
+          <input type="email" id="email" name="email" autocomplete="email" inputmode="email">
+          <p class="err">Please enter a valid email address.</p>
+        </div>
+        <div class="field" data-required data-match="email">
+          <label for="emailConfirm">Confirm email <span class="req">*</span></label>
+          <input type="email" id="emailConfirm" name="emailConfirm" inputmode="email">
+          <p class="err">This doesn't match the email above.</p>
+        </div>
+      </div>
+      <p class="note">After you submit, a confirmation will arrive from our team. If it doesn't show up, <span class="spam">check your junk or spam folder</span> and add us to your safe-sender list.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Home address</legend>
+      <div class="grid">
+        <div class="field" data-required>
+          <label for="addr1">Address line 1 <span class="req">*</span></label>
+          <input type="text" id="addr1" name="addr1" autocomplete="address-line1">
+          <p class="err">Please enter your address.</p>
+        </div>
+        <div class="field">
+          <label for="addr2">Address line 2</label>
+          <input type="text" id="addr2" name="addr2" autocomplete="address-line2">
+        </div>
+      </div>
+      <div class="grid g3" style="margin-top:14px">
+        <div class="field" data-required>
+          <label for="city">City <span class="req">*</span></label>
+          <input type="text" id="city" name="city" autocomplete="address-level2">
+          <p class="err">Please enter your city.</p>
+        </div>
+        <div class="field">
+          <label for="region">State / region</label>
+          <input type="text" id="region" name="region" autocomplete="address-level1">
+        </div>
+        <div class="field" data-required>
+          <label for="postal">Postal code <span class="req">*</span></label>
+          <input type="text" id="postal" name="postal" autocomplete="postal-code">
+          <p class="err">Please enter your postal code.</p>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px" data-required>
+        <label for="country">Country <span class="req">*</span></label>
+        <select id="country" name="country" autocomplete="country-name"><option value="">&mdash; Select country &mdash;</option></select>
+        <p class="err">Please select your country.</p>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Phone</legend>
+      <div class="grid g2">
+        <div class="field" data-required>
+          <label for="phone1">Phone number <span class="req">*</span></label>
+          <input type="tel" id="phone1" name="phone1" autocomplete="tel" inputmode="tel">
+          <p class="err">Please enter at least one phone number.</p>
+          <p class="hint">A number where we can reach you with questions before your visit.</p>
+        </div>
+        <div class="field">
+          <label for="phone1Type">Type</label>
+          <select id="phone1Type" name="phone1Type">
+            <option>Mobile</option><option>Home</option><option>Work</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid g2" style="margin-top:14px">
+        <div class="field">
+          <label for="whatsapp">WhatsApp number</label>
+          <input type="tel" id="whatsapp" name="whatsapp" inputmode="tel">
+          <p class="hint">Optional, and often the easiest way to coordinate on the day.</p>
+        </div>
+      </div>
+    </fieldset>
+  </section>
+
+  <!-- ============ STEP 2 · GROUP ============ -->
+  <section class="panel" data-panel="1">
+    <div class="station"><span class="bullet">2</span><h2>Your group</h2><span class="sub">Who's coming</span></div>
+    <p class="lede">Tell us a little about your party so we can match you with the Greeter best suited to your group.</p>
+
+    <fieldset>
+      <legend>Group size</legend>
+      <div class="grid g2">
+        <div class="field">
+          <label id="adultsLbl">Adults</label>
+          <div class="counter" role="group" aria-labelledby="adultsLbl">
+            <button type="button" data-count="adults" data-delta="-1" aria-label="Fewer adults">&minus;</button>
+            <output id="adultsOut">1</output>
+            <button type="button" data-count="adults" data-delta="1" aria-label="More adults">+</button>
+          </div>
+        </div>
+        <div class="field">
+          <label id="childrenLbl">Children <span class="hint" style="display:inline">(age 17 and under)</span></label>
+          <div class="counter" role="group" aria-labelledby="childrenLbl">
+            <button type="button" data-count="children" data-delta="-1" aria-label="Fewer children">&minus;</button>
+            <output id="childrenOut">0</output>
+            <button type="button" data-count="children" data-delta="1" aria-label="More children">+</button>
+          </div>
+        </div>
+      </div>
+      <p class="note">Visits are limited to <strong>6 guests total</strong> to keep your experience informal and personal.</p>
+    </fieldset>
+
+    <fieldset id="ageAdultsFs" data-check-required>
+      <legend>Adult age ranges <span class="req" aria-hidden="true">*</span></legend>
+      <div class="chips" id="adultAges">
+        <label class="chip"><input type="checkbox" name="adultAges" value="18–30"><span>18&ndash;30</span></label>
+        <label class="chip"><input type="checkbox" name="adultAges" value="31–45"><span>31&ndash;45</span></label>
+        <label class="chip"><input type="checkbox" name="adultAges" value="46–65"><span>46&ndash;65</span></label>
+        <label class="chip"><input type="checkbox" name="adultAges" value="66+"><span>66+</span></label>
+      </div>
+      <p class="err">Please pick at least one age range.</p>
+      <p class="hint" style="margin-top:8px">Approximate ages help your Greeter plan a walk that suits everyone.</p>
+    </fieldset>
+
+    <fieldset id="ageKidsFs" class="hidden" data-check-required>
+      <legend>Children's age ranges <span class="req" aria-hidden="true">*</span></legend>
+      <div class="chips">
+        <label class="chip"><input type="checkbox" name="childAges" value="0–3"><span>0&ndash;3</span></label>
+        <label class="chip"><input type="checkbox" name="childAges" value="4–6"><span>4&ndash;6</span></label>
+        <label class="chip"><input type="checkbox" name="childAges" value="7–12"><span>7&ndash;12</span></label>
+        <label class="chip"><input type="checkbox" name="childAges" value="13–17"><span>13&ndash;17</span></label>
+      </div>
+      <p class="err">Please pick at least one age range for the children.</p>
+    </fieldset>
+
+    <fieldset id="companionsFs" class="hidden">
+      <legend>Other adults in your group</legend>
+      <p class="hint" style="margin-bottom:4px">After the visit we send each adult a short feedback form. As a nonprofit, your feedback helps us improve and make the case for support. Thank you!</p>
+      <div id="companions"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>About your visit</legend>
+      <div class="field">
+        <label for="groupNotes">Anything that helps us match you</label>
+        <textarea id="groupNotes" name="groupNotes" placeholder="First time in New York? In town for work? Celebrating something?"></textarea>
+      </div>
+    </fieldset>
+  </section>
+
+  <!-- ============ STEP 3 · DATES ============ -->
+  <section class="panel" data-panel="2">
+    <div class="station"><span class="bullet">3</span><h2>Dates</h2><span class="sub">When you're in town</span></div>
+    <p class="lede">Give us your trip dates and three choices for meeting a Greeter. We don't schedule visits on your arrival or departure days, so your 1st or 2nd full day works best.</p>
+
+    <fieldset>
+      <legend>Your trip</legend>
+      <div class="grid g2">
+        <div class="field" data-required>
+          <label for="arrival">Arrival date <span class="req">*</span></label>
+          <input type="date" id="arrival" name="arrival">
+          <p class="err">Please enter your arrival date.</p>
+        </div>
+        <div class="field" data-required>
+          <label for="departure">Departure date <span class="req">*</span></label>
+          <input type="date" id="departure" name="departure">
+          <p class="err">Departure must be after arrival.</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>When would you like to meet a Greeter?</legend>
+      <div class="choice-row">
+        <h3><span class="b">1</span>First choice <span class="req">*</span></h3>
+        <div class="grid g2">
+          <div class="field" data-required data-visit-date>
+            <label for="visit1Date">Date</label>
+            <input type="date" id="visit1Date" name="visit1Date">
+            <p class="err">Choose a date between your arrival and departure (not on either).</p>
+          </div>
+          <div class="field">
+            <label for="visit1Time">Start time</label>
+            <select id="visit1Time" name="visit1Time" class="timeSel"></select>
+          </div>
+        </div>
+      </div>
+      <div class="choice-row">
+        <h3><span class="b">2</span>Second choice <span class="req">*</span></h3>
+        <div class="grid g2">
+          <div class="field" data-required data-visit-date>
+            <label for="visit2Date">Date</label>
+            <input type="date" id="visit2Date" name="visit2Date">
+            <p class="err">Choose a date between your arrival and departure (not on either).</p>
+          </div>
+          <div class="field">
+            <label for="visit2Time">Start time</label>
+            <select id="visit2Time" name="visit2Time" class="timeSel"></select>
+          </div>
+        </div>
+      </div>
+      <div class="choice-row optional">
+        <h3><span class="b">3</span>Third choice <span class="hint" style="display:inline;text-transform:none;letter-spacing:0">(optional)</span></h3>
+        <div class="grid g2">
+          <div class="field" data-visit-date>
+            <label for="visit3Date">Date</label>
+            <input type="date" id="visit3Date" name="visit3Date">
+            <p class="err">Choose a date between your arrival and departure (not on either).</p>
+          </div>
+          <div class="field">
+            <label for="visit3Time">Start time</label>
+            <select id="visit3Time" name="visit3Time" class="timeSel"></select>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Plans</legend>
+      <div class="field">
+        <label for="dateNotes">What do you already have planned or hope to do while you're here?</label>
+        <textarea id="dateNotes" name="dateNotes"></textarea>
+      </div>
+    </fieldset>
+  </section>
+
+  <!-- ============ STEP 4 · STAYING ============ -->
+  <section class="panel" data-panel="3">
+    <div class="station"><span class="bullet">4</span><h2>Where you're staying</h2><span class="sub">So we can meet easily</span></div>
+    <p class="lede">We need to know where you'll be in New York so you and your Greeter can plan an easy meeting point, and so we can reach you during your stay. We can't process a request without it.</p>
+
+    <fieldset>
+      <legend>I'm staying <span class="req" aria-hidden="true">*</span></legend>
+      <div class="chips" id="stayType">
+        <label class="chip"><input type="radio" name="stayType" value="hotel"><span>At a hotel</span></label>
+        <label class="chip"><input type="radio" name="stayType" value="friend"><span>With a friend or relative</span></label>
+        <label class="chip"><input type="radio" name="stayType" value="rental"><span>At a vacation rental</span></label>
+        <label class="chip"><input type="radio" name="stayType" value="other"><span>Somewhere else</span></label>
+      </div>
+      <p class="err" id="stayTypeErr" style="display:none">Please choose where you're staying.</p>
+    </fieldset>
+
+    <fieldset id="stayHotel" class="hidden">
+      <legend>Hotel details</legend>
+      <div class="grid">
+        <div class="field" data-stay="hotel">
+          <label for="hotelName">Hotel name <span class="req">*</span></label>
+          <input type="text" id="hotelName" name="hotelName">
+          <p class="err">Please enter the hotel name.</p>
+        </div>
+        <div class="field" data-stay="hotel">
+          <label for="hotelAddr">Hotel address <span class="req">*</span></label>
+          <input type="text" id="hotelAddr" name="hotelAddr">
+          <p class="err">Please enter the hotel address.</p>
+        </div>
+        <div class="grid g2">
+          <div class="field">
+            <label for="hotelPhone">Hotel phone</label>
+            <input type="tel" id="hotelPhone" name="hotelPhone" inputmode="tel">
+          </div>
+          <div class="field" data-stay="hotel">
+            <label for="resName">Name on reservation <span class="req">*</span></label>
+            <input type="text" id="resName" name="resName">
+            <p class="err">Please enter the reservation name.</p>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset id="stayLocal" class="hidden">
+      <legend>Local address</legend>
+      <div class="grid">
+        <div class="field" data-stay="local">
+          <label for="localAddr1">Address <span class="req">*</span></label>
+          <input type="text" id="localAddr1" name="localAddr1">
+          <p class="err">Please enter the address where you'll be staying.</p>
+        </div>
+        <div class="field">
+          <label for="localAddr2">Address line 2</label>
+          <input type="text" id="localAddr2" name="localAddr2">
+        </div>
+        <div class="grid g3">
+          <div class="field">
+            <label for="localCity">City</label>
+            <input type="text" id="localCity" name="localCity" value="New York">
+          </div>
+          <div class="field">
+            <label for="localState">State</label>
+            <input type="text" id="localState" name="localState" value="NY">
+          </div>
+          <div class="field">
+            <label for="localZip">ZIP</label>
+            <input type="text" id="localZip" name="localZip" inputmode="numeric">
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset id="stayContactFs" class="hidden">
+      <legend>Reaching you in New York</legend>
+      <div class="grid g2">
+        <div class="field" data-stay="any">
+          <label for="nycPhone">Phone number that works in NYC <span class="req">*</span></label>
+          <input type="tel" id="nycPhone" name="nycPhone" inputmode="tel">
+          <p class="err">Please enter a number we can reach while you're in New York.</p>
+        </div>
+        <div class="field">
+          <label for="nycPhoneType">This number is</label>
+          <select id="nycPhoneType" name="nycPhoneType">
+            <option>Mobile</option><option>Accommodation</option><option>Friend / family</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+  </section>
+
+  <!-- ============ STEP 5 · INTERESTS ============ -->
+  <section class="panel" data-panel="4">
+    <div class="station"><span class="bullet">5</span><h2>Neighborhoods &amp; interests</h2><span class="sub">Shape your walk</span></div>
+    <p class="lede">Not sure? Choose "Greeter's Choice" and your volunteer will take you somewhere they love.</p>
+
+    <fieldset>
+      <legend>Neighborhoods</legend>
+      <div class="grid g3">
+        <div class="field" data-required>
+          <label for="hood1">First choice <span class="req">*</span></label>
+          <select id="hood1" name="hood1" class="hoodSel"></select>
+          <p class="err">Please pick a neighborhood.</p>
+        </div>
+        <div class="field">
+          <label for="hood2">Second choice</label>
+          <select id="hood2" name="hood2" class="hoodSel"></select>
+        </div>
+        <div class="field">
+          <label for="hood3">Third choice</label>
+          <select id="hood3" name="hood3" class="hoodSel"></select>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px">
+        <label for="hoodOther">A specific place you'd like to see</label>
+        <input type="text" id="hoodOther" name="hoodOther" placeholder="e.g. the High Line, Arthur Avenue, Flushing…">
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Interests</legend>
+      <div class="grid g2">
+        <div class="field">
+          <label for="int1">First choice</label>
+          <select id="int1" name="int1" class="intSel"></select>
+        </div>
+        <div class="field">
+          <label for="int2">Second choice</label>
+          <select id="int2" name="int2" class="intSel"></select>
+        </div>
+      </div>
+      <div class="grid g2" style="margin-top:14px">
+        <div class="field">
+          <label for="occasion">Celebrating a special occasion?</label>
+          <select id="occasion" name="occasion">
+            <option value="">&mdash;</option><option>Birthday</option><option>Wedding anniversary</option>
+            <option>Honeymoon</option><option>Graduation</option><option>Getting married</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="intOther">Other interests</label>
+          <input type="text" id="intOther" name="intOther">
+        </div>
+      </div>
+    </fieldset>
+  </section>
+
+  <!-- ============ STEP 6 · LANGUAGE ============ -->
+  <section class="panel" data-panel="5">
+    <div class="station"><span class="bullet">6</span><h2>Language</h2><span class="sub">So conversation flows</span></div>
+    <p class="lede">Tell us which language you'd like your Greeter to speak. We'll do our best to pair you with a volunteer who speaks it.</p>
+
+    <fieldset>
+      <legend>Preferred language</legend>
+      <div class="grid g2">
+        <div class="field" data-required>
+          <label for="language">Language <span class="req">*</span></label>
+          <select id="language" name="language"></select>
+          <p class="err">Please choose a language.</p>
+        </div>
+        <div class="field hidden" id="langOtherWrap">
+          <label for="langOther">Which language?</label>
+          <input type="text" id="langOther" name="langOther">
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset id="englishFs" class="hidden">
+      <legend>If we can't find a match</legend>
+      <div class="field">
+        <label>Is a visit in English acceptable?</label>
+        <div class="chips">
+          <label class="chip"><input type="radio" name="englishOk" value="yes"><span>Yes</span></label>
+          <label class="chip"><input type="radio" name="englishOk" value="no"><span>No</span></label>
+        </div>
+      </div>
+      <div class="field hidden" id="englishLevelWrap" style="margin-top:14px">
+        <label for="englishLevel">Your comfort level in English</label>
+        <select id="englishLevel" name="englishLevel">
+          <option>A little English</option><option>Good English</option><option>Fluent</option>
+        </select>
+      </div>
+    </fieldset>
+  </section>
+
+  <!-- ============ STEP 7 · FINISH ============ -->
+  <section class="panel" data-panel="6">
+    <div class="station"><span class="bullet">7</span><h2>Almost there</h2><span class="sub">Last details &amp; review</span></div>
+
+    <fieldset>
+      <legend>Accessibility</legend>
+      <div class="field">
+        <label>Does anyone in your group need an accommodation? <span class="req">*</span></label>
+        <div class="chips">
+          <label class="chip"><input type="radio" name="accessNeed" value="yes"><span>Yes</span></label>
+          <label class="chip"><input type="radio" name="accessNeed" value="no"><span>No</span></label>
+        </div>
+        <p class="hint" style="margin-top:8px">Big Apple Greeter will make every effort to accommodate people with disabilities.</p>
+      </div>
+      <div class="field hidden" id="accessDetailWrap" style="margin-top:14px">
+        <label for="accessDetail">Please describe</label>
+        <textarea id="accessDetail" name="accessDetail"></textarea>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Media visits</legend>
+      <div class="field">
+        <label>If a media request matches your visit, may a journalist join? <span class="req">*</span></label>
+        <div class="chips">
+          <label class="chip"><input type="radio" name="mediaOk" value="yes"><span>Yes</span></label>
+          <label class="chip"><input type="radio" name="mediaOk" value="no"><span>No</span></label>
+        </div>
+        <p class="hint" style="margin-top:8px">If you agree, you could be quoted, filmed, or recorded for a potential news story.</p>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>One last thing</legend>
+      <div class="grid g2">
+        <div class="field" data-required>
+          <label for="referral">How did you hear about us? <span class="req">*</span></label>
+          <select id="referral" name="referral">
+            <option value="">&mdash; Select &mdash;</option>
+            <option>Tripadvisor</option><option>Internet search</option>
+            <option>Friend or family</option><option>Met a Greeter before</option><option>Other</option>
+          </select>
+          <p class="err">Please tell us how you found us.</p>
+        </div>
+        <div class="field hidden" id="referralOtherWrap">
+          <label for="referralOther">Tell us more</label>
+          <input type="text" id="referralOther" name="referralOther">
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px">
+        <label for="finalNotes">Anything else we should know about your visit?</label>
+        <textarea id="finalNotes" name="finalNotes"></textarea>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Review your request</legend>
+      <div class="review"><dl id="reviewList"></dl></div>
+      <p class="note">Submitting sends your request to our volunteer team. We'll email you to confirm, so remember to check your spam folder.</p>
+    </fieldset>
+  </section>
+
+  <!-- nav -->
+  <p class="door-warn" id="doorWarn" role="alert">Stand clear of the closing doors! A few fields at this stop still need attention.</p>
+  <div class="form-nav" id="navBar">
+    <button type="button" class="btn ghost" id="backBtn">&larr; Previous station</button>
+    <button type="button" class="btn primary" id="nextBtn">Next stop &rarr;</button>
+    <button type="submit" class="btn submit hidden" id="submitBtn">End of the line: send request</button>
+  </div>
+  </form>
+
+  <!-- success -->
+  <div class="success" id="successView">
+    <div class="ok" aria-hidden="true">&#10003;</div>
+    <div class="tablet">
+      <div class="tablet-inner">
+        <p class="stop-name">This Is Your Stop</p>
+        <h2>You Have Arrived</h2>
+      </div>
+    </div>
+    <p>Your visit request is on its way to our volunteer team. A confirmation email is headed to <strong id="successEmail"></strong>.</p>
+    <p>If it doesn't arrive shortly, <span class="spam">check your junk or spam folder</span> and add us to your safe-sender list.</p>
+  </div>
+
+  </div><!-- /form-shell -->
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <img src="assets/iga-logo.png" alt="International Greeter Association">
+          <p>A free welcome-visitor service from NYC volunteers.</p>
+        </div>
+        <div>
+          <h5>Visitors</h5>
+          <ul>
+            <li><a href="register.html">Request a Greeter</a></li>
+            <li><a href="visitors.html#faqs">Visitor FAQs</a></li>
+            <li><a href="visitors.html#nyc">About NYC</a></li>
+            <li><a href="visitors.html#blog">Blog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Get Involved</h5>
+          <ul>
+            <li><a href="volunteers.html">Become a Greeter</a></li>
+            <li><a href="#">Volunteer FAQs</a></li>
+            <li><a href="support.html#why">Why Give</a></li>
+            <li><a href="support.html#ways">Ways to Give</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>About</h5>
+          <ul>
+            <li><a href="about.html#mission">Our Mission &amp; History</a></li>
+            <li><a href="about.html#board">Board of Directors</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="about.html#iga">International Greeter Association</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="foot-bottom">
+        <span>&copy; Big Apple Greeter. All rights reserved.</span>
+        <span><a href="#">Greeter Log-In</a> &nbsp;&middot;&nbsp; <a href="#">Visitor Log-In</a></span>
+      </div>
+    </div>
+  </footer>
+
+<script>
+/* ============================================================
+   CONFIG — set this to your form handler before going live.
+   e.g. "/api/visitor-register" on your own server, or a form
+   service endpoint. The page POSTs a JSON payload (see submit()).
+   Leave empty to run in preview mode (no network request).
+   ============================================================ */
+const FORM_ENDPOINT = "";
+
+/* ---------- mobile menu ---------- */
+document.getElementById("hamburger").addEventListener("click",()=>{
+  document.getElementById("menu").classList.toggle("open");
+});
+
+/* ---------- data ---------- */
+const COUNTRIES = ["Afghanistan","Albania","Algeria","Andorra","Angola","Antigua & Deps","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bhutan","Bolivia","Bosnia Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Central African Republic","Chad","Chile","China","Colombia","Comoros","Congo","Costa Rica","Croatia","Cuba","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","East Timor","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Fiji","Finland","France","Gabon","Gambia","Georgia","Germany","Ghana","Greece","Grenada","Guatemala","Guinea","Guinea-Bissau","Guyana","Haiti","Honduras","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Ivory Coast","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kiribati","North Korea","South Korea","Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","North Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Morocco","Mozambique","Myanmar","Namibia","Nauru","Nepal","Netherlands","New Zealand","Nicaragua","Niger","Nigeria","Norway","Oman","Pakistan","Palau","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania","Russian Federation","Rwanda","St Kitts & Nevis","St Lucia","St Vincent & the Grenadines","Samoa","San Marino","Sao Tome & Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","Spain","Sri Lanka","Sudan","Suriname","Eswatini","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Togo","Tonga","Trinidad & Tobago","Tunisia","Turkey","Turkmenistan","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"];
+const HOODS = ["Greeter's Choice","Manhattan","Brooklyn","Queens","Bronx","Staten Island","Off the beaten path"];
+const INTERESTS = ["General overview","Iconic NYC","Architecture","Art","Children's interests","Churches","Dance","Fashion","Food","Gay NYC","Movie & TV locations","Museums","Music","NYC culture","NYC daily life","NYC history","Parks","Photography","Residential neighborhoods","Shopping","Sports","Subway","Synagogues","Theater"];
+const LANGUAGES = ["English","Arabic","Cantonese","Czech","Dutch","French","German","Hebrew","Italian","Japanese","Mandarin","Portuguese","Russian","Spanish","Yiddish","Other"];
+const TIMES = ["9 AM","10 AM","11 AM","12 PM","1 PM","2 PM","3 PM"];
+
+/* ---------- populate selects ---------- */
+function fill(sel, items, placeholder){
+  items.forEach(v=>{const o=document.createElement("option");o.textContent=v;sel.appendChild(o);});
+  if(placeholder){const p=document.createElement("option");p.value="";p.textContent=placeholder;sel.prepend(p);sel.value="";}
+}
+fill(document.getElementById("country"), COUNTRIES);
+document.getElementById("country").value="";
+document.querySelectorAll(".hoodSel").forEach(s=>fill(s,HOODS,"— Select —"));
+document.querySelectorAll(".intSel").forEach(s=>fill(s,INTERESTS,"— Select —"));
+document.querySelectorAll(".timeSel").forEach(s=>{fill(s,TIMES);s.value="10 AM";});
+fill(document.getElementById("language"),LANGUAGES,"— Select —");
+
+/* ---------- stepper ---------- */
+const panels=[...document.querySelectorAll(".panel")];
+const stepsLis=[...document.querySelectorAll("#steps li")];
+const track=document.getElementById("track");
+const STOPS=["Contact","Group","Dates","Staying","Interests","Language","Finish"];
+let step=0;
+let lastStep=0;
+/* Anchor the track and apple to the stations' real positions, so the
+   apple sits dead-center on the current dot at any screen size */
+function moveTrain(){
+  const first=stepsLis[0], cur=stepsLis[step];
+  const start=first.offsetLeft+first.offsetWidth/2;
+  const x=cur.offsetLeft+cur.offsetWidth/2;
+  track.style.left=start+"px";
+  track.style.width=Math.max(0,x-start)+"px";
+  document.getElementById("train").style.left=x+"px";
+}
+window.addEventListener("resize",moveTrain);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(moveTrain);
+function render(){
+  panels.forEach((p,i)=>{
+    p.classList.toggle("active",i===step);
+    p.classList.toggle("rev", i===step && step<lastStep);
+  });
+  stepsLis.forEach((li,i)=>{
+    li.classList.toggle("done",i<step);
+    li.classList.toggle("current",i===step);
+    li.querySelector(".dot").textContent = i<step ? "✓" : i+1;
+    if(i===step) li.setAttribute("aria-current","step"); else li.removeAttribute("aria-current");
+  });
+  moveTrain();
+  document.getElementById("conductorMsg").innerHTML = step===panels.length-1
+    ? "Last stop"
+    : "This is <b>"+STOPS[step]+"</b>. Next stop: <b>"+STOPS[step+1]+"</b>";
+  document.getElementById("doorWarn").classList.remove("show");
+  document.getElementById("backBtn").style.visibility = step===0 ? "hidden" : "visible";
+  document.getElementById("nextBtn").classList.toggle("hidden", step===panels.length-1);
+  document.getElementById("submitBtn").classList.toggle("hidden", step!==panels.length-1);
+  if(step===panels.length-1) buildReview();
+  lastStep=step;
+  window.scrollTo({top:0});
+}
+
+/* ---------- validation ---------- */
+function setInvalid(field, bad){ field.classList.toggle("invalid", !!bad); }
+function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+function validatePanel(i){
+  if(testMode) return true;
+  const panel=panels[i];
+  let ok=true, firstBad=null;
+
+  panel.querySelectorAll(".field[data-required]").forEach(f=>{
+    if(f.closest(".hidden")) return;
+    const input=f.querySelector("input,select,textarea");
+    let bad = !input.value.trim();
+    if(!bad && f.dataset.type==="email") bad = !validEmail(input.value.trim());
+    if(!bad && f.dataset.match){ bad = input.value.trim() !== document.getElementById(f.dataset.match).value.trim(); }
+    setInvalid(f,bad);
+    if(bad){ ok=false; firstBad=firstBad||input; }
+  });
+
+  panel.querySelectorAll("fieldset[data-check-required]").forEach(fs=>{
+    if(fs.classList.contains("hidden")) return;
+    const any=[...fs.querySelectorAll("input")].some(c=>c.checked);
+    fs.querySelector(".err").style.display = any ? "none" : "block";
+    if(!any){ ok=false; firstBad=firstBad||fs.querySelector("input"); }
+  });
+
+  /* step-specific rules */
+  if(i===2){ // dates
+    const arr=document.getElementById("arrival"), dep=document.getElementById("departure");
+    if(arr.value && dep.value && dep.value<=arr.value){
+      setInvalid(dep.closest(".field"),true); ok=false; firstBad=firstBad||dep;
+    }
+    panel.querySelectorAll(".field[data-visit-date]").forEach(f=>{
+      const input=f.querySelector("input");
+      const required=f.hasAttribute("data-required");
+      const v=input.value;
+      let bad=false;
+      if(required && !v) bad=true;
+      if(v && arr.value && dep.value){
+        if(v<=arr.value || v>=dep.value) bad=true; /* not on arrival/departure days */
+      }
+      setInvalid(f,bad);
+      if(bad){ ok=false; firstBad=firstBad||input; }
+    });
+  }
+
+  if(i===3){ // staying
+    const type=document.querySelector('input[name="stayType"]:checked');
+    document.getElementById("stayTypeErr").style.display = type ? "none" : "block";
+    if(!type){ ok=false; }
+    panel.querySelectorAll(".field[data-stay]").forEach(f=>{
+      if(f.closest(".hidden")) { setInvalid(f,false); return; }
+      const input=f.querySelector("input");
+      const bad=!input.value.trim();
+      setInvalid(f,bad);
+      if(bad){ ok=false; firstBad=firstBad||input; }
+    });
+  }
+
+  if(i===6){ // finish: radios required
+    [["accessNeed","accessibility"],["mediaOk","media visits"]].forEach(([name])=>{
+      const chosen=document.querySelector(`input[name="${name}"]:checked`);
+      if(!chosen){ ok=false; }
+    });
+    if(!ok && !firstBad) firstBad=panel.querySelector('input[type="radio"]');
+  }
+
+  if(firstBad) firstBad.focus({preventScroll:false});
+  return ok;
+}
+
+document.getElementById("nextBtn").addEventListener("click",()=>{
+  if(validatePanel(step)){ step=Math.min(step+1,panels.length-1); render(); }
+  else { document.getElementById("doorWarn").classList.add("show"); }
+});
+document.getElementById("backBtn").addEventListener("click",()=>{
+  step=Math.max(step-1,0); render();
+});
+stepsLis.forEach(li=>li.addEventListener("click",()=>{
+  const target=+li.dataset.step;
+  if(target<step){ step=target; render(); } /* free to go back; forward requires validation */
+}));
+
+/* clear error styling on input */
+document.getElementById("regForm").addEventListener("input",e=>{
+  const f=e.target.closest(".field"); if(f) setInvalid(f,false);
+});
+
+/* ---------- group counters & companions ---------- */
+const counts={adults:1,children:0};
+function refreshCounts(){
+  const total=counts.adults+counts.children;
+  document.getElementById("adultsOut").textContent=counts.adults;
+  document.getElementById("childrenOut").textContent=counts.children;
+  document.getElementById("ageKidsFs").classList.toggle("hidden",counts.children===0);
+  const fs=document.getElementById("companionsFs");
+  fs.classList.toggle("hidden",counts.adults<2);
+  const wrap=document.getElementById("companions");
+  const existing=wrap.children.length;
+  const needed=Math.max(counts.adults-1,0);
+  for(let n=existing;n<needed;n++){
+    const idx=n+2;
+    const div=document.createElement("div");
+    div.className="companion";
+    div.innerHTML=`<h3>Adult ${idx}</h3>
+      <div class="grid g3">
+        <div class="field"><label for="c${idx}First">First name</label><input type="text" id="c${idx}First" data-comp="first"></div>
+        <div class="field"><label for="c${idx}Last">Last name</label><input type="text" id="c${idx}Last" data-comp="last"></div>
+        <div class="field"><label for="c${idx}Email">Email</label><input type="email" id="c${idx}Email" data-comp="email" inputmode="email"></div>
+      </div>`;
+    wrap.appendChild(div);
+  }
+  while(wrap.children.length>needed) wrap.lastElementChild.remove();
+}
+document.querySelectorAll("[data-count]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    const key=btn.dataset.count, d=+btn.dataset.delta;
+    const next={...counts,[key]:counts[key]+d};
+    if(next.adults<1||next.children<0) return;
+    if(next.adults+next.children>6) return;
+    counts[key]=next[key]; refreshCounts();
+  });
+});
+refreshCounts();
+
+/* ---------- staying conditionals ---------- */
+document.querySelectorAll('input[name="stayType"]').forEach(r=>{
+  r.addEventListener("change",()=>{
+    const v=r.value;
+    document.getElementById("stayHotel").classList.toggle("hidden",v!=="hotel");
+    document.getElementById("stayLocal").classList.toggle("hidden",v==="hotel");
+    document.getElementById("stayContactFs").classList.remove("hidden");
+    document.getElementById("stayTypeErr").style.display="none";
+  });
+});
+
+/* ---------- language conditionals ---------- */
+const langSel=document.getElementById("language");
+langSel.addEventListener("change",()=>{
+  const v=langSel.value;
+  document.getElementById("langOtherWrap").classList.toggle("hidden",v!=="Other");
+  document.getElementById("englishFs").classList.toggle("hidden",v===""||v==="English");
+});
+document.querySelectorAll('input[name="englishOk"]').forEach(r=>{
+  r.addEventListener("change",()=>{
+    document.getElementById("englishLevelWrap").classList.toggle("hidden",r.value!=="yes"||!r.checked);
+  });
+});
+
+/* ---------- finish conditionals ---------- */
+document.querySelectorAll('input[name="accessNeed"]').forEach(r=>{
+  r.addEventListener("change",()=>{
+    document.getElementById("accessDetailWrap").classList.toggle("hidden",!(r.value==="yes"&&r.checked));
+  });
+});
+document.getElementById("referral").addEventListener("change",e=>{
+  document.getElementById("referralOtherWrap").classList.toggle("hidden",e.target.value!=="Other");
+});
+
+/* ---------- review ---------- */
+function fmtDate(v){
+  if(!v) return "";
+  const d=new Date(v+"T12:00:00");
+  return d.toLocaleDateString("en-US",{weekday:"short",month:"long",day:"numeric",year:"numeric"});
+}
+function val(id){ return (document.getElementById(id)?.value||"").trim(); }
+function radio(name){ return document.querySelector(`input[name="${name}"]:checked`)?.value||""; }
+function checks(name){ return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(c=>c.value); }
+
+function buildReview(){
+  const dl=document.getElementById("reviewList");
+  const rows=[];
+  const add=(k,v)=>{ if(v) rows.push([k,v]); };
+  add("Name",[val("title"),val("firstName"),val("lastName")].filter(Boolean).join(" "));
+  add("Email",val("email"));
+  add("Group",`${counts.adults} adult${counts.adults>1?"s":""}${counts.children?`, ${counts.children} child${counts.children>1?"ren":""}`:""}`);
+  add("Ages",[...checks("adultAges"),...checks("childAges")].join(", "));
+  add("Trip",`${fmtDate(val("arrival"))} → ${fmtDate(val("departure"))}`);
+  add("Visit choices",[1,2,3].map(n=>{
+    const d=val(`visit${n}Date`); return d?`${fmtDate(d)} at ${val(`visit${n}Time`)}`:null;
+  }).filter(Boolean).join(" · "));
+  const st=radio("stayType");
+  add("Staying", st==="hotel" ? `${val("hotelName")} (hotel)` :
+      st ? {friend:"With a friend or relative",rental:"Vacation rental",other:"Other"}[st] : "");
+  add("Neighborhoods",[val("hood1"),val("hood2"),val("hood3")].filter(Boolean).join(", "));
+  add("Interests",[val("int1"),val("int2"),val("intOther")].filter(Boolean).join(", "));
+  add("Language", val("language")==="Other"?val("langOther"):val("language"));
+  add("Accessibility", radio("accessNeed")==="yes" ? (val("accessDetail")||"Yes") : radio("accessNeed")==="no"?"No accommodations needed":"");
+  add("Media visits", radio("mediaOk")==="yes"?"Journalist may join":radio("mediaOk")==="no"?"No journalists":"");
+  dl.innerHTML=rows.map(([k,v])=>`<dt>${k}</dt><dd>${v.replace(/</g,"&lt;")}</dd>`).join("");
+}
+
+/* ---------- submit ---------- */
+document.getElementById("regForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  if(!validatePanel(6)){ document.getElementById("doorWarn").classList.add("show"); return; }
+  document.getElementById("doorWarn").classList.remove("show");
+
+  const companions=[...document.querySelectorAll(".companion")].map(c=>({
+    first:c.querySelector('[data-comp="first"]').value.trim(),
+    last:c.querySelector('[data-comp="last"]').value.trim(),
+    email:c.querySelector('[data-comp="email"]').value.trim(),
+  })).filter(c=>c.first||c.last||c.email);
+
+  const payload={
+    submittedAt:new Date().toISOString(),
+    contact:{
+      title:val("title"),firstName:val("firstName"),lastName:val("lastName"),
+      email:val("email"),
+      address:{line1:val("addr1"),line2:val("addr2"),city:val("city"),region:val("region"),postal:val("postal"),country:val("country")},
+      phone:{number:val("phone1"),type:val("phone1Type")},
+      whatsapp:val("whatsapp"),
+    },
+    group:{adults:counts.adults,children:counts.children,
+      adultAges:checks("adultAges"),childAges:checks("childAges"),
+      companions,notes:val("groupNotes")},
+    dates:{arrival:val("arrival"),departure:val("departure"),
+      choices:[1,2,3].map(n=>({date:val(`visit${n}Date`),time:val(`visit${n}Time`)})).filter(c=>c.date),
+      notes:val("dateNotes")},
+    stay:{type:radio("stayType"),
+      hotel:{name:val("hotelName"),address:val("hotelAddr"),phone:val("hotelPhone"),reservationName:val("resName")},
+      local:{line1:val("localAddr1"),line2:val("localAddr2"),city:val("localCity"),state:val("localState"),zip:val("localZip")},
+      nycPhone:{number:val("nycPhone"),type:val("nycPhoneType")}},
+    preferences:{neighborhoods:[val("hood1"),val("hood2"),val("hood3")].filter(Boolean),
+      otherNeighborhood:val("hoodOther"),
+      interests:[val("int1"),val("int2")].filter(Boolean),
+      otherInterests:val("intOther"),occasion:val("occasion")},
+    language:{preferred:val("language")==="Other"?val("langOther"):val("language"),
+      englishOk:radio("englishOk"),englishLevel:radio("englishOk")==="yes"?val("englishLevel"):""},
+    accessibility:{needed:radio("accessNeed"),detail:val("accessDetail")},
+    mediaOk:radio("mediaOk"),
+    referral:{source:val("referral"),detail:val("referralOther")},
+    finalNotes:val("finalNotes"),
+  };
+
+  const btn=document.getElementById("submitBtn");
+  btn.disabled=true; btn.textContent="Sending…";
+
+  try{
+    if(FORM_ENDPOINT){
+      const res=await fetch(FORM_ENDPOINT,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(payload),
+      });
+      if(!res.ok) throw new Error("Server responded "+res.status);
+    }else{
+      console.info("Preview mode — payload:",payload);
+    }
+    document.getElementById("regForm").style.display="none";
+    document.querySelector(".stepper").style.display="none";
+    document.querySelector(".conductor").style.display="none";
+    document.querySelector(".page-head").style.display="none";
+    document.getElementById("successEmail").textContent=payload.contact.email;
+    document.getElementById("successView").style.display="block";
+    window.scrollTo({top:0});
+  }catch(err){
+    btn.disabled=false; btn.textContent="End of the line: send request";
+    alert("We couldn't send your request. Please check your connection and try again. Nothing you entered has been lost.");
+    console.error(err);
+  }
+});
+
+/* ---------- Test ride: click through the whole line without typing ----------
+   Skips validation and drops sample data into any empty fields so the
+   review and success screens have something to show. Remove before launch. */
+let testMode=false;
+const testBtn=document.createElement("button");
+testBtn.type="button"; testBtn.className="test-chip"; testBtn.textContent="Test ride: off";
+document.body.appendChild(testBtn);
+testBtn.addEventListener("click",()=>{
+  testMode=!testMode;
+  testBtn.textContent="Test ride: "+(testMode?"on":"off");
+  testBtn.classList.toggle("on",testMode);
+  if(testMode){ fillSample(); document.getElementById("doorWarn").classList.remove("show"); }
+});
+function setVal(id,v){ const el=document.getElementById(id); if(el && !el.value) el.value=v; }
+function pick(name,value){
+  if(document.querySelector(`input[name="${name}"]:checked`)) return;
+  const el=value ? document.querySelector(`input[name="${name}"][value="${value}"]`)
+                 : document.querySelector(`input[name="${name}"]`);
+  if(el){ el.checked=true; el.dispatchEvent(new Event("change")); }
+}
+function iso(d){ return d.toISOString().slice(0,10); }
+function fillSample(){
+  const day=86400000, base=new Date(Date.now()+30*day);
+  setVal("firstName","Jane"); setVal("lastName","Tester");
+  setVal("email","jane.tester@example.com"); setVal("emailConfirm","jane.tester@example.com");
+  setVal("addr1","1 Test Street"); setVal("city","Springfield"); setVal("postal","12345");
+  const c=document.getElementById("country"); if(c && !c.value) c.value="United States";
+  setVal("phone1","+1 212 555 0100");
+  pick("adultAges");
+  setVal("arrival",iso(base)); setVal("departure",iso(new Date(base.getTime()+5*day)));
+  setVal("visit1Date",iso(new Date(base.getTime()+1*day)));
+  setVal("visit2Date",iso(new Date(base.getTime()+2*day)));
+  pick("stayType","hotel");
+  setVal("hotelName","The Test Hotel"); setVal("hotelAddr","123 Broadway"); setVal("resName","Jane Tester");
+  setVal("nycPhone","+1 212 555 0100");
+  const h=document.getElementById("hood1"); if(h && !h.value) h.value="Greeter's Choice";
+  const l=document.getElementById("language"); if(l && !l.value){ l.value="English"; l.dispatchEvent(new Event("change")); }
+  pick("accessNeed","no"); pick("mediaOk","yes");
+  const r=document.getElementById("referral"); if(r && !r.value){ r.value="Tripadvisor"; r.dispatchEvent(new Event("change")); }
+}
+
+render();
+</script>
+<script>
+  // Nav logo: play one full cycle on load, then animate only while hovering the nav.
+  // No loop attribute, so every cycle parks on the last frame.
+  (function(){
+    var v = document.querySelector('.logo-video');
+    var bar = document.querySelector('header');
+    if (!v || !bar) return;
+    var over = false;
+    bar.addEventListener('mouseenter', function(){ over = true; if (v.ended) v.play(); });
+    bar.addEventListener('mouseleave', function(){ over = false; });
+    v.addEventListener('ended', function(){ if (over) v.play(); });
+  })();
+</script>
+</body>
+</html>

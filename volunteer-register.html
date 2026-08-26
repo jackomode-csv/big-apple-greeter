@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Become a Greeter - Big Apple Greeter</title>
+  <meta name="description" content="Apply to become a Big Apple Greeter volunteer. Tell us about yourself, your neighborhoods, and why you want to share your New York with visitors.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --red:#de5447;
+      --red-bright:#c23a2d;
+      --ink:#292929;
+      --ink-soft:#464646;
+      --muted:#b1b1b1;
+      --line:#e6e6e6;
+      --panel:#fafafa;
+      --green:#00933c;  /* 4·5·6 line green: arrival & success only */
+      --bg:#ffffff;
+      --maxw:1120px;
+      --radius:2px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    @media (prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      *,*::before,*::after{animation:none!important;transition:none!important}
+    }
+    body{
+      font-family:'Inclusive Sans',Arial,sans-serif;
+      color:var(--ink);
+      background:var(--bg);
+      font-size:17px;
+      font-weight:420;
+      line-height:1.62;
+      -webkit-font-smoothing:antialiased;
+    }
+    img{max-width:100%;display:block}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{letter-spacing:-.015em}
+    h5{letter-spacing:.14em}
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+    .btn{
+      display:inline-block;
+      background:var(--red);
+      color:#fff;
+      font-weight:600;
+      font-size:.95rem;
+      letter-spacing:.02em;
+      padding:14px 30px;
+      border-radius:var(--radius);
+      white-space:nowrap;
+      transition:background .2s ease;
+    }
+    .btn:hover{background:var(--red-bright)}
+    .btn-outline{
+      background:transparent;
+      color:var(--red);
+      border:2px solid var(--red);
+    }
+    .btn-outline:hover{background:var(--red);color:#fff}
+
+    /* ---------- Header / Nav (matches index.html) ---------- */
+    header{
+      position:sticky;top:0;z-index:2000;
+      background:rgba(255,255,255,.97);
+      border-bottom:1px solid var(--line);
+      backdrop-filter:saturate(180%) blur(6px);
+    }
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;
+      height:84px;
+    }
+    .logo{flex:0 0 auto}
+    /* Animated logo film in the nav; static SVG only for reduced motion */
+    /* logo-nav.mp4 is the reel cropped to the lockup band, so it sizes naturally */
+    .logo-video{height:70px;width:auto;display:block;mix-blend-mode:multiply}
+    .logo-svg{height:46px;width:auto;display:none}
+    @media (prefers-reduced-motion:reduce){
+      .logo-video{display:none}
+      .logo-svg{display:block}
+    }
+    .logo-svg text{font-family:'Libre Franklin',Arial,sans-serif;fill:#000}
+    .lg-name{font-size:236px;font-weight:700}
+    .lg-tag{font-size:115px;font-weight:400;font-style:italic}
+    .menu{display:flex;align-items:center;gap:6px;list-style:none;margin-left:auto}
+    .menu>li{position:relative}
+    .menu>li>a,.menu>li>span{
+      display:block;padding:12px 13px;font-weight:500;font-size:.95rem;cursor:pointer;
+      white-space:nowrap;
+    }
+    .menu>li>a:hover,.menu>li>span:hover{color:var(--red)}
+    .dropdown{
+      position:absolute;top:100%;left:0;min-width:220px;
+      background:#fff;border:1px solid var(--line);border-radius:4px;
+      box-shadow:0 12px 30px rgba(0,0,0,.08);
+      padding:8px 0;opacity:0;visibility:hidden;transform:translateY(6px);
+      transition:all .18s ease;list-style:none;
+    }
+    .menu>li:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+    .dropdown li a{display:block;padding:10px 20px;font-size:.9rem}
+    .dropdown li a:hover{background:#f6f6f6;color:var(--red)}
+    .nav-actions{display:flex;align-items:center;gap:6px;margin-left:8px}
+    .nav-actions .btn{padding:12px 20px;font-size:.9rem}
+    .nav-social{display:flex;align-items:center;gap:4px;margin-left:6px}
+    .nav-social a{
+      width:34px;height:34px;display:grid;place-items:center;border-radius:50%;
+      color:var(--ink);transition:color .2s,background .2s;
+    }
+    .nav-social a:hover{color:var(--red);background:#f4f4f4}
+    .nav-social svg{width:18px;height:18px;fill:currentColor;display:block}
+    /* Designer credit: pinned to the page's right edge, clear of the nav */
+    .credit-link{
+      position:absolute;right:0;top:50%;transform:translateY(-50%);
+      background:#0039a6;color:#fff;
+      padding:6px 10px;border-radius:2px 0 0 2px;
+      font-size:.6rem;font-weight:700;letter-spacing:.1em;
+      white-space:nowrap;transition:background .2s;
+    }
+    .credit-link:hover{background:#00287a}
+    @media (max-width:1260px){ .credit-link{display:none} }
+    .hamburger{display:none;background:none;border:0;font-size:1.6rem;cursor:pointer;color:var(--ink)}
+
+    /* ---------- Page head ---------- */
+    .shell{max-width:800px;margin:0 auto;padding:0 24px}
+    .page-head{padding:64px 24px 40px;text-align:center}
+    .eyebrow{
+      font-size:.8rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--red-bright);margin-bottom:12px;
+    }
+    .page-head h1{font-size:clamp(2rem,4.4vw,2.9rem);font-weight:800;line-height:1.12}
+    .page-head .intro{
+      color:var(--ink-soft);max-width:56ch;margin:16px auto 0;font-size:1.08rem;
+    }
+
+    /* ---------- Subway-line stepper: 7 stops on the route map ---------- */
+    .stepper{margin:0 0 14px;position:relative}
+    .stepper ol{
+      list-style:none;display:flex;justify-content:space-between;
+      position:relative;
+    }
+    .stepper ol::before{
+      content:"";position:absolute;top:13px;left:13px;right:13px;
+      height:6px;background:var(--line);border-radius:3px;
+    }
+    .stepper .track{
+      position:absolute;top:13px;left:13px;height:6px;
+      background:var(--red);border-radius:3px;width:0;
+      transition:width .45s cubic-bezier(.25,.75,.3,1);
+    }
+    /* the apple rides the line and sits centered on the current station */
+    .stepper .train{
+      position:absolute;top:13px;left:13px;z-index:2;
+      width:34px;height:41px;
+      margin:-20px 0 0 -17px;
+      transition:left .45s cubic-bezier(.25,.75,.3,1);
+      pointer-events:none;
+      filter:drop-shadow(0 3px 4px rgba(0,0,0,.25));
+    }
+    .stepper li{position:relative;z-index:1;text-align:center;flex:1;cursor:pointer}
+    .stepper .dot{
+      width:26px;height:26px;border-radius:50%;
+      background:var(--bg);border:3px solid var(--line);
+      margin:0 auto;display:grid;place-items:center;
+      font-size:11px;font-weight:700;color:var(--ink-soft);
+      transition:border-color .25s,background .25s,color .25s;
+    }
+    .stepper li.done .dot{background:var(--green);border-color:var(--green);color:#fff}
+    .stepper li.current .dot{
+      border-color:var(--red);color:var(--red);
+      animation:arrive 1.6s ease-in-out infinite;
+    }
+    @keyframes arrive{
+      0%,100%{box-shadow:0 0 0 0 rgba(180,0,0,.35)}
+      50%{box-shadow:0 0 0 8px rgba(180,0,0,0)}
+    }
+    .stepper .lbl{
+      display:block;margin-top:8px;
+      font-size:10px;text-transform:uppercase;letter-spacing:.12em;
+      color:var(--ink-soft);font-weight:600;
+    }
+    .stepper li.current .lbl{color:var(--red);font-weight:700}
+    .conductor{
+      display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      margin:0 0 36px;
+      font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+      color:var(--ink-soft);
+    }
+    .conductor b{color:var(--red-bright);font-weight:700}
+    @media (max-width:640px){
+      .stepper .lbl{display:none}
+      .stepper li.current .lbl{display:block;position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap}
+      .stepper{margin-bottom:46px}
+    }
+
+    /* ---------- Station signage: vintage enamel transit sign ----------
+       White painted caps on black, framed like the old IRT entrance signs.
+       Franklin is compressed with scaleX to fake the condensed lettering;
+       no glow or texture, so contrast stays crisp. */
+    .station{
+      display:flex;align-items:center;gap:14px;
+      background:#131316;
+      border:3px solid #2b2b30;
+      border-radius:3px;
+      box-shadow:inset 0 0 0 1px #000;
+      padding:12px 16px;margin:0 0 24px;
+    }
+    .station .bullet{
+      width:30px;height:30px;border-radius:50%;flex:none;
+      background:var(--red-bright);color:#fff;
+      display:grid;place-items:center;font-weight:700;font-size:14px;
+    }
+    .station h2{
+      font-size:1.3rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+      color:#fff;line-height:1.05;
+      transform:scaleX(.82);transform-origin:left center;
+    }
+    .station .sub{
+      margin-left:auto;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+      color:#e2e2e7;font-weight:600;text-align:right;
+    }
+    @media (max-width:640px){.station .sub{display:none}}
+
+    /* ---------- Panels & fields ---------- */
+    /* Panels pull in like a train: fast out of the tunnel, gentle brake */
+    .panel{display:none}
+    .panel.active{display:block;animation:pull-in .4s cubic-bezier(.2,.8,.3,1)}
+    .panel.active.rev{animation-name:pull-in-rev}
+    @keyframes pull-in{from{opacity:0;transform:translateX(56px)}to{opacity:1;transform:none}}
+    @keyframes pull-in-rev{from{opacity:0;transform:translateX(-56px)}to{opacity:1;transform:none}}
+    .lede{color:var(--ink-soft);font-size:.95rem;margin:-8px 0 26px;max-width:62ch}
+    fieldset{border:0;margin:0 0 30px}
+    legend{
+      font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;
+      color:var(--ink);margin-bottom:14px;padding:0;
+      display:flex;align-items:center;gap:10px;width:100%;
+    }
+    legend::after{content:"";flex:1;height:1px;background:var(--line)}
+    .grid{display:grid;gap:14px}
+    .g2{grid-template-columns:1fr 1fr}
+    .g3{grid-template-columns:1fr 1fr 1fr}
+    @media (max-width:560px){.g2,.g3{grid-template-columns:1fr}}
+    .field label{
+      display:block;font-size:.82rem;font-weight:600;margin-bottom:6px;
+    }
+    .field label .req{color:var(--red-bright)}
+    .field .hint{font-size:.78rem;color:var(--ink-soft);margin-top:6px;font-weight:420}
+    input[type=text],input[type=email],input[type=tel],input[type=date],
+    select,textarea{
+      width:100%;
+      font:inherit;font-size:.92rem;color:var(--ink);
+      background:var(--bg);
+      border:1px solid #c9c9c9;border-radius:var(--radius);
+      padding:12px 13px;
+      transition:border-color .15s;
+    }
+    textarea{min-height:96px;resize:vertical}
+    input:hover,select:hover,textarea:hover{border-color:var(--ink-soft)}
+    input:focus-visible,select:focus-visible,textarea:focus-visible,
+    button:focus-visible,.chip input:focus-visible + span{
+      outline:2px solid var(--red-bright);outline-offset:1px;border-color:var(--red-bright);
+    }
+    .field.invalid input,.field.invalid select,.field.invalid textarea{border-color:var(--red-bright)}
+    .err{display:none;font-size:.78rem;color:var(--red-bright);font-weight:600;margin-top:6px}
+    .field.invalid .err{display:block}
+
+    /* chips (checkbox / radio) */
+    .chips{display:flex;flex-wrap:wrap;gap:10px}
+    .chip{position:relative}
+    .chip input{position:absolute;inset:0;opacity:0;cursor:pointer}
+    .chip span{
+      display:inline-block;padding:10px 18px;border-radius:var(--radius);
+      border:1px solid #c9c9c9;font-size:.85rem;font-weight:600;letter-spacing:.02em;
+      background:var(--bg);cursor:pointer;user-select:none;
+      transition:background .15s,border-color .15s,color .15s;
+    }
+    .chip input:checked + span{background:var(--red);border-color:var(--red);color:#fff}
+    .chip:hover span{border-color:var(--red)}
+
+    /* counters */
+    .counter{display:flex;align-items:center;gap:0;border:1px solid #c9c9c9;border-radius:var(--radius);width:max-content;overflow:hidden}
+    .counter button{
+      width:44px;height:44px;border:0;background:var(--panel);
+      font-size:20px;font-weight:700;cursor:pointer;color:var(--ink);
+      transition:background .15s;
+    }
+    .counter button:hover{background:#efefef}
+    .counter output{width:52px;text-align:center;font-size:1rem;font-weight:700}
+
+    /* info notes */
+    .note{
+      background:var(--panel);border-left:3px solid var(--red-bright);
+      padding:13px 16px;font-size:.82rem;color:var(--ink-soft);margin:14px 0 0;
+    }
+    .spam{font-weight:600;color:var(--ink)}
+
+    /* companion cards & visit choice rows */
+    .companion{
+      background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+      padding:16px;margin-top:12px;
+    }
+    .companion h3{font-size:.75rem;text-transform:uppercase;letter-spacing:.14em;margin-bottom:12px}
+    .choice-row{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+    .choice-row h3{font-size:.75rem;text-transform:uppercase;letter-spacing:.14em;margin-bottom:12px;display:flex;gap:8px;align-items:center}
+    .choice-row h3 .b{width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-size:11px;flex:none}
+    .choice-row.optional h3 .b{background:var(--ink-soft)}
+
+    /* doors-closing warning: shown when a stop still has empty fields */
+    .door-warn{
+      display:none;margin-top:26px;
+      background:#131316;border:3px solid #2b2b30;border-radius:3px;
+      box-shadow:inset 0 0 0 1px #000;
+      padding:12px 16px;font-size:.82rem;font-weight:700;
+      letter-spacing:.08em;text-transform:uppercase;
+      color:#fff;
+    }
+    .door-warn.show{display:flex;align-items:center;gap:10px}
+    .door-warn::before{
+      content:"";width:10px;height:10px;border-radius:50%;
+      background:#f6c243;flex:none;
+      animation:doorlight 1s ease-in-out infinite;
+    }
+    @keyframes doorlight{0%,100%{opacity:1}50%{opacity:.25}}
+
+    /* nav buttons */
+    .form-nav{display:flex;justify-content:space-between;gap:12px;margin-top:26px;border-top:1px solid var(--line);padding-top:24px}
+    @media (max-width:560px){
+      .form-nav{flex-direction:column}
+      .form-nav .btn{width:100%;white-space:normal}
+    }
+    button.btn{
+      font:inherit;font-size:.95rem;font-weight:600;letter-spacing:.02em;
+      border-radius:var(--radius);padding:14px 30px;cursor:pointer;border:2px solid transparent;
+      background:var(--red);color:#fff;
+      transition:background .2s ease,color .2s ease,transform .05s;
+    }
+    button.btn:active{transform:translateY(1px)}
+    .btn.primary{background:var(--red);color:#fff}
+    .btn.primary:hover{background:var(--red-bright)}
+    .btn.ghost{background:transparent;border-color:var(--red);color:var(--red)}
+    .btn.ghost:hover{background:var(--red);color:#fff}
+    .btn.submit{background:var(--green);color:#fff}
+    .btn.submit:hover{background:#007a32}
+    .btn.submit:disabled{opacity:.6;cursor:default}
+
+    /* review summary */
+    .review{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:22px}
+    .review dl{display:grid;grid-template-columns:180px 1fr}
+    .review dt,.review dd{padding:10px 14px;font-size:.85rem;border-top:1px solid var(--line)}
+    .review dt{font-weight:700;background:var(--panel)}
+    .review dl > dt:first-of-type,.review dl > dt:first-of-type + dd{border-top:0}
+    @media (max-width:560px){.review dl{grid-template-columns:1fr}.review dd{padding-top:0;border-top:0}}
+
+    /* ---------- success: mosaic station wall ----------
+       White subway tile in running bond (layered gradients draw the
+       grout), with the arrival announced on a tiled station tablet */
+    .success{
+      display:none;text-align:center;
+      margin-top:44px;
+      padding:64px 28px 72px;
+      border-radius:3px;
+      border:1px solid var(--line);
+      background-color:#f6f5f0;
+      background-image:
+        linear-gradient(90deg,#e2e1d8 1px,transparent 1px),
+        linear-gradient(90deg,#e2e1d8 1px,transparent 1px),
+        linear-gradient(#e2e1d8 1px,transparent 1px);
+      background-size:160px 80px,160px 80px,100% 40px;
+      background-position:0 0,80px 40px,0 0;
+    }
+    .success .ok{
+      width:72px;height:72px;border-radius:50%;background:var(--green);
+      border:5px solid #f3ecd8;
+      color:#fff;font-size:32px;display:grid;place-items:center;margin:0 auto;
+      box-shadow:0 2px 10px rgba(0,0,0,.18);
+    }
+    /* station-name tablet: dark field, cream keyline, tessera border */
+    .success .tablet{
+      display:inline-block;margin:26px auto 30px;
+      padding:13px;border-radius:2px;
+      background:repeating-conic-gradient(#bda45e 0 25%, #8d7238 0 50%);
+      background-size:14px 14px;
+      box-shadow:0 3px 14px rgba(0,0,0,.16);
+    }
+    .success .tablet-inner{
+      background:var(--red);
+      border:2px solid #f3ecd8;
+      padding:16px 32px 18px;
+    }
+    .success .stop-name{
+      font-size:.7rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;
+      color:#f0e6cd;margin-bottom:6px;
+    }
+    .success h2{
+      font-size:clamp(1.5rem,4.5vw,2.1rem);font-weight:800;letter-spacing:.07em;
+      text-transform:uppercase;color:#fff;line-height:1.1;margin:0;
+    }
+    .success p{color:var(--ink-soft);max-width:48ch;margin:0 auto 8px;font-size:.95rem}
+
+    /* test-ride toggle: dev aid, skips validation and fills sample data */
+    .test-chip{
+      position:fixed;left:16px;bottom:16px;z-index:3000;
+      font:inherit;font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+      background:#fff;color:var(--ink-soft);border:1px dashed #c6cbcd;border-radius:999px;
+      padding:8px 14px;cursor:pointer;
+    }
+    .test-chip.on{background:var(--ink);color:#fff;border-style:solid;border-color:var(--ink)}
+
+    /* util */
+    .hidden{display:none!important}
+    .form-shell{padding-bottom:96px}
+
+    /* ---------- Footer (matches index.html) ---------- */
+    footer{background:var(--ink);color:#cfcfcf;padding:72px 0 40px;font-size:.9rem}
+    .foot-top{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:40px;margin-bottom:50px}
+    .foot-brand img{height:70px;margin-bottom:18px;filter:brightness(0) invert(1);opacity:.9}
+    footer h5{color:#fff;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px;font-weight:600}
+    footer ul{list-style:none}
+    footer ul li{margin-bottom:10px}
+    footer ul li a:hover{color:#fff}
+    .foot-bottom{margin-top:4px;padding-top:24px;border-top:1px solid #3a3a3a;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:.8rem}
+    .foot-bottom a{text-decoration:underline}
+
+    /* ---------- Responsive nav ---------- */
+    /* Collapse at the same width as the homepage so the header
+       doesn't change shape when moving between pages */
+    @media (max-width:1080px){
+      .menu{
+        position:fixed;inset:84px 0 auto 0;flex-direction:column;background:#fff;
+        border-bottom:1px solid var(--line);padding:10px 0;gap:0;margin:0;
+        display:none;box-shadow:0 20px 30px rgba(0,0,0,.08);
+      }
+      .menu.open{display:flex}
+      .menu>li{width:100%}
+      .dropdown{position:static;opacity:1;visibility:visible;transform:none;box-shadow:none;border:0;padding:0 0 8px 16px}
+      .menu>li:not(:hover) .dropdown{opacity:1;visibility:visible}
+      .hamburger{display:block}
+      .nav-actions{margin-left:auto;margin-right:4px}
+      .nav-actions .btn-outline,.nav-actions .nav-social{display:none}
+      .nav-actions .btn{padding:11px 20px;font-size:.88rem}
+    }
+    @media (max-width:900px){
+      .foot-top{grid-template-columns:1fr 1fr}
+      .foot-brand{grid-column:1/-1}
+    }
+    @media (max-width:560px){
+      .logo-svg{height:38px}
+      .logo-video{height:54px}
+      .page-head{padding:44px 24px 32px}
+      .foot-top{grid-template-columns:1fr}
+    }
+  
+    /* Inclusive Sans maxes out at weight 700; a hairline stroke adds
+       the missing step so titles hold their display weight */
+    h1,h2,h3,.headline{-webkit-text-stroke:.5px currentColor}
+  </style>
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header>
+    <nav class="wrap nav">
+      <a class="logo" href="index.html" aria-label="Big Apple Greeter home">
+        <video class="logo-video" src="assets/logo-nav.mp4" autoplay muted playsinline aria-hidden="true"></video>
+        <svg class="logo-svg" viewBox="0 0 2693.39 624.82" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Big Apple Greeter — A Welcoming Friend in New York City">
+          <text class="lg-name" x="553.78" y="326.31" textLength="2068" lengthAdjust="spacing">Big Apple Greeter</text>
+          <text class="lg-tag" x="595.64" y="521.7" textLength="1990" lengthAdjust="spacing">A Welcoming Friend in New York City</text>
+          <g>
+            <path fill="#d1483d" d="M344.52,405.78c3.95,3.69,3.85,9.81.78,14.2-2.59,3.7-10.17,6.45-14.48,2.78l-15.51-13.19-9.31,9.91,13.82,12.74c3.85,3.55,3.89,10.14,1.54,13.81-3.13,4.89-10.89,7.17-15.65,2.98-7.5-6.6-17.17-13.55-22.72-21.71-5.92-8.71-11.02-15.52-21.22-17.85.9-7.69-.42-16.77-5.43-22.29-5.03-5.55-12.23-8.34-20.72-9.07-1.4-14.19-12.52-24.69-26.95-24.01-.38-12.69-9.14-21.37-19.18-23.84-13.15-3.24-22.01,4.56-30.27,13.66-8.12,8.95-15.42,17.42-12.15,30.27,2.72,10.66,12.27,19.5,25.98,19.12.99,14.34,11.91,24.97,26.87,24.25.4,14.24,11.48,24.67,26.44,24.56,1.1,8.99,5.36,17,12.29,20.8,17.52,9.6,30.17-.08,42.35-17.2l12.11,11.31c8.15,7.61,18.45,10.56,29,5.94,9.04-3.96,15.21-12.99,14.9-24.52,14.34-1.04,24.95-11.77,24.22-26.8,15.01-.53,24.59-12.13,24.48-26.56,9.33-1.17,18.84-6.18,22.42-15.01,4.1-10.11,2.59-21.01-5.91-28.77l-90.42-82.59c-8.04-7.34-22.93-7.08-30.41.16-19.96,19.32-33.16,42.9-44.63,29.47-4.68-5.48-2.52-11.78,2.17-17.32,23.19-27.38,45.2-54.58,71.12-79.42,38.36-36.76,90.02-49,131.35-11.41,25.13,22.85,35.75,51.83,36.01,86.01.44,58.33-4.7,116.02-23.74,171.29-8.66,25.15-18.6,47.81-33.5,69.16-25.79,36.95-69.52,50.58-112.17,34.36-22.8-11.17-47.21-10.07-68.38,5.78-32.77,11.72-71.26,1.16-94.27-25.36-14.13-16.29-26.39-32.75-36.54-51.84-35.44-66.69-64.9-166.61-43.74-239.63,12.86-44.38,57.26-71.05,102.03-65.82,15.92,1.86,28.89,8.65,40.2,19.26l48.72,45.66-30.56,36.69c-8.72,10.47-6.46,25.86,3.53,34.4s25.32,8.02,34.96-2.44l25.41-27.57c4.34-4.7,11.82-2.54,16.04,1.34l89.25,81.97c4.15,3.81.62,13.29-2.73,15.36-4.42,2.74-11.06,2.19-15.24-1.65l-11.3-10.42-9.89,9.68,12.99,12.16c4.35,4.08,4.21,11.23.52,15.45-3.65,4.18-10.88,4.81-15.25.93l-14.07-12.5-9.17,10.26,13.99,13.05Z"/>
+            <path fill="#d1483d" d="M179.16,376.06c-4.05,4.62-11.57,3.6-15.24.48-3.59-3.05-5.15-11.27-1.68-15.02l13.34-14.43c3.71-4.01,10.35-4.51,14.82-1.54,3.57,2.37,6.27,10.57,2.91,14.4l-14.15,16.11Z"/>
+            <path fill="#d1483d" d="M233.69,424.03c-4.63,5.08-11.78,4.96-16.03,1.45-4.49-3.71-5.02-11.64-.94-16.06l12.36-13.4c4.47-4.85,12.33-4.42,16.42.15,4.44,4.97,3.02,11.61-1.36,16.41l-10.45,11.46Z"/>
+            <path fill="#d1483d" d="M206.41,400.08c-4.4,4.79-11.58,4.02-15.35.86-4.99-4.19-5.58-11.52-.81-16.44l14.24-14.68c3.58-3.69,12.74-.8,14.96,2.7,3,4.71,2.24,10.92-1.73,15.24l-11.31,12.34Z"/>
+            <path fill="#d1483d" d="M268.45,431.26c2.71,9.25-9.39,21.68-17.73,21.41-3.89-.12-8.94-4.16-9.84-8.15-2.12-9.4,10.41-20.68,16.29-21.06,5.14-.33,10.08,3.73,11.27,7.8Z"/>
+            <path fill="#6baa64" d="M161.18,35.76c4.72,6.25,11.84,10.02,19.84,12.76,21.45,7.29,45.93,16.23,63.24,30.36,22.12,21.37,30.81,47.83,32.84,78.15l51.89-51.11,10.39,9.28-34.58,34.21c-10.56,10.44-18.35,22.49-26.59,34.79-5.59,8.32-9.9,16.94-14.66,26.34-4.76-7.54-11.26-13.71-18.76-19.13l-33.13-24.19c-19.3-14.08-34.87-30.44-45.8-51.85-7.04-13.83-10.73-28.91-12.96-44.19-1.74-12.13.33-24.19,3.48-35.37h4.76l.04-.04ZM258.54,181.2c6.13-22.24,4.35-45.18-6.25-65.19-15.99-30.11-50.73-48.12-83.78-55.7-3.93,15.12,3.98,33.63,11.68,47.09,6.25,10.89,13.54,20.5,21.37,30.32,15.86,17.27,36.32,30.65,56.99,43.53v-.04Z"/>
+          </g>
+        </svg>
+      </a>
+
+      <ul class="menu" id="menu">
+        <li>
+          <a href="visitors.html">Visitors</a>
+        </li>
+        <li>
+          <a href="volunteers.html">Volunteers</a>
+        </li>
+        <li>
+          <a href="about.html">About Us</a>
+        </li>
+        <li>
+          <a href="support.html">Support Us</a>
+        </li>
+      </ul>
+
+      <div class="nav-actions">
+        <a class="btn" href="https://bigapplegreeter.kindful.com" target="_blank" rel="noopener">Donate</a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Open menu">&#9776;</button>
+    </nav>
+    <a class="credit-link" href="https://jkmry.com" target="_blank" rel="noopener">JKMRY.COM</a>
+  </header>
+
+  <!-- ============ PAGE HEAD ============ -->
+  <div class="shell page-head">
+    <p class="eyebrow">Volunteer Application &middot; All Five Boroughs</p>
+    <h1>Pull up a chair.</h1>
+    <p class="intro">Tell us about yourself and why you want to show visitors your New York. It takes about four minutes, and greets are always on your schedule.</p>
+  </div>
+
+  <div class="shell form-shell">
+
+  <nav class="stepper" aria-label="Application progress">
+    <div class="track" id="track"></div>
+    <img class="train" id="train" src="assets/map-pin.svg" alt="">
+    <ol id="steps">
+      <li data-step="0"><span class="dot">1</span><span class="lbl">Contact</span></li>
+      <li data-step="1"><span class="dot">2</span><span class="lbl">Background</span></li>
+      <li data-step="2"><span class="dot">3</span><span class="lbl">Reference</span></li>
+      <li data-step="3"><span class="dot">4</span><span class="lbl">Interests</span></li>
+      <li data-step="4"><span class="dot">5</span><span class="lbl">Finish</span></li>
+    </ol>
+  </nav>
+  <p class="conductor"><span id="conductorMsg" aria-live="polite"></span><span>5 stops &middot; about 4 minutes</span></p>
+
+  <form id="volForm" novalidate>
+
+  <!-- ============ STEP 1 - CONTACT ============ -->
+  <section class="panel" data-panel="0">
+    <div class="station"><span class="bullet">1</span><h2>Contact information</h2><span class="sub">How we reach you</span></div>
+    <p class="lede">Our volunteer team uses these details to follow up on your application and invite you to an orientation.</p>
+
+    <fieldset>
+      <legend>Your name</legend>
+      <div class="grid g3">
+        <div class="field">
+          <label for="title">Title</label>
+          <select id="title" name="title">
+            <option value="">&mdash;</option><option>Mr.</option><option>Mrs.</option><option>Ms.</option><option>Mx.</option>
+          </select>
+        </div>
+        <div class="field" data-required>
+          <label for="firstName">First name <span class="req">*</span></label>
+          <input type="text" id="firstName" name="firstName" autocomplete="given-name">
+          <p class="err">Please enter your first name.</p>
+        </div>
+        <div class="field" data-required>
+          <label for="lastName">Last name <span class="req">*</span></label>
+          <input type="text" id="lastName" name="lastName" autocomplete="family-name">
+          <p class="err">Please enter your last name.</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Email</legend>
+      <div class="grid g2">
+        <div class="field" data-required data-type="email">
+          <label for="email">Email <span class="req">*</span></label>
+          <input type="email" id="email" name="email" autocomplete="email" inputmode="email">
+          <p class="err">Please enter a valid email address.</p>
+        </div>
+        <div class="field" data-required data-match="email">
+          <label for="emailConfirm">Confirm email <span class="req">*</span></label>
+          <input type="email" id="emailConfirm" name="emailConfirm" inputmode="email">
+          <p class="err">This doesn't match the email above.</p>
+        </div>
+      </div>
+      <p class="note">We'll reply from our volunteer team. If you don't hear from us, <span class="spam">check your junk or spam folder</span> and add us to your safe-sender list.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Home address</legend>
+      <div class="grid">
+        <div class="field" data-required>
+          <label for="addr1">Address line 1 <span class="req">*</span></label>
+          <input type="text" id="addr1" name="addr1" autocomplete="address-line1">
+          <p class="err">Please enter your address.</p>
+        </div>
+        <div class="field">
+          <label for="addr2">Address line 2</label>
+          <input type="text" id="addr2" name="addr2" autocomplete="address-line2">
+        </div>
+      </div>
+      <div class="grid g3" style="margin-top:14px">
+        <div class="field" data-required>
+          <label for="city">City <span class="req">*</span></label>
+          <input type="text" id="city" name="city" autocomplete="address-level2" value="New York">
+          <p class="err">Please enter your city.</p>
+        </div>
+        <div class="field" data-required>
+          <label for="state">State <span class="req">*</span></label>
+          <select id="state" name="state" autocomplete="address-level1"></select>
+          <p class="err">Please select your state.</p>
+        </div>
+        <div class="field" data-required>
+          <label for="zip">ZIP code <span class="req">*</span></label>
+          <input type="text" id="zip" name="zip" autocomplete="postal-code" inputmode="numeric">
+          <p class="err">Please enter your ZIP code.</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Phone</legend>
+      <div class="grid g2">
+        <div class="field" data-required>
+          <label for="phone1">Primary phone <span class="req">*</span></label>
+          <input type="tel" id="phone1" name="phone1" autocomplete="tel" inputmode="tel">
+          <p class="err">Please enter a phone number.</p>
+        </div>
+        <div class="field">
+          <label for="phone1Type">Type</label>
+          <select id="phone1Type" name="phone1Type">
+            <option>Mobile</option><option>Home</option><option>Work</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid g2" style="margin-top:14px">
+        <div class="field">
+          <label for="phone2">Secondary phone</label>
+          <input type="tel" id="phone2" name="phone2" inputmode="tel">
+        </div>
+        <div class="field">
+          <label for="phone2Type">Type</label>
+          <select id="phone2Type" name="phone2Type">
+            <option>Mobile</option><option>Home</option><option>Work</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+  </section>
+
+  <!-- ============ STEP 2 - BACKGROUND ============ -->
+  <section class="panel" data-panel="1">
+    <div class="station"><span class="bullet">2</span><h2>Your background</h2><span class="sub">What you bring</span></div>
+    <p class="lede">There's no resume screening here. We just want to know a little about you and what makes you want to share your city.</p>
+
+    <fieldset>
+      <legend>Work status <span class="req" aria-hidden="true">*</span></legend>
+      <div class="chips" id="workStatus">
+        <label class="chip"><input type="radio" name="workStatus" value="Employed"><span>Employed</span></label>
+        <label class="chip"><input type="radio" name="workStatus" value="Self-employed"><span>Self-employed</span></label>
+        <label class="chip"><input type="radio" name="workStatus" value="Unemployed"><span>Unemployed</span></label>
+        <label class="chip"><input type="radio" name="workStatus" value="Semi-retired"><span>Semi-retired</span></label>
+        <label class="chip"><input type="radio" name="workStatus" value="Retired"><span>Retired</span></label>
+        <label class="chip"><input type="radio" name="workStatus" value="Student"><span>Student</span></label>
+      </div>
+      <p class="err" id="workErr" style="display:none">Please choose your work status.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Experience</legend>
+      <div class="field" data-required>
+        <label for="experience">Tell us about your work and volunteer experience <span class="req">*</span></label>
+        <textarea id="experience" name="experience" placeholder="Jobs, volunteering, community groups, anything that shaped you."></textarea>
+        <p class="err">Please tell us a bit about your experience.</p>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Motivation</legend>
+      <div class="field" data-required>
+        <label for="motivation">Why would you like to become a volunteer for Big Apple Greeter? <span class="req">*</span></label>
+        <textarea id="motivation" name="motivation" placeholder="What do you love about this city, and why do you want to share it?"></textarea>
+        <p class="err">Please tell us why you'd like to join.</p>
+      </div>
+    </fieldset>
+  </section>
+
+  <!-- ============ STEP 3 - REFERENCE ============ -->
+  <section class="panel" data-panel="2">
+    <div class="station"><span class="bullet">3</span><h2>A reference</h2><span class="sub">Someone who can vouch for you</span></div>
+    <p class="lede">Someone who knows you well and isn't a family member: a colleague, a neighbor, a fellow volunteer.</p>
+
+    <fieldset>
+      <legend>Reference contact</legend>
+      <div class="grid">
+        <div class="field" data-required>
+          <label for="refName">Name <span class="req">*</span></label>
+          <input type="text" id="refName" name="refName">
+          <p class="err">Please enter your reference's name.</p>
+        </div>
+      </div>
+      <div class="grid g2" style="margin-top:14px">
+        <div class="field" data-required>
+          <label for="refPhone">Phone <span class="req">*</span></label>
+          <input type="tel" id="refPhone" name="refPhone" inputmode="tel">
+          <p class="err">Please enter your reference's phone number.</p>
+        </div>
+        <div class="field" data-required data-type="email">
+          <label for="refEmail">Email <span class="req">*</span></label>
+          <input type="email" id="refEmail" name="refEmail" inputmode="email">
+          <p class="err">Please enter a valid email for your reference.</p>
+        </div>
+      </div>
+    </fieldset>
+  </section>
+
+  <!-- ============ STEP 4 - INTERESTS ============ -->
+  <section class="panel" data-panel="3">
+    <div class="station"><span class="bullet">4</span><h2>Interests</h2><span class="sub">What you'd love to share</span></div>
+    <p class="lede">Pick anything you'd genuinely enjoy showing a visitor. This helps us match you with guests who'll love your New York.</p>
+
+    <fieldset>
+      <legend>I could talk about&hellip;</legend>
+      <div class="chips" id="interestChips"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Anything else</legend>
+      <div class="field">
+        <label for="intOther">Other interests or specialties</label>
+        <textarea id="intOther" name="intOther" placeholder="Your block's best bakery, birding in Prospect Park, cast-iron architecture&hellip;"></textarea>
+      </div>
+    </fieldset>
+  </section>
+
+  <!-- ============ STEP 5 - FINISH ============ -->
+  <section class="panel" data-panel="4">
+    <div class="station"><span class="bullet">5</span><h2>Almost there</h2><span class="sub">Review &amp; send</span></div>
+
+    <fieldset>
+      <legend>One last thing</legend>
+      <div class="field">
+        <label for="finalNotes">Anything else we should know?</label>
+        <textarea id="finalNotes" name="finalNotes"></textarea>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Review your application</legend>
+      <div class="review"><dl id="reviewList"></dl></div>
+      <p class="note">Submitting sends your application to our volunteer team. We'll be in touch about next steps and orientation, so remember to check your spam folder.</p>
+    </fieldset>
+  </section>
+
+  <!-- nav -->
+  <p class="door-warn" id="doorWarn" role="alert">Stand clear of the closing doors! A few fields at this stop still need attention.</p>
+  <div class="form-nav" id="navBar">
+    <button type="button" class="btn ghost" id="backBtn">&larr; Previous station</button>
+    <button type="button" class="btn primary" id="nextBtn">Next stop &rarr;</button>
+    <button type="submit" class="btn submit hidden" id="submitBtn">End of the line: send application</button>
+  </div>
+  </form>
+
+  <!-- success -->
+  <div class="success" id="successView">
+    <div class="ok" aria-hidden="true">&#10003;</div>
+    <div class="tablet">
+      <div class="tablet-inner">
+        <p class="stop-name">This Is Your Stop</p>
+        <h2>Welcome To The Family</h2>
+      </div>
+    </div>
+    <p>Your application is on its way to our volunteer team. A confirmation email is headed to <strong id="successEmail"></strong>.</p>
+    <p>If it doesn't arrive shortly, <span class="spam">check your junk or spam folder</span> and add us to your safe-sender list.</p>
+  </div>
+
+  </div><!-- /form-shell -->
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <img src="assets/iga-logo.png" alt="International Greeter Association">
+          <p>A free welcome-visitor service from NYC volunteers.</p>
+        </div>
+        <div>
+          <h5>Visitors</h5>
+          <ul>
+            <li><a href="register.html">Request a Greeter</a></li>
+            <li><a href="visitors.html#faqs">Visitor FAQs</a></li>
+            <li><a href="visitors.html#nyc">About NYC</a></li>
+            <li><a href="visitors.html#blog">Blog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Get Involved</h5>
+          <ul>
+            <li><a href="volunteers.html">Become a Greeter</a></li>
+            <li><a href="#">Volunteer FAQs</a></li>
+            <li><a href="support.html#why">Why Give</a></li>
+            <li><a href="support.html#ways">Ways to Give</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>About</h5>
+          <ul>
+            <li><a href="about.html#mission">Our Mission &amp; History</a></li>
+            <li><a href="about.html#board">Board of Directors</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="about.html#iga">International Greeter Association</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="foot-bottom">
+        <span>&copy; Big Apple Greeter. All rights reserved.</span>
+        <span><a href="#">Greeter Log-In</a> &nbsp;&middot;&nbsp; <a href="#">Visitor Log-In</a></span>
+      </div>
+    </div>
+  </footer>
+
+<script>
+/* ============================================================
+   CONFIG - set this to your form handler before going live.
+   The page POSTs a JSON payload (see submit()). Leave empty to
+   run in preview mode (no network request).
+   ============================================================ */
+const FORM_ENDPOINT = "";
+
+/* ---------- mobile menu ---------- */
+document.getElementById("hamburger").addEventListener("click",()=>{
+  document.getElementById("menu").classList.toggle("open");
+});
+
+/* ---------- data ---------- */
+const STATES=["AL","AK","AZ","AR","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","PR","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"];
+const INTERESTS=["General overview","Iconic NYC","Architecture","Art","Children's interests","Churches","Dance","Fashion","Food","Gay NYC","Movie & TV locations","Museums","Music","NYC culture","NYC daily life","NYC history","Parks","Photography","Residential neighborhoods","Shopping","Sports","Subway","Synagogues","Theater"];
+
+const stateSel=document.getElementById("state");
+STATES.forEach(s=>{const o=document.createElement("option");o.textContent=s;stateSel.appendChild(o);});
+const ph=document.createElement("option");ph.value="";ph.textContent="—";stateSel.prepend(ph);
+stateSel.value="NY";
+
+const chipWrap=document.getElementById("interestChips");
+INTERESTS.forEach(v=>{
+  const l=document.createElement("label");l.className="chip";
+  const inp=document.createElement("input");inp.type="checkbox";inp.name="interests";inp.value=v;
+  const sp=document.createElement("span");sp.textContent=v;
+  l.appendChild(inp);l.appendChild(sp);
+  chipWrap.appendChild(l);
+});
+
+/* ---------- stepper ---------- */
+const panels=[...document.querySelectorAll(".panel")];
+const stepsLis=[...document.querySelectorAll("#steps li")];
+const track=document.getElementById("track");
+const STOPS=["Contact","Background","Reference","Interests","Finish"];
+let step=0;
+let lastStep=0;
+function moveTrain(){
+  const first=stepsLis[0], cur=stepsLis[step];
+  const start=first.offsetLeft+first.offsetWidth/2;
+  const x=cur.offsetLeft+cur.offsetWidth/2;
+  track.style.left=start+"px";
+  track.style.width=Math.max(0,x-start)+"px";
+  document.getElementById("train").style.left=x+"px";
+}
+window.addEventListener("resize",moveTrain);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(moveTrain);
+function render(){
+  panels.forEach((p,i)=>{
+    p.classList.toggle("active",i===step);
+    p.classList.toggle("rev", i===step && step<lastStep);
+  });
+  stepsLis.forEach((li,i)=>{
+    li.classList.toggle("done",i<step);
+    li.classList.toggle("current",i===step);
+    li.querySelector(".dot").textContent = i<step ? "✓" : i+1;
+    if(i===step) li.setAttribute("aria-current","step"); else li.removeAttribute("aria-current");
+  });
+  moveTrain();
+  document.getElementById("conductorMsg").innerHTML = step===panels.length-1
+    ? "Last stop"
+    : "This is <b>"+STOPS[step]+"</b>. Next stop: <b>"+STOPS[step+1]+"</b>";
+  document.getElementById("doorWarn").classList.remove("show");
+  document.getElementById("backBtn").style.visibility = step===0 ? "hidden" : "visible";
+  document.getElementById("nextBtn").classList.toggle("hidden", step===panels.length-1);
+  document.getElementById("submitBtn").classList.toggle("hidden", step!==panels.length-1);
+  if(step===panels.length-1) buildReview();
+  lastStep=step;
+  window.scrollTo({top:0});
+}
+
+/* ---------- validation ---------- */
+function setInvalid(field, bad){ field.classList.toggle("invalid", !!bad); }
+function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+function validatePanel(i){
+  if(testMode) return true;
+  const panel=panels[i];
+  let ok=true, firstBad=null;
+
+  panel.querySelectorAll(".field[data-required]").forEach(f=>{
+    if(f.closest(".hidden")) return;
+    const input=f.querySelector("input,select,textarea");
+    let bad = !input.value.trim();
+    if(!bad && f.dataset.type==="email") bad = !validEmail(input.value.trim());
+    if(!bad && f.dataset.match){ bad = input.value.trim() !== document.getElementById(f.dataset.match).value.trim(); }
+    setInvalid(f,bad);
+    if(bad){ ok=false; firstBad=firstBad||input; }
+  });
+
+  if(i===1){ // background: work status required
+    const chosen=document.querySelector('input[name="workStatus"]:checked');
+    document.getElementById("workErr").style.display = chosen ? "none" : "block";
+    if(!chosen){ ok=false; firstBad=firstBad||document.querySelector('input[name="workStatus"]'); }
+  }
+
+  if(firstBad) firstBad.focus({preventScroll:false});
+  return ok;
+}
+
+document.getElementById("nextBtn").addEventListener("click",()=>{
+  if(validatePanel(step)){ step=Math.min(step+1,panels.length-1); render(); }
+  else { document.getElementById("doorWarn").classList.add("show"); }
+});
+document.getElementById("backBtn").addEventListener("click",()=>{
+  step=Math.max(step-1,0); render();
+});
+stepsLis.forEach(li=>li.addEventListener("click",()=>{
+  const target=+li.dataset.step;
+  if(target<step){ step=target; render(); }
+}));
+
+document.getElementById("volForm").addEventListener("input",e=>{
+  const f=e.target.closest(".field"); if(f) setInvalid(f,false);
+});
+document.querySelectorAll('input[name="workStatus"]').forEach(r=>{
+  r.addEventListener("change",()=>{ document.getElementById("workErr").style.display="none"; });
+});
+
+/* ---------- review ---------- */
+function val(id){ return (document.getElementById(id)?.value||"").trim(); }
+function radio(name){ return document.querySelector(`input[name="${name}"]:checked`)?.value||""; }
+function checks(name){ return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(c=>c.value); }
+function clip(s,n){ return s.length>n ? s.slice(0,n-1)+"…" : s; }
+
+function buildReview(){
+  const dl=document.getElementById("reviewList");
+  const rows=[];
+  const add=(k,v)=>{ if(v) rows.push([k,v]); };
+  add("Name",[val("title"),val("firstName"),val("lastName")].filter(Boolean).join(" "));
+  add("Email",val("email"));
+  add("Address",[val("addr1"),val("addr2"),val("city"),val("state"),val("zip")].filter(Boolean).join(", "));
+  add("Phone",val("phone1")+(val("phone1")?" ("+val("phone1Type")+")":""));
+  add("Work status",radio("workStatus"));
+  add("Experience",clip(val("experience"),120));
+  add("Motivation",clip(val("motivation"),120));
+  add("Reference",[val("refName"),val("refPhone"),val("refEmail")].filter(Boolean).join(" · "));
+  add("Interests",checks("interests").join(", "));
+  add("Other interests",clip(val("intOther"),80));
+  add("Notes",clip(val("finalNotes"),80));
+  dl.innerHTML=rows.map(([k,v])=>`<dt>${k}</dt><dd>${v.replace(/</g,"&lt;")}</dd>`).join("");
+}
+
+/* ---------- submit ---------- */
+document.getElementById("volForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  if(!validatePanel(4)){ document.getElementById("doorWarn").classList.add("show"); return; }
+  document.getElementById("doorWarn").classList.remove("show");
+
+  const payload={
+    submittedAt:new Date().toISOString(),
+    contact:{
+      title:val("title"),firstName:val("firstName"),lastName:val("lastName"),
+      email:val("email"),
+      address:{line1:val("addr1"),line2:val("addr2"),city:val("city"),state:val("state"),zip:val("zip")},
+      phonePrimary:{number:val("phone1"),type:val("phone1Type")},
+      phoneSecondary:{number:val("phone2"),type:val("phone2Type")},
+    },
+    background:{
+      workStatus:radio("workStatus"),
+      experience:val("experience"),
+      motivation:val("motivation"),
+    },
+    reference:{name:val("refName"),phone:val("refPhone"),email:val("refEmail")},
+    interests:{selected:checks("interests"),other:val("intOther")},
+    finalNotes:val("finalNotes"),
+  };
+
+  const btn=document.getElementById("submitBtn");
+  btn.disabled=true; btn.textContent="Sending…";
+
+  try{
+    if(FORM_ENDPOINT){
+      const res=await fetch(FORM_ENDPOINT,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(payload),
+      });
+      if(!res.ok) throw new Error("Server responded "+res.status);
+    }else{
+      console.info("Preview mode - payload:",payload);
+    }
+    document.getElementById("volForm").style.display="none";
+    document.querySelector(".stepper").style.display="none";
+    document.querySelector(".conductor").style.display="none";
+    document.querySelector(".page-head").style.display="none";
+    document.getElementById("successEmail").textContent=payload.contact.email;
+    document.getElementById("successView").style.display="block";
+    window.scrollTo({top:0});
+  }catch(err){
+    btn.disabled=false; btn.textContent="End of the line: send application";
+    alert("We couldn't send your application. Please check your connection and try again. Nothing you entered has been lost.");
+    console.error(err);
+  }
+});
+
+/* ---------- Test ride: click through the whole line without typing ---------- */
+let testMode=false;
+const testBtn=document.createElement("button");
+testBtn.type="button"; testBtn.className="test-chip"; testBtn.textContent="Test ride: off";
+document.body.appendChild(testBtn);
+testBtn.addEventListener("click",()=>{
+  testMode=!testMode;
+  testBtn.textContent="Test ride: "+(testMode?"on":"off");
+  testBtn.classList.toggle("on",testMode);
+  if(testMode){ fillSample(); document.getElementById("doorWarn").classList.remove("show"); }
+});
+function setVal(id,v){ const el=document.getElementById(id); if(el && !el.value) el.value=v; }
+function pick(name,value){
+  if(document.querySelector(`input[name="${name}"]:checked`)) return;
+  const el=value ? document.querySelector(`input[name="${name}"][value="${value}"]`)
+                 : document.querySelector(`input[name="${name}"]`);
+  if(el){ el.checked=true; el.dispatchEvent(new Event("change")); }
+}
+function fillSample(){
+  setVal("firstName","Jane"); setVal("lastName","Tester");
+  setVal("email","jane.tester@example.com"); setVal("emailConfirm","jane.tester@example.com");
+  setVal("addr1","1 Test Street"); setVal("zip","10007");
+  setVal("phone1","+1 212 555 0100");
+  pick("workStatus","Retired");
+  setVal("experience","Thirty years teaching public school in Queens; weekend docent at the Transit Museum.");
+  setVal("motivation","I've been bragging about this city my whole life. Might as well make it official.");
+  setVal("refName","Sam Reference"); setVal("refPhone","+1 212 555 0199"); setVal("refEmail","sam.reference@example.com");
+  const c=document.querySelector('input[name="interests"][value="Subway"]'); if(c) c.checked=true;
+}
+
+render();
+</script>
+<script>
+  // Nav logo: play one full cycle on load, then animate only while hovering the nav.
+  // No loop attribute, so every cycle parks on the last frame.
+  (function(){
+    var v = document.querySelector('.logo-video');
+    var bar = document.querySelector('header');
+    if (!v || !bar) return;
+    var over = false;
+    bar.addEventListener('mouseenter', function(){ over = true; if (v.ended) v.play(); });
+    bar.addEventListener('mouseleave', function(){ over = false; });
+    v.addEventListener('ended', function(){ if (over) v.play(); });
+  })();
+</script>
+</body>
+</html>

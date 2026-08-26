@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Big Apple Greeter - A Free Welcome-Visitor Service from NYC Volunteers</title>
+  <meta name="description" content="Big Apple Greeter - A Free Welcome-Visitor Service from NYC Volunteers">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    :root{
+      --red:#de5447;
+      --red-bright:#c23a2d;
+      --ink:#292929;
+      --ink-soft:#464646;
+      --muted:#b1b1b1;
+      --line:#e6e6e6;
+      --bg:#ffffff;
+      --maxw:1120px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Inclusive Sans',Arial,sans-serif;
+      color:var(--ink);
+      background:var(--bg);
+      font-size:17px;
+      font-weight:420;
+      line-height:1.62;
+      -webkit-font-smoothing:antialiased;
+    }
+    img{max-width:100%;display:block}
+    a{color:inherit;text-decoration:none}
+    /* Franklin Gothic display character: tight tracking on headings */
+    h1,h2,h3{letter-spacing:-.015em}
+    h5{letter-spacing:.14em}
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+    .btn{
+      display:inline-block;
+      background:var(--red);
+      color:#fff;
+      font-weight:600;
+      font-size:.95rem;
+      letter-spacing:.02em;
+      padding:14px 30px;
+      border-radius:2px;
+      white-space:nowrap;
+      transition:background .2s ease;
+    }
+    .btn:hover{background:var(--red-bright)}
+    .btn-outline{
+      background:transparent;
+      color:var(--red);
+      border:2px solid var(--red);
+    }
+    .btn-outline:hover{background:var(--red);color:#fff}
+
+    /* ---------- Header / Nav ---------- */
+    header{
+      position:sticky;top:0;z-index:2000;
+      background:rgba(255,255,255,.97);
+      border-bottom:1px solid var(--line);
+      backdrop-filter:saturate(180%) blur(6px);
+    }
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;
+      height:84px;
+    }
+    .logo{flex:0 0 auto}
+    /* Animated logo film in the nav; static SVG only for reduced motion */
+    /* logo-nav.mp4 is the reel cropped to the lockup band, so it sizes naturally */
+    .logo-video{height:70px;width:auto;display:block;mix-blend-mode:multiply}
+    .logo-svg{height:46px;width:auto;display:none}
+    @media (prefers-reduced-motion:reduce){
+      .logo-video{display:none}
+      .logo-svg{display:block}
+    }
+    .logo-svg text{font-family:'Libre Franklin',Arial,sans-serif;fill:#000}
+    .lg-name{font-size:236px;font-weight:700}
+    .lg-tag{font-size:115px;font-weight:400;font-style:italic}
+    .menu{display:flex;align-items:center;gap:6px;list-style:none;margin-left:auto}
+    .menu>li{position:relative}
+    .menu>li>a,.menu>li>span{
+      display:block;padding:12px 13px;font-weight:500;font-size:.95rem;cursor:pointer;
+      white-space:nowrap;
+    }
+    .menu>li>a:hover,.menu>li>span:hover{color:var(--red)}
+    .dropdown{
+      position:absolute;top:100%;left:0;min-width:220px;
+      background:#fff;border:1px solid var(--line);border-radius:4px;
+      box-shadow:0 12px 30px rgba(0,0,0,.08);
+      padding:8px 0;opacity:0;visibility:hidden;transform:translateY(6px);
+      transition:all .18s ease;list-style:none;
+    }
+    .menu>li:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+    .dropdown li a{display:block;padding:10px 20px;font-size:.9rem}
+    .dropdown li a:hover{background:#f6f6f6;color:var(--red)}
+    .nav-actions{display:flex;align-items:center;gap:6px;margin-left:8px}
+    .nav-actions .btn{padding:12px 20px;font-size:.9rem}
+    .nav-social{display:flex;align-items:center;gap:4px;margin-left:6px}
+    .nav-social a{
+      width:34px;height:34px;display:grid;place-items:center;border-radius:50%;
+      color:var(--ink);transition:color .2s,background .2s;
+    }
+    .nav-social a:hover{color:var(--red);background:#f4f4f4}
+    .nav-social svg{width:18px;height:18px;fill:currentColor;display:block}
+    /* Designer credit: pinned to the page's right edge, clear of the nav */
+    .credit-link{
+      position:absolute;right:0;top:50%;transform:translateY(-50%);
+      background:#0039a6;color:#fff;
+      padding:6px 10px;border-radius:2px 0 0 2px;
+      font-size:.6rem;font-weight:700;letter-spacing:.1em;
+      white-space:nowrap;transition:background .2s;
+    }
+    .credit-link:hover{background:#00287a}
+    @media (max-width:1260px){ .credit-link{display:none} }
+    .hamburger{display:none;background:none;border:0;font-size:1.6rem;cursor:pointer;color:var(--ink)}
+
+    /* ---------- Hero ---------- */
+    /* Full screen: fills the viewport minus the 84px sticky header */
+    /* The logo reel IS the hero: shown clean, uncropped, on white. */
+    .hero{
+      position:relative;overflow:hidden;
+      min-height:calc(100vh - 84px);
+      min-height:calc(100svh - 84px);
+      display:flex;align-items:center;justify-content:center;
+      background:#fff;
+    }
+    .hero-video{
+      width:100%;height:100%;
+      position:absolute;inset:0;
+      object-fit:contain;display:block;
+    }
+    .hero-controls{position:absolute;right:20px;bottom:20px;z-index:3;display:flex;gap:8px}
+    .hero-btn{
+      width:40px;height:40px;border-radius:50%;cursor:pointer;
+      border:1px solid rgba(0,0,0,.15);background:rgba(255,255,255,.85);
+      color:var(--ink);font-size:.75rem;line-height:1;
+      display:grid;place-items:center;transition:background .2s,transform .2s;
+      backdrop-filter:blur(4px);
+    }
+    .hero-btn:hover{background:#fff;transform:scale(1.06)}
+    /* Scroll cue */
+    .scroll-cue{
+      position:absolute;left:50%;bottom:26px;z-index:3;
+      width:26px;height:26px;margin-left:-13px;
+      border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);
+      transform:rotate(45deg);opacity:.45;
+      animation:cue 1.8s ease-in-out infinite;
+    }
+    .scroll-cue:hover{opacity:.8}
+    @keyframes cue{
+      0%,100%{transform:rotate(45deg) translate(0,0);opacity:.35}
+      50%{transform:rotate(45deg) translate(5px,5px);opacity:.7}
+    }
+    @media (prefers-reduced-motion:reduce){ .scroll-cue{animation:none} }
+    /* Primary CTA: fades in after the logo reel gets its moment */
+    .hero-cta{
+      position:absolute;left:50%;bottom:96px;transform:translateX(-50%);z-index:3;
+      opacity:0;animation:heroCta .9s ease 1.3s forwards;
+    }
+    @keyframes heroCta{to{opacity:1}}
+    @media (prefers-reduced-motion:reduce){ .hero-cta{animation:none;opacity:1} }
+
+    /* ---------- Feature ---------- */
+    /* Full bleed: video runs from the page's left edge to the midpoint.
+       The 4:3 video sets the row height; the text column matches it exactly. */
+    .feature{display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:stretch}
+    .feature .media{position:relative;aspect-ratio:4/3;width:100%;overflow:hidden;background:#fff}
+    /* Two stacked players double-buffer the reel: the next clip preloads in
+       the hidden one, so swaps never flash the poster or a blank frame */
+    .feature .media video{
+      position:absolute;inset:0;width:100%;height:100%;
+      object-fit:contain;display:block;
+      transition:opacity .25s ease;
+    }
+    .feature .media video.standby{opacity:0}
+    .feature .body{
+      display:flex;flex-direction:column;justify-content:center;
+      padding:56px clamp(24px,4vw,72px);
+    }
+    .feature h2{font-size:2.2rem;font-weight:800;line-height:1.15;margin-bottom:20px}
+    .feature p{margin-bottom:18px;color:var(--ink-soft);font-size:1.12rem;font-weight:450;line-height:1.6}
+    .feature .btn{margin-top:14px}
+
+    /* ---------- Clips + Map (full bleed 50/50) ---------- */
+    .clips{position:relative;background:#fff;overflow:hidden}
+    .clips-layout{
+      display:grid;grid-template-columns:1fr 1fr;gap:0;
+      align-items:stretch;min-height:620px;
+    }
+    .clips-col{
+      display:flex;flex-direction:column;justify-content:center;align-items:center;
+      padding:80px clamp(24px,4vw,64px);
+    }
+    .clips-title{
+      font-size:2.2rem;font-weight:800;line-height:1.15;
+      margin-bottom:28px;text-align:center;
+    }
+    /* isolate: keeps Leaflet's internal z-indexes (400-1000) from escaping
+       and painting over the sticky header */
+    .map-col{position:relative;overflow:hidden;isolation:isolate;z-index:0}
+    /* neutral grey while tiles load, to match Positron rather than flash warm */
+    #map{position:absolute;inset:0;width:100%;height:100%;background:#eceff1;z-index:0}
+    /* Positron paints water rgb(212,218,220) — a grey with a faint blue cast —
+       while its land tones are neutral (channels within 2 of each other).
+       Saturation therefore lands almost entirely on the water: it comes up to a
+       clear pale blue while the land stays grey. Stay at 4; by 5 the land picks
+       up a cream cast, which is the warmth we left Voyager to get away from. */
+    .map-base{filter:saturate(4)}
+    /* Apple pin: drop the default marker chrome */
+    .apple-pin{background:none;border:0}
+    .apple-pin img{
+      width:100%;height:100%;display:block;
+      filter:drop-shadow(0 3px 5px rgba(0,0,0,.35));
+    }
+    .leaflet-popup-content{font-family:'Inclusive Sans',Arial,sans-serif;font-weight:600;color:var(--ink)}
+    /* Label floating above the active clip's apple */
+    .clip-tip{
+      font-family:'Inclusive Sans',Arial,sans-serif;
+      background:var(--red);color:#fff;border:0;border-radius:4px;
+      padding:7px 12px;font-size:.78rem;line-height:1.35;text-align:center;
+      box-shadow:0 6px 16px rgba(0,0,0,.28);
+    }
+    .clip-tip b{font-weight:700}
+    .clip-tip::before{border-top-color:var(--red) !important}
+    /* Full-screen toggle: same treatment as the hero and clip player buttons.
+       Sits above Leaflet's controls, which top out around z-index 1000. */
+    .map-fs-btn{
+      position:absolute;top:12px;right:12px;z-index:1200;
+      width:36px;height:36px;border-radius:50%;cursor:pointer;
+      border:1px solid rgba(0,0,0,.15);background:rgba(255,255,255,.85);
+      color:var(--ink);display:grid;place-items:center;
+      transition:background .2s,transform .2s;backdrop-filter:blur(4px);
+    }
+    .map-fs-btn:hover{background:#fff;transform:scale(1.06)}
+    .map-fs-btn svg{
+      width:17px;height:17px;display:block;fill:none;stroke:currentColor;
+      stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+    }
+    /* Native fullscreen puts the element in the top layer, so the stacking
+       context below doesn't apply — only the mobile height cap needs undoing.
+       :fullscreen and :-webkit-full-screen must stay in SEPARATE rules; a
+       browser that doesn't know one would throw out the whole selector list. */
+    .map-col:fullscreen{background:#fff;height:auto}
+    .map-col:fullscreen #map{position:absolute;inset:0;height:100%}
+    .map-col:-webkit-full-screen{background:#fff;height:auto}
+    .map-col:-webkit-full-screen #map{position:absolute;inset:0;height:100%}
+    /* iOS Safari has no element fullscreen, so pin the column over the page.
+       .map-col's own isolation/z-index has to come off here or the sticky
+       header (z-index 2000) would paint straight over the "fullscreen" map. */
+    body.map-fs{overflow:hidden}
+    body.map-fs .map-col{
+      position:fixed;inset:0;z-index:9000;
+      isolation:auto;overflow:visible;height:auto;background:#fff;
+    }
+    body.map-fs #map{position:absolute;inset:0;height:100%}
+    @media (max-width:900px){
+      .clips-layout{grid-template-columns:1fr;min-height:0}
+      .clips-col{padding:56px 24px}
+      .map-col{height:380px}
+      #map{position:relative;height:380px}
+    }
+
+    /* ---------- Testimonials ---------- */
+    .quotes{position:relative;color:#fff;text-align:center;padding:100px 0;overflow:hidden}
+    .quotes::before{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(165deg,#330707 0%,#1e0303 100%);
+    }
+    .quotes .wrap{position:relative;z-index:1}
+    .quotes .headline{font-size:clamp(1.8rem,3.4vw,2.6rem);font-weight:800;margin-bottom:6px}
+    .quotes .attr{font-weight:300;opacity:.85;margin-bottom:34px}
+    /* News (left) + reviews (right) columns */
+    .qn-grid{
+      display:grid;grid-template-columns:minmax(280px,4fr) minmax(0,8fr);
+      gap:clamp(36px,5vw,84px);text-align:left;
+    }
+    .qcol-head{
+      font-size:.8rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+      color:rgba(255,255,255,.75);border-bottom:1px solid rgba(255,255,255,.3);
+      padding-bottom:12px;margin-bottom:10px;
+    }
+    .feed{list-style:none}
+    .feed li{padding:18px 0;border-bottom:1px solid rgba(255,255,255,.14)}
+    .feed li:last-child{border-bottom:0}
+    .feed-date{
+      display:block;font-size:.72rem;font-weight:600;letter-spacing:.1em;
+      text-transform:uppercase;color:rgba(255,255,255,.6);
+    }
+    .feed a{display:block;margin:5px 0 6px;font-weight:700;font-size:1.02rem;line-height:1.35}
+    .feed a:hover{text-decoration:underline}
+    .feed p{font-size:.86rem;font-weight:300;color:rgba(255,255,255,.8)}
+    @media (max-width:900px){
+      .qn-grid{grid-template-columns:1fr}
+    }
+    .stars{
+      display:block;color:#ffb400;font-size:.85rem;letter-spacing:3px;
+      margin-bottom:8px;line-height:1;
+    }
+    .stars-lg{font-size:1.15rem;margin-bottom:12px}
+    .quote-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;text-align:left}
+    @media (max-width:640px){
+      .quote-grid{grid-template-columns:1fr}
+    }
+    .quote-grid blockquote{
+      background:rgba(255,255,255,.06);border-left:3px solid var(--red-bright);
+      padding:22px 24px;border-radius:4px;font-weight:300;
+    }
+    .quote-grid cite{display:block;margin-top:12px;font-size:.85rem;font-style:normal;opacity:.75}
+    .quotes .btn{margin-top:34px}
+
+    /* ---------- Greeter clips carousel (portrait 9:16) ---------- */
+    .rev-carousel{
+      position:relative;width:100%;max-width:320px;margin:0 auto;
+      transition:max-width .4s ease;
+    }
+    .rev-stage{
+      position:relative;aspect-ratio:9/16;overflow:hidden;background:transparent;
+      transition:aspect-ratio .4s ease;
+    }
+    /* QR slides: let the frame go landscape so the code is big and scannable */
+    .rev-carousel.qr-mode{max-width:100%}
+    .rev-carousel.qr-mode .rev-stage{aspect-ratio:16/9}
+    .rev-slide{
+      position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;
+    }
+    .rev-slide.is-active{opacity:1;visibility:visible}
+    .rev-slide img,.rev-slide video{width:100%;height:100%;object-fit:cover;display:block}
+    /* Clip player: same treatment as the hero reels, scaled to this frame */
+    .clip-play{
+      position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4;
+      width:62px;height:62px;border-radius:50%;cursor:pointer;
+      background:rgba(255,255,255,.9);border:1px solid rgba(0,0,0,.08);
+      display:grid;place-items:center;transition:transform .2s ease;
+      box-shadow:0 10px 30px rgba(0,0,0,.22);
+    }
+    .clip-play::before{
+      content:"";border-left:18px solid var(--red);
+      border-top:11px solid transparent;border-bottom:11px solid transparent;margin-left:5px;
+    }
+    .clip-play:hover{transform:translate(-50%,-50%) scale(1.08)}
+    .clip-play.is-hidden{display:none}
+    .clip-controls{position:absolute;right:10px;bottom:10px;z-index:5;display:flex;gap:6px}
+    .clip-btn{
+      width:32px;height:32px;border-radius:50%;cursor:pointer;
+      border:1px solid rgba(0,0,0,.15);background:rgba(255,255,255,.85);
+      color:var(--ink);font-size:.68rem;line-height:1;
+      display:grid;place-items:center;transition:background .2s,transform .2s;
+      backdrop-filter:blur(4px);
+    }
+    .clip-btn:hover{background:#fff;transform:scale(1.06)}
+    /* QR must never be cropped, or it stops scanning */
+    .rev-slide.is-qr img{object-fit:contain;padding:0}
+    .rev-arrow{
+      position:absolute;top:50%;transform:translateY(-50%);z-index:4;
+      width:36px;height:36px;border-radius:50%;cursor:pointer;
+      border:0;background:rgba(0,0,0,.35);
+      color:#fff;font-size:.85rem;display:grid;place-items:center;
+      opacity:.75;transition:opacity .2s,background .2s,transform .2s;
+    }
+    .rev-arrow:hover{opacity:1;background:rgba(0,0,0,.7);transform:translateY(-50%) scale(1.08)}
+    .rev-arrow.prev{left:-18px}
+    .rev-arrow.next{right:-18px}
+    .rev-dots{display:flex;gap:8px;margin-top:16px;justify-content:center}
+    .rev-dot{
+      width:9px;height:9px;border-radius:50%;cursor:pointer;padding:0;
+      border:0;background:rgba(0,0,0,.2);transition:background .2s,transform .2s;
+    }
+    .rev-dot:hover{background:rgba(0,0,0,.4)}
+    .rev-dot.is-active{background:var(--red);transform:scale(1.25)}
+    @media (max-width:900px){
+      .rev-carousel{margin-left:auto;margin-right:auto}
+      .rev-dots{justify-content:center}
+      .rev-arrow.prev{left:6px}
+      .rev-arrow.next{right:6px}
+    }
+
+    /* ---------- Footer ---------- */
+    footer{background:var(--ink);color:#cfcfcf;padding:72px 0 40px;font-size:.9rem}
+    .foot-top{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:40px;margin-bottom:50px}
+    .foot-brand img{height:70px;margin-bottom:18px;filter:brightness(0) invert(1);opacity:.9}
+    footer h5{color:#fff;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px;font-weight:600}
+    footer ul{list-style:none}
+    footer ul li{margin-bottom:10px}
+    footer ul li a:hover{color:#fff}
+    .newsletter{border-top:1px solid #3a3a3a;padding-top:40px;max-width:560px}
+    .newsletter h2{color:#fff;font-size:1.4rem;font-weight:600;margin-bottom:14px}
+    .newsletter p{font-size:.82rem;color:var(--muted);margin-bottom:14px}
+    .news-form{display:flex;gap:10px;margin:18px 0}
+    .news-form input{flex:1;padding:13px 16px;border:0;border-radius:2px;font-family:inherit}
+    .foot-bottom{margin-top:44px;padding-top:24px;border-top:1px solid #3a3a3a;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:.8rem}
+    .foot-bottom a{text-decoration:underline}
+
+    /* ---------- Scroll fade-in (matches original Squarespace .preFade/.fadeIn) ---------- */
+    .reveal{opacity:0;transition:opacity .9s ease;transition-delay:var(--fade-delay,0s)}
+    .reveal.in{opacity:1}
+    @media (prefers-reduced-motion:reduce){
+      .reveal{opacity:1 !important;transition:none}
+    }
+
+    /* ---------- Responsive ---------- */
+    /* The full nav row (links + both buttons + socials) needs ~1050px;
+       collapse to the hamburger before it runs out of room */
+    @media (max-width:1080px){
+      .menu{
+        position:fixed;inset:84px 0 auto 0;flex-direction:column;background:#fff;
+        border-bottom:1px solid var(--line);padding:10px 0;gap:0;margin:0;
+        display:none;box-shadow:0 20px 30px rgba(0,0,0,.08);
+      }
+      .menu.open{display:flex}
+      .menu>li{width:100%}
+      .dropdown{position:static;opacity:1;visibility:visible;transform:none;box-shadow:none;border:0;padding:0 0 8px 16px}
+      .menu>li:not(:hover) .dropdown{opacity:1;visibility:visible}
+      .hamburger{display:block}
+      /* Donate stays pinned top right; Request a Greeter is covered by the hero CTA */
+      .nav-actions{margin-left:auto;margin-right:4px}
+      .nav-actions .btn-outline,.nav-actions .nav-social{display:none}
+      .nav-actions .btn{padding:11px 20px;font-size:.88rem}
+    }
+    @media (max-width:900px){
+      .feature{grid-template-columns:1fr}
+      .feature .body{padding:48px 24px}
+      .foot-top{grid-template-columns:1fr 1fr}
+      .foot-brand{grid-column:1/-1}
+    }
+    @media (max-width:560px){
+      .logo-svg{height:38px}
+      .logo-video{height:54px}
+      .news-form{flex-direction:column}
+      .foot-top{grid-template-columns:1fr}
+    }
+  
+    /* Inclusive Sans maxes out at weight 700; a hairline stroke adds
+       the missing step so titles hold their display weight */
+    h1,h2,h3,.headline{-webkit-text-stroke:.5px currentColor}
+  </style>
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header>
+    <nav class="wrap nav">
+      <a class="logo" href="#" aria-label="Big Apple Greeter home">
+        <video class="logo-video" src="assets/logo-nav.mp4" autoplay muted playsinline aria-hidden="true"></video>
+        <svg class="logo-svg" viewBox="0 0 2693.39 624.82" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Big Apple Greeter — A Welcoming Friend in New York City">
+          <text class="lg-name" x="553.78" y="326.31" textLength="2068" lengthAdjust="spacing">Big Apple Greeter</text>
+          <text class="lg-tag" x="595.64" y="521.7" textLength="1990" lengthAdjust="spacing">A Welcoming Friend in New York City</text>
+          <g>
+            <path fill="#d1483d" d="M344.52,405.78c3.95,3.69,3.85,9.81.78,14.2-2.59,3.7-10.17,6.45-14.48,2.78l-15.51-13.19-9.31,9.91,13.82,12.74c3.85,3.55,3.89,10.14,1.54,13.81-3.13,4.89-10.89,7.17-15.65,2.98-7.5-6.6-17.17-13.55-22.72-21.71-5.92-8.71-11.02-15.52-21.22-17.85.9-7.69-.42-16.77-5.43-22.29-5.03-5.55-12.23-8.34-20.72-9.07-1.4-14.19-12.52-24.69-26.95-24.01-.38-12.69-9.14-21.37-19.18-23.84-13.15-3.24-22.01,4.56-30.27,13.66-8.12,8.95-15.42,17.42-12.15,30.27,2.72,10.66,12.27,19.5,25.98,19.12.99,14.34,11.91,24.97,26.87,24.25.4,14.24,11.48,24.67,26.44,24.56,1.1,8.99,5.36,17,12.29,20.8,17.52,9.6,30.17-.08,42.35-17.2l12.11,11.31c8.15,7.61,18.45,10.56,29,5.94,9.04-3.96,15.21-12.99,14.9-24.52,14.34-1.04,24.95-11.77,24.22-26.8,15.01-.53,24.59-12.13,24.48-26.56,9.33-1.17,18.84-6.18,22.42-15.01,4.1-10.11,2.59-21.01-5.91-28.77l-90.42-82.59c-8.04-7.34-22.93-7.08-30.41.16-19.96,19.32-33.16,42.9-44.63,29.47-4.68-5.48-2.52-11.78,2.17-17.32,23.19-27.38,45.2-54.58,71.12-79.42,38.36-36.76,90.02-49,131.35-11.41,25.13,22.85,35.75,51.83,36.01,86.01.44,58.33-4.7,116.02-23.74,171.29-8.66,25.15-18.6,47.81-33.5,69.16-25.79,36.95-69.52,50.58-112.17,34.36-22.8-11.17-47.21-10.07-68.38,5.78-32.77,11.72-71.26,1.16-94.27-25.36-14.13-16.29-26.39-32.75-36.54-51.84-35.44-66.69-64.9-166.61-43.74-239.63,12.86-44.38,57.26-71.05,102.03-65.82,15.92,1.86,28.89,8.65,40.2,19.26l48.72,45.66-30.56,36.69c-8.72,10.47-6.46,25.86,3.53,34.4s25.32,8.02,34.96-2.44l25.41-27.57c4.34-4.7,11.82-2.54,16.04,1.34l89.25,81.97c4.15,3.81.62,13.29-2.73,15.36-4.42,2.74-11.06,2.19-15.24-1.65l-11.3-10.42-9.89,9.68,12.99,12.16c4.35,4.08,4.21,11.23.52,15.45-3.65,4.18-10.88,4.81-15.25.93l-14.07-12.5-9.17,10.26,13.99,13.05Z"/>
+            <path fill="#d1483d" d="M179.16,376.06c-4.05,4.62-11.57,3.6-15.24.48-3.59-3.05-5.15-11.27-1.68-15.02l13.34-14.43c3.71-4.01,10.35-4.51,14.82-1.54,3.57,2.37,6.27,10.57,2.91,14.4l-14.15,16.11Z"/>
+            <path fill="#d1483d" d="M233.69,424.03c-4.63,5.08-11.78,4.96-16.03,1.45-4.49-3.71-5.02-11.64-.94-16.06l12.36-13.4c4.47-4.85,12.33-4.42,16.42.15,4.44,4.97,3.02,11.61-1.36,16.41l-10.45,11.46Z"/>
+            <path fill="#d1483d" d="M206.41,400.08c-4.4,4.79-11.58,4.02-15.35.86-4.99-4.19-5.58-11.52-.81-16.44l14.24-14.68c3.58-3.69,12.74-.8,14.96,2.7,3,4.71,2.24,10.92-1.73,15.24l-11.31,12.34Z"/>
+            <path fill="#d1483d" d="M268.45,431.26c2.71,9.25-9.39,21.68-17.73,21.41-3.89-.12-8.94-4.16-9.84-8.15-2.12-9.4,10.41-20.68,16.29-21.06,5.14-.33,10.08,3.73,11.27,7.8Z"/>
+            <path fill="#6baa64" d="M161.18,35.76c4.72,6.25,11.84,10.02,19.84,12.76,21.45,7.29,45.93,16.23,63.24,30.36,22.12,21.37,30.81,47.83,32.84,78.15l51.89-51.11,10.39,9.28-34.58,34.21c-10.56,10.44-18.35,22.49-26.59,34.79-5.59,8.32-9.9,16.94-14.66,26.34-4.76-7.54-11.26-13.71-18.76-19.13l-33.13-24.19c-19.3-14.08-34.87-30.44-45.8-51.85-7.04-13.83-10.73-28.91-12.96-44.19-1.74-12.13.33-24.19,3.48-35.37h4.76l.04-.04ZM258.54,181.2c6.13-22.24,4.35-45.18-6.25-65.19-15.99-30.11-50.73-48.12-83.78-55.7-3.93,15.12,3.98,33.63,11.68,47.09,6.25,10.89,13.54,20.5,21.37,30.32,15.86,17.27,36.32,30.65,56.99,43.53v-.04Z"/>
+          </g>
+        </svg>
+      </a>
+
+      <ul class="menu" id="menu">
+        <li>
+          <a href="visitors.html">Visitors</a>
+        </li>
+        <li>
+          <a href="volunteers.html">Volunteers</a>
+        </li>
+        <li>
+          <a href="about.html">About Us</a>
+        </li>
+        <li>
+          <a href="support.html">Support Us</a>
+        </li>
+      </ul>
+
+      <div class="nav-actions">
+        <a class="btn btn-outline" href="register.html">Request a Greeter</a>
+        <a class="btn" href="https://bigapplegreeter.kindful.com" target="_blank" rel="noopener">Donate</a>
+        <div class="nav-social">
+          <a href="https://www.instagram.com/bigapplegreeter" target="_blank" rel="noopener" aria-label="Big Apple Greeter on Instagram" title="Instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.3-1.46.72-2.12 1.39C1.35 2.68.93 3.35.63 4.14.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.3.79.72 1.46 1.39 2.12.66.67 1.33 1.09 2.12 1.39.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56.79-.3 1.46-.72 2.12-1.39.67-.66 1.09-1.33 1.39-2.12.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91-.3-.79-.72-1.46-1.39-2.12C21.32 1.35 20.65.93 19.86.63 19.1.33 18.22.13 16.95.07 15.67.01 15.26 0 12 0z"/><path d="M12 5.84a6.16 6.16 0 100 12.32 6.16 6.16 0 000-12.32zm0 10.16a4 4 0 110-8 4 4 0 010 8z"/><circle cx="18.41" cy="5.59" r="1.44"/></svg>
+          </a>
+          <a href="https://www.facebook.com/bigapplegreeter/" target="_blank" rel="noopener" aria-label="Big Apple Greeter on Facebook" title="Facebook">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+          </a>
+          <a href="#" aria-label="Big Apple Greeter on YouTube" title="YouTube">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.19a3.02 3.02 0 00-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.5A3.02 3.02 0 00.5 6.19C0 8.08 0 12 0 12s0 3.92.5 5.81a3.02 3.02 0 002.12 2.14c1.88.5 9.38.5 9.38.5s7.5 0 9.38-.5a3.02 3.02 0 002.12-2.14C24 15.92 24 12 24 12s0-3.92-.5-5.81zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Open menu">&#9776;</button>
+    </nav>
+    <a class="credit-link" href="https://jkmry.com" target="_blank" rel="noopener">JKMRY.COM</a>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <video class="hero-video" id="heroVideo" autoplay loop muted playsinline poster="assets/hero-poster.jpg">
+      <source src="assets/hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero-cta">
+      <a class="btn" href="register.html">Request a Greeter</a>
+    </div>
+    <div class="hero-controls">
+      <button class="hero-btn" id="heroSound" aria-label="Unmute video" title="Unmute video">&#128263;</button>
+      <button class="hero-btn" id="heroToggle" aria-label="Pause video" title="Pause video">&#10073;&#10073;</button>
+    </div>
+    <a class="scroll-cue" href="#feature" aria-label="Scroll to content"></a>
+  </section>
+
+  <!-- ============ FEATURE ============ -->
+  <section class="feature" id="feature">
+    <div class="media">
+      <video id="mediaVideo" autoplay muted playsinline poster="assets/astor_apple.jpg"
+             aria-label="Big Apple Greeter landmarks: the Astor Place cube and the Unisphere"></video>
+      <video id="mediaVideoB" class="standby" muted playsinline preload="auto" aria-hidden="true"></video>
+    </div>
+    <div class="body">
+      <h2>Big Apple Greeter, New York Icon.</h2>
+      <p>Stroll above Manhattan streets on the High Line. Poke into the happening shops of Brooklyn. Savor the ethnic murals and delicious foods of the Bronx or Queens. Ferry your way past Lady Liberty to a new point of view.</p>
+      <p>Spend two to four hours getting the insider scoop from volunteers who actually live here. We&rsquo;re not professional tour guides. We&rsquo;re the people of New York, proudly representing our city and sharing it with you.</p>
+      <a class="btn btn-outline" href="#">Learn More</a>
+    </div>
+  </section>
+
+  <!-- ============ TESTIMONIALS ============ -->
+  <!-- ============ CLIPS + MAP ============ -->
+  <section class="clips">
+    <div class="clips-layout">
+     <div class="clips-col">
+      <h2 class="clips-title">We&rsquo;ll take you there.</h2>
+
+      <!-- Greeter clips carousel -->
+      <div class="rev-carousel">
+        <button class="rev-arrow prev" id="revPrev" aria-label="Previous clip">&#10094;</button>
+        <div class="rev-stage">
+          <div class="rev-slide is-active">
+            <video id="clipVideo" src="assets/dumpling-map.mp4" playsinline preload="metadata"
+                   poster="assets/dumpling-poster.jpg"
+                   aria-label="A Greeter on dumplings at North Dumpling Co, Lower East Side"></video>
+            <button class="clip-play" id="clipPlay" aria-label="Play the clip"></button>
+            <div class="clip-controls">
+              <button class="clip-btn" id="clipSound" aria-label="Mute video" title="Mute video">&#128266;</button>
+              <button class="clip-btn" id="clipToggle" aria-label="Play video" title="Play video">&#9654;</button>
+            </div>
+          </div>
+          <div class="rev-slide"><img src="assets/review-3.jpg" alt="A Greeter on the best view of the city"></div>
+          <div class="rev-slide"><img src="assets/review-1.jpg" alt="A Greeter on helping visitors learn the subway"></div>
+          <div class="rev-slide"><img src="assets/review-2.jpg" alt="A Greeter recommending the bus"></div>
+          <div class="rev-slide is-qr"><img src="assets/new_qr.svg" alt="Scan to visit Big Apple Greeter"></div>
+          <div class="rev-slide is-qr"><img src="assets/old_qr.svg" alt="Scan to visit Big Apple Greeter"></div>
+        </div>
+        <button class="rev-arrow next" id="revNext" aria-label="Next clip">&#10095;</button>
+      </div>
+      <div class="rev-dots" id="revDots" aria-label="Choose a clip">
+        <button class="rev-dot is-active" data-go="0" aria-label="Dumplings on the Lower East Side"></button>
+        <button class="rev-dot" data-go="1" aria-label="Best view of the city"></button>
+        <button class="rev-dot" data-go="2" aria-label="Learning the subway"></button>
+        <button class="rev-dot" data-go="3" aria-label="Riding the bus"></button>
+        <button class="rev-dot" data-go="4" aria-label="QR code"></button>
+        <button class="rev-dot" data-go="5" aria-label="QR code"></button>
+      </div>
+
+     </div>
+
+     <div class="map-col">
+       <div id="map" role="img" aria-label="Map showing Big Apple Greeter in Lower Manhattan"></div>
+     </div>
+    </div>
+  </section>
+
+  <!-- ============ NEWS + REVIEWS ============ -->
+  <section class="quotes">
+    <div class="wrap">
+      <div class="qn-grid">
+
+        <!-- Left: news feed -->
+        <div>
+          <h3 class="qcol-head">In the News</h3>
+          <ul class="feed">
+            <li>
+              <span class="feed-date">April 2025 &middot; Bronx Times</span>
+              <a href="https://www.bxtimes.com/big-apple-greeter-shows-tourists-the-best-of-little-italy-and-beyond/" target="_blank" rel="noopener">Big Apple Greeter shows tourists the best of Little Italy and beyond</a>
+              <p>A profile of volunteer Ellen Gasnick, greeting visitors since the early 1990s.</p>
+            </li>
+            <li>
+              <span class="feed-date">NYC Tourism + Conventions</span>
+              <a href="https://www.nyctourism.com/articles/big-apple-greeter-helps-visitors-explore-nyc/" target="_blank" rel="noopener">Big Apple Greeter helps visitors explore New York City</a>
+              <p>The city&rsquo;s official tourism site on why a free walk with a local beats any bus tour.</p>
+            </li>
+            <li>
+              <span class="feed-date">amNewYork</span>
+              <a href="https://www.amny.com/news/big-apple-greeters-volunteer-to-bring-back-tourism-to-chinatown/" target="_blank" rel="noopener">Big Apple Greeter volunteers bring tourism back to Chinatown</a>
+              <p>Volunteers rally foot traffic for Chinatown and Little Italy businesses hit by the tourism slump.</p>
+            </li>
+            <li>
+              <span class="feed-date">CityPASS</span>
+              <a href="https://www.citypass.com/articles/new-york/big-apple-greeters-give-visitors-better-bite" target="_blank" rel="noopener">Big Apple Greeters give visitors a better bite</a>
+              <p>Why a free walk with a New Yorker beats the guidebook, from the sightseeing-pass company.</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Right: TripAdvisor pull quotes -->
+        <div>
+          <h3 class="qcol-head">Reviews from TripAdvisor</h3>
+          <span class="stars stars-lg" role="img" aria-label="Rated 5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <p class="headline">&ldquo;The cream of the crop.&rdquo;</p>
+          <p class="attr">&mdash; Jon L, July 2026</p>
+          <div class="quote-grid">
+            <blockquote><span class="stars" role="img" aria-label="Rated 5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span>&ldquo;Book it!&rdquo;<cite>&mdash; Emma D, Glasgow, United Kingdom &middot; July 2026</cite></blockquote>
+            <blockquote><span class="stars" role="img" aria-label="Rated 5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span>&ldquo;One of the best travel experiences ever.&rdquo;<cite>&mdash; Troy H, Melbourne, Australia &middot; June 2026</cite></blockquote>
+            <blockquote><span class="stars" role="img" aria-label="Rated 5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span>&ldquo;Tips and tricks that only true locals know.&rdquo;<cite>&mdash; Zorica V, Novi Sad, Serbia &middot; February 2026</cite></blockquote>
+            <blockquote><span class="stars" role="img" aria-label="Rated 5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span>&ldquo;Our greeter Karen was lovely and showed us some wonderful places.&rdquo;<cite>&mdash; TripAdvisor reviewer &middot; February 2026</cite></blockquote>
+            <blockquote><span class="stars" role="img" aria-label="Rated 5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span>&ldquo;An essential part of each visit.&rdquo;<cite>&mdash; Tom L, Ottawa, Canada &middot; November 2025</cite></blockquote>
+            <blockquote><span class="stars" role="img" aria-label="Rated 5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span>&ldquo;The most wonderful introduction to New York City.&rdquo;<cite>&mdash; TripAdvisor reviewer &middot; 2025</cite></blockquote>
+            <blockquote><span class="stars" role="img" aria-label="Rated 5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span>&ldquo;The fact that it is free is amazing!&rdquo;<cite>&mdash; TripAdvisor reviewer &middot; 2025</cite></blockquote>
+            <blockquote><span class="stars" role="img" aria-label="Rated 5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span>&ldquo;The walk along the promenade with the Lower Manhattan skyline as a backdrop is wonderful.&rdquo;<cite>&mdash; TripAdvisor reviewer &middot; 2025</cite></blockquote>
+          </div>
+          <a class="btn" href="https://www.tripadvisor.com/Attraction_Review-g60763-d276231-Reviews-Big_Apple_Greeter-New_York_City_New_York.html#REVIEWS" target="_blank" rel="noopener">Read More on TripAdvisor</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <img src="assets/iga-logo.png" alt="International Greeter Association">
+          <p>A free welcome-visitor service from NYC volunteers.</p>
+        </div>
+        <div>
+          <h5>Visitors</h5>
+          <ul>
+            <li><a href="register.html">Request a Greeter</a></li>
+            <li><a href="visitors.html#faqs">Visitor FAQs</a></li>
+            <li><a href="visitors.html#nyc">About NYC</a></li>
+            <li><a href="visitors.html#blog">Blog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Get Involved</h5>
+          <ul>
+            <li><a href="volunteers.html">Become a Greeter</a></li>
+            <li><a href="#">Volunteer FAQs</a></li>
+            <li><a href="support.html#why">Why Give</a></li>
+            <li><a href="support.html#ways">Ways to Give</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>About</h5>
+          <ul>
+            <li><a href="about.html#mission">Our Mission &amp; History</a></li>
+            <li><a href="about.html#board">Board of Directors</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="about.html#iga">International Greeter Association</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="newsletter">
+        <h2>Subscribe To Our Newsletter</h2>
+        <p>Please select all the ways you would like to hear from us.</p>
+        <form class="news-form" action="https://bigapplegreeter.us13.list-manage.com/subscribe/post?u=a27416b7f0798484983f7cdca&amp;id=3662b5e9ed" method="post" target="_blank" novalidate>
+          <input type="email" name="EMAIL" placeholder="Email address" aria-label="Email address" required>
+          <button class="btn" type="submit">Subscribe</button>
+        </form>
+        <p>You can unsubscribe at any time by clicking the link in the footer of our emails. We use Mailchimp as our marketing platform.</p>
+      </div>
+
+      <div class="foot-bottom">
+        <span>&copy; Big Apple Greeter. All rights reserved.</span>
+        <span><a href="#">Greeter Log-In</a> &nbsp;&middot;&nbsp; <a href="#">Visitor Log-In</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="assets/parks.js"></script>
+  <script src="assets/subway-lines.js"></script>
+  <script>
+    // ---- Map with the apple as the pin ----
+    (function(){
+      var el = document.getElementById('map');
+      if (!el || typeof L === 'undefined') return;
+
+      var BAG = [40.7127, -74.0040];              // Big Apple Greeter, 1 Centre St
+      var map = L.map('map', {
+        center: [40.7200, -73.9700],              // framed to keep Jersey off-screen
+        zoom: 13,
+        scrollWheelZoom: false                    // don't hijack page scrolling
+      });
+
+      // Positron, not Voyager: Voyager's cream land and yellow roads fight both
+      // the red apples and the subway colors. Positron is neutral grey.
+      //
+      // Split into its unlabeled base and its label-only overlay so the two can
+      // be treated differently: the base gets a saturation filter to bring the
+      // water up (see .map-base), the labels deliberately do not, or the place
+      // names would turn blue along with the harbor.
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
+        maxZoom: 19,
+        className: 'map-base'
+      }).addTo(map);
+
+      // Labels ride above the parks and subway lines, the way a real map stacks
+      // them — street names stay readable where a line crosses them. Still below
+      // markerPane (600), so the apples sit on top of everything.
+      map.createPane('labels');
+      map.getPane('labels').style.zIndex = 450;
+      map.getPane('labels').style.pointerEvents = 'none';
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19,
+        pane: 'labels'
+      }).addTo(map);
+
+      // ---- Parkland ----
+      // Positron renders parks as a barely-there grey, so paint them in.
+      // Own pane below the default overlayPane (400) so the subway lines and
+      // the apples always sit on top of the green, whatever order they load in.
+      map.createPane('parks');
+      map.getPane('parks').style.zIndex = 350;
+      // A muted sage: reads as park at a glance without competing with the red
+      // apples, and stays clearly distinct from the G train's bright green.
+      if (window.NYC_PARKS) {
+        L.geoJSON(window.NYC_PARKS, {
+          pane: 'parks',
+          interactive: false,
+          style: { color: '#b9d6ae', weight: .6, fillColor: '#d4e7cb', fillOpacity: .9 }
+        }).addTo(map);
+      }
+
+      // ---- Subway lines, in MTA trunk colors ----
+      // MTA colors by trunk line, not by route, so the 1/2/3 share one red and
+      // stack into a single visible line where they run together.
+      var MTA = {
+        '1':'#EE352E','2':'#EE352E','3':'#EE352E',
+        '4':'#00933C','5':'#00933C','6':'#00933C',
+        '7':'#B933AD',
+        'A':'#0039A6','C':'#0039A6','E':'#0039A6','SIR':'#0039A6',
+        'B':'#FF6319','D':'#FF6319','F':'#FF6319','M':'#FF6319',
+        'G':'#6CBE45',
+        'J':'#996633','Z':'#996633',
+        'L':'#A7A9AC',
+        'N':'#FCCC0A','Q':'#FCCC0A','R':'#FCCC0A','W':'#FCCC0A',
+        'ST':'#808183','SF':'#808183','SR':'#808183'   // shuttles
+      };
+
+      // Thin at the framed citywide view or the lines mat together into a
+      // smudge; thicker once a clip flies the map in on one neighborhood.
+      var lineWeight = function(z){ return z <= 12 ? 1.4 : z >= 15 ? 3.4 : z === 13 ? 2 : 2.6; };
+
+      var subway = null;
+      if (window.SUBWAY_LINES) {
+        subway = L.geoJSON(window.SUBWAY_LINES, {
+          interactive: false,                       // never steal clicks from the apples
+          style: function(f){
+            return {
+              color: MTA[f.properties.service] || '#808183',
+              weight: lineWeight(map.getZoom()),
+              opacity: .8,
+              lineCap: 'round',
+              lineJoin: 'round'
+            };
+          }
+        }).addTo(map);
+
+        map.on('zoomend', function(){
+          subway.setStyle({ weight: lineWeight(map.getZoom()) });
+        });
+      }
+
+      var appleIcon = L.icon({
+        iconUrl: 'assets/map-pin.svg',
+        iconSize: [46, 56],        // keeps the SVG's 100.52 x 122.01 ratio
+        iconAnchor: [23, 56],      // tip of the apple sits on the spot
+        popupAnchor: [0, -50],
+        className: 'apple-pin'
+      });
+
+      L.marker(BAG, { icon: appleIcon, alt: 'Big Apple Greeter' })
+        .addTo(map)
+        .bindPopup('<b>Big Apple Greeter</b><br>A Welcoming Friend in New York City');
+
+      // Each Greeter clip drops an apple at the place they're talking about.
+      // Slide order matches the carousel. `null` = show them all at once (QR slides).
+      var CLIPS = [
+        { name: 'North Dumpling Co', note: 'Dumplings on the Lower East Side', coords: [40.7152, -73.9886] },
+        { name: 'United Nations',  note: 'The best view in the city', coords: [40.7489, -73.9680] },
+        { name: 'Penn Station',    note: 'Learning the subway',       coords: [40.7506, -73.9935] },
+        { name: 'Astoria, Queens', note: 'Riding the bus',            coords: [40.7644, -73.9235] },
+        null,   // QR slide -> all pins
+        null    // QR slide -> all pins
+      ];
+      var pins = [];
+
+      var clearPins = function(){
+        pins.forEach(function(p){ map.removeLayer(p); });
+        pins = [];
+      };
+      var dropPin = function(c){
+        var m = L.marker(c.coords, { icon: appleIcon, alt: c.name })
+          .addTo(map)
+          .bindTooltip('<b>' + c.name + '</b><br>' + c.note, {
+            direction: 'top', offset: [0, -52], permanent: true, className: 'clip-tip'
+          });
+        pins.push(m);
+        return m;
+      };
+
+      window.showClipPin = function(i, fly){
+        clearPins();
+        var c = CLIPS[i];
+
+        if (!c) {
+          // QR slide: show every location at once, framed to fit them all
+          var all = CLIPS.filter(Boolean);
+          all.forEach(dropPin);
+          var group = L.featureGroup(pins.concat([L.marker(BAG)]));
+          if (fly) { map.flyToBounds(group.getBounds().pad(0.35), { duration: 1 }); }
+          return;
+        }
+
+        dropPin(c);
+        if (fly) { map.flyTo(c.coords, 14, { duration: 1 }); }
+      };
+
+      // Place the first clip's apple without moving the framed view
+      window.showClipPin(0, false);
+
+      // ---- Full-screen toggle ----
+      // Hand-rolled rather than a plugin: it's ~40 lines, and it can match the
+      // hero/clip buttons and fall back cleanly where the API doesn't exist.
+      (function(){
+        var col = document.querySelector('.map-col');
+        if (!col) return;
+
+        var EXPAND   = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+        var COLLAPSE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
+
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'map-fs-btn';
+        col.appendChild(btn);
+
+        var request = col.requestFullscreen || col.webkitRequestFullscreen;
+        var faking  = function(){ return document.body.classList.contains('map-fs'); };
+        var isOn    = function(){
+          return faking() ||
+                 document.fullscreenElement === col ||
+                 document.webkitFullscreenElement === col;
+        };
+
+        var was = null;
+        var sync = function(){
+          var on = isOn();
+          btn.innerHTML = on ? COLLAPSE : EXPAND;
+          var label = on ? 'Exit full screen map' : 'View map full screen';
+          btn.setAttribute('aria-label', label);
+          btn.setAttribute('title', label);
+          btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+          // The wheel is only a scroll hijack while the page is behind it
+          if (on) { map.scrollWheelZoom.enable(); } else { map.scrollWheelZoom.disable(); }
+          // Only re-measure on an actual transition. On the initial call there
+          // is nothing to resize, and the deferred setView would stomp a
+          // carousel flyTo if a visitor clicked an arrow inside the delay.
+          if (was === on) { return; }
+          was = on;
+          // Leaflet caches the container size, so it has to re-measure after
+          // the box changes. Restoring center/zoom keeps the framing put —
+          // invalidateSize alone drifts the view when the aspect ratio jumps.
+          var c = map.getCenter(), z = map.getZoom();
+          setTimeout(function(){
+            map.invalidateSize();
+            map.setView(c, z, { animate: false });
+          }, 120);
+        };
+
+        var fake = function(){ document.body.classList.add('map-fs'); sync(); };
+        var enter = function(){
+          if (!request) { fake(); return; }
+          var p;
+          try { p = request.call(col); } catch (e) { fake(); return; }
+          // Fullscreen can be refused (iframe without allowfullscreen, policy)
+          if (p && p.catch) { p.catch(fake); }
+        };
+        var exit = function(){
+          if (faking()) { document.body.classList.remove('map-fs'); sync(); return; }
+          if (document.exitFullscreen) { document.exitFullscreen(); }
+          else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); }
+        };
+
+        btn.addEventListener('click', function(){ if (isOn()) { exit(); } else { enter(); } });
+        document.addEventListener('fullscreenchange', sync);
+        document.addEventListener('webkitfullscreenchange', sync);
+        // Esc leaves native fullscreen by itself; the CSS fallback needs it wired
+        document.addEventListener('keydown', function(e){
+          if (e.key === 'Escape' && faking()) { exit(); }
+        });
+
+        sync();
+      })();
+    })();
+
+    // Mobile menu toggle
+    var ham = document.getElementById('hamburger');
+    var menu = document.getElementById('menu');
+    ham.addEventListener('click', function(){ menu.classList.toggle('open'); });
+
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ---- Feature media: landmark reel, double-buffered so clip changes
+    // never flash the poster or the previous video ----
+    (function(){
+      var mvA = document.getElementById('mediaVideo');
+      var mvB = document.getElementById('mediaVideoB');
+      if (!mvA || !mvB) return;
+      var reel = ['assets/astor_apple.mp4', 'assets/unisphere.mp4', 'assets/apple_of_liberty.mp4', 'assets/bronx.mp4', 'assets/staten.mp4'];
+      var idx = 0;               // clip index in the visible player
+      var act = mvA, standby = mvB;
+
+      var preload = function(){
+        standby.src = reel[(idx + 1) % reel.length];
+        standby.load();
+      };
+      var swap = function(){
+        idx = (idx + 1) % reel.length;
+        var t = act; act = standby; standby = t;
+        act.currentTime = 0;
+        act.play();
+        // incoming player always sits on top; the old one fades out beneath
+        // it, still showing its final frame (its src is untouched until the
+        // fade is over, so a loading/blank element is never visible)
+        act.style.zIndex = 1;
+        standby.style.zIndex = 0;
+        act.classList.remove('standby');
+        standby.classList.add('standby');
+        setTimeout(preload, 400);
+      };
+
+      // only the VISIBLE player's ending advances the reel — the hidden one
+      // must never drive a swap
+      var onEnded = function(e){ if (e.target === act) swap(); };
+      mvA.addEventListener('ended', onEnded);
+      mvB.addEventListener('ended', onEnded);
+
+      // after the first play: drop the poster (it re-flashes on every reload
+      // of this element) and drop autoplay (it would make this element start
+      // playing invisibly every time a new clip is preloaded into it)
+      mvA.addEventListener('playing', function(){
+        mvA.removeAttribute('poster');
+        mvA.removeAttribute('autoplay');
+      }, { once: true });
+
+      act.src = reel[0];
+      preload();
+      if (reduceMotion) { mvA.removeAttribute('autoplay'); mvA.pause(); }
+    })();
+
+    // ---- Hero reel: loops until stopped; sound available on click ----
+    // Browsers block autoplay WITH sound, so it starts muted and the
+    // speaker button turns audio on (a click is the required user gesture).
+    var hv = document.getElementById('heroVideo');
+    var ht = document.getElementById('heroToggle');
+    var hs = document.getElementById('heroSound');
+    if (hv && ht && hs) {
+      if (reduceMotion) { hv.removeAttribute('autoplay'); hv.pause(); }
+
+      var syncPlay = function(){
+        var paused = hv.paused;
+        ht.innerHTML = paused ? '&#9654;' : '&#10073;&#10073;';
+        var label = (paused ? 'Play' : 'Pause') + ' video';
+        ht.setAttribute('aria-label', label);
+        ht.setAttribute('title', label);
+      };
+      var syncSound = function(){
+        hs.innerHTML = hv.muted ? '&#128263;' : '&#128266;';
+        var label = (hv.muted ? 'Unmute' : 'Mute') + ' video';
+        hs.setAttribute('aria-label', label);
+        hs.setAttribute('title', label);
+      };
+
+      ht.addEventListener('click', function(){
+        if (hv.paused) { hv.play(); } else { hv.pause(); }
+      });
+      hs.addEventListener('click', function(){
+        hv.muted = !hv.muted;
+        if (!hv.muted && hv.paused) { hv.play(); }
+        syncSound();
+      });
+
+      hv.addEventListener('play', syncPlay);
+      hv.addEventListener('pause', syncPlay);
+      hv.addEventListener('volumechange', syncSound);
+      syncPlay(); syncSound();
+    }
+
+    // ---- Greeter clips carousel (reviews section) ----
+    (function(){
+      var rSlides = document.querySelectorAll('.rev-slide');
+      var rDots   = document.querySelectorAll('.rev-dot');
+      if (!rSlides.length) return;
+      var rCur = 0;
+
+      var rCarousel = document.querySelector('.rev-carousel');
+
+      var rShow = function(n){
+        rCur = (n + rSlides.length) % rSlides.length;
+        rSlides.forEach(function(s,i){ s.classList.toggle('is-active', i === rCur); });
+        rDots.forEach(function(d,i){ d.classList.toggle('is-active', i === rCur); });
+        // QR slides widen the frame to landscape so the code is big
+        rCarousel.classList.toggle('qr-mode', rSlides[rCur].classList.contains('is-qr'));
+        // Drop the apple on the place this Greeter is talking about
+        if (window.showClipPin) { window.showClipPin(rCur, true); }
+        // video slides play only while they're the one on screen
+        rSlides.forEach(function(s,i){
+          var v = s.querySelector('video');
+          if (!v || i === rCur) return;
+          v.pause();          // leaving the slide stops it
+          v.currentTime = 0;  // and it waits at the start for next time
+        });
+      };
+
+      // Clip player: badge starts it, corner buttons mirror the hero reels
+      (function(){
+        var cv = document.getElementById('clipVideo');
+        var badge = document.getElementById('clipPlay');
+        var ct = document.getElementById('clipToggle');
+        var cs = document.getElementById('clipSound');
+        if (!cv || !badge) return;
+
+        var syncPlay = function(){
+          var paused = cv.paused;
+          badge.classList.toggle('is-hidden', !paused);
+          ct.innerHTML = paused ? '&#9654;' : '&#10073;&#10073;';
+          var label = (paused ? 'Play' : 'Pause') + ' video';
+          ct.setAttribute('aria-label', label); ct.setAttribute('title', label);
+        };
+        var syncSound = function(){
+          cs.innerHTML = cv.muted ? '&#128263;' : '&#128266;';
+          var label = (cv.muted ? 'Unmute' : 'Mute') + ' video';
+          cs.setAttribute('aria-label', label); cs.setAttribute('title', label);
+        };
+
+        badge.addEventListener('click', function(){ cv.play(); });
+        cv.addEventListener('click', function(){ if (cv.paused) { cv.play(); } else { cv.pause(); } });
+        ct.addEventListener('click', function(){ if (cv.paused) { cv.play(); } else { cv.pause(); } });
+        cs.addEventListener('click', function(){ cv.muted = !cv.muted; syncSound(); });
+
+        cv.addEventListener('play', syncPlay);
+        cv.addEventListener('pause', syncPlay);
+        cv.addEventListener('ended', function(){ cv.currentTime = 0; syncPlay(); });
+        cv.addEventListener('volumechange', syncSound);
+        syncPlay(); syncSound();
+      })();
+
+      // Don't let two soundtracks run at once: pause the hero reel when a
+      // carousel clip is played.
+      var heroReel = document.getElementById('heroVideo');
+      rSlides.forEach(function(sl){
+        var v = sl.querySelector('video');
+        if (v && heroReel) { v.addEventListener('play', function(){ heroReel.pause(); }); }
+      });
+
+      // Manual only — advances when the visitor clicks
+      document.getElementById('revPrev').addEventListener('click', function(){ rShow(rCur - 1); });
+      document.getElementById('revNext').addEventListener('click', function(){ rShow(rCur + 1); });
+      rDots.forEach(function(d){
+        d.addEventListener('click', function(){ rShow(parseInt(d.dataset.go, 10)); });
+      });
+    })();
+
+    // Scroll fade-in: each section's items cascade in with a staggered delay (~0.9s ease)
+    var groups = [
+      ['.feature .media', '.feature h2', '.feature p', '.feature .btn'],
+      ['.quotes .qcol-head', '.quotes .feed li', '.quotes .headline', '.quotes .attr', '.quotes .quote-grid blockquote', '.quotes .btn'],
+      ['.foot-brand', '.foot-top > div:not(.foot-brand)', '.newsletter', '.foot-bottom']
+    ];
+
+    groups.forEach(function(selectors){
+      var items = [];
+      selectors.forEach(function(sel){
+        document.querySelectorAll(sel).forEach(function(el){ items.push(el); });
+      });
+      items.forEach(function(el, i){
+        el.classList.add('reveal');
+        el.style.setProperty('--fade-delay', (i * 0.15) + 's');
+      });
+    });
+
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+      document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+    } else {
+      document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+    }
+  </script>
+<script>
+  // Nav logo: play one full cycle on load, then animate only while hovering the nav.
+  // No loop attribute, so every cycle parks on the last frame.
+  (function(){
+    var v = document.querySelector('.logo-video');
+    var bar = document.querySelector('header');
+    if (!v || !bar) return;
+    var over = false;
+    bar.addEventListener('mouseenter', function(){ over = true; if (v.ended) v.play(); });
+    bar.addEventListener('mouseleave', function(){ over = false; });
+    v.addEventListener('ended', function(){ if (over) v.play(); });
+  })();
+</script>
+</body>
+</html>
