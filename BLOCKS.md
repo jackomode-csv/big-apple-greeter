@@ -78,13 +78,21 @@ Extracted from `about.html`, verbatim:
 | `header` | site chrome. The nav is a loop, so adding a page is one line of JSON |
 | `footer` | site chrome. The three link columns are a loop |
 | `hero-photo` | full-height hero, white type over a photo |
-| `split` | two columns: content on the left, a photo column on the right |
 | `group` | the workhorse. Heading, optional date stamp or link, then either a prose paragraph or a definition list. Optionally two-column |
+| `sections-with-photo` | a run of sections with a photo beside them. The sections inside are ordinary `group`s |
 | `photo-banner` | full-width image with a caption |
 | `cta` | closing call to action with buttons |
-| `wide` | the max-width container that holds the middle of a page |
 
-`split` and `wide` are containers: they hold other blocks and nest to any depth.
+**There are no layout containers in the content model.** A page is a flat list
+of things a person can name. The centred column that holds the middle of a page
+is applied by the renderer: block types listed in `FULL_BLEED` span the window,
+and any run of the rest is wrapped in `.wide`. Nobody editing the site has to
+know that div exists.
+
+`sections-with-photo` is the one block that holds others, and it holds them
+because that is what it *is* — two sections and the photo that sits beside them.
+The sections inside render through the ordinary `group` template, so a section
+beside a photo and a section on its own are described the same way.
 
 ---
 
@@ -115,9 +123,9 @@ What the remaining pages would need, given the blocks that already exist:
 
 | page | already covered | still to build |
 |---|---|---|
-| volunteers | header, footer, group, split, wide, cta | fam-hero, invited |
-| support | header, footer, group, cta, wide | sup-hero, story-quote, tax-band |
-| visitors | header, footer, group, wide | hub-hero, tabs, faq |
+| volunteers | header, footer, group, sections-with-photo, cta | fam-hero, invited |
+| support | header, footer, group, cta | sup-hero, story-quote, tax-band |
+| visitors | header, footer, group | hub-hero, tabs, faq |
 | index | header, footer | hero (video), feature, clips, quotes |
 | register, volunteer-register | header, footer | form-shell |
 
@@ -170,10 +178,9 @@ format is the same, so switching later costs nothing.
   Cloudflare Worker, free, about ten minutes.
 - The video moved to R2. `assets/*.mp4` is gitignored, so any deploy today
   ships a site with 13 dead reels.
-- `wide` and `split` flattened out of the content model. They are layout
-  containers, and asking a client to think about them is asking them to think
-  about HTML. "Two columns with a photo beside them" should be a property of a
-  content section, not a wrapper block.
+
+Every block type on the About page has an entry in `admin/config.yml`, so
+nothing on that page is uneditable.
 
 **What this gives them:** reorder blocks, edit any text, swap images, add and
 remove sections, add rows to a list.
@@ -206,7 +213,8 @@ It selects on specific classes — `.rev-carousel`, `.tabs`, `.stepper`,
 
 That splits the blocks in two:
 
-- **Content blocks** — `group`, `split`, `photo-banner`, `cta`, `hero-photo`.
+- **Content blocks** — `group`, `sections-with-photo`, `photo-banner`, `cta`,
+  `hero-photo`.
   Reorder, duplicate, delete and retype freely.
 - **Behavioural blocks** — the hero reel, the review carousel, the map, the
   tabs, the FAQ, the two form shells. Their script has to travel with them, and

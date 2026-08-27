@@ -1,8 +1,11 @@
-/* split.css -- styles for the split block.
+/* sections-with-photo.css -- styles for the sections-with-photo block.
+
+   The selectors still say .split. The class names in the markup are
+   deliberately unchanged; only the name the content file calls this block by
+   has changed, so nothing renders differently.
+
    Lifted from about.html verbatim; media queries regrouped by block. */
 
-/* ---------- Wide container, shared with the other hubs ---------- */
-    .wide{max-width:1800px;margin:0 auto;padding:0 clamp(24px,4vw,64px)}
 
 /* ---------- Photo-beside layout, like the homepage feature split ---------- */
     .split{

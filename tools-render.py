@@ -99,21 +99,51 @@ def block(b, indent=2):
     """Render one block. Containers recurse, so nesting depth is not fixed."""
     t = b['type']
     ctx = dict(b)
-    if t == 'split':
-        # Same indent, not indent+2: .split's inner column <div> is not
-        # itself indented, so its children sit level with the split.
-        ctx['left'] = stack(b.get('left', []), indent)
-    elif t == 'wide':
-        ctx['blocks'] = stack(b.get('blocks', []), indent + 2)
+    if t == 'sections-with-photo':
+        # The sections inside render through the ordinary group template, so
+        # a section beside a photo and a section on its own are the same
+        # thing described the same way. Same indent, not indent+2: the inner
+        # column <div> is not itself indented.
+        ctx['sections'] = stack(b.get('sections', []), indent)
     out = render(template(t), ctx)
     if b.get('note'):
         out = banner(b['note'], indent) + out
     return out
 
 
-def stack(blocks, indent=2):
-    """One blank line between blocks, whatever each template ends with."""
-    return '\n\n'.join(block(b, indent).rstrip('\n') for b in blocks) + '\n'
+# Blocks that span the full window. Everything else is page content and sits
+# in the centred column, so the renderer wraps runs of them rather than making
+# anyone put a container block in the content file.
+FULL_BLEED = {'header', 'hero-photo', 'cta', 'footer'}
+
+
+def stack(blocks, indent=2, wrap=False):
+    """One blank line between blocks, whatever each template ends with.
+
+    With wrap=True, consecutive content blocks are collected into the .wide
+    container. That container holds no content of its own, so it does not
+    belong in the content file: an editor should be arranging sections, not
+    thinking about which div they live in.
+    """
+    if not wrap:
+        return '\n\n'.join(block(b, indent).rstrip('\n') for b in blocks) + '\n'
+
+    out, run = [], []
+
+    def flush():
+        if run:
+            inner = '\n\n'.join(block(b, indent + 2).rstrip('\n') for b in run) + '\n'
+            out.append(render(template('_wide'), {'blocks': inner}).rstrip('\n'))
+            del run[:]
+
+    for b in blocks:
+        if b['type'] in FULL_BLEED:
+            flush()
+            out.append(block(b, indent).rstrip('\n'))
+        else:
+            run.append(b)
+    flush()
+    return '\n\n'.join(out) + '\n'
 
 
 def styles(blocks, seen=None):
@@ -133,9 +163,8 @@ def styles(blocks, seen=None):
         if t not in seen:
             seen.append(t)
             css.append(t)
-        for key in ('blocks', 'left'):
-            if isinstance(b.get(key), list):
-                css.extend(styles(b[key], seen))
+        if isinstance(b.get('sections'), list):
+            css.extend(styles(b['sections'], seen))
     return css
 
 
@@ -150,7 +179,7 @@ def read_css(names):
 
 def build(page):
     data = json.load(io.open(os.path.join(ROOT, 'content', page + '.json'), encoding='utf-8'))
-    body = stack(data['blocks'])
+    body = stack(data['blocks'], wrap=True)
     # Sorted, not page order: reordering content must never be able to change
     # which rule wins. _base stays first; the rest are alphabetical so the
     # cascade is a property of the library, not of how a page is arranged.

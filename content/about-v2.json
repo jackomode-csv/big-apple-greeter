@@ -39,205 +39,200 @@
       "cue_label": "Scroll to our mission"
     },
     {
-      "type": "wide",
-      "blocks": [
+      "type": "sections-with-photo",
+      "note": "MISSION + STORY, with Lynn's photo alongside both",
+      "photo": {
+        "src": "assets/lynn-brooks-mem.png",
+        "alt": "Archival photo of founder Lynn Brooks at a computer in the Big Apple Greeter office, 1993, with a green apple badge marking 35 years"
+      },
+      "sections": [
         {
-          "type": "split",
-          "note": "MISSION + STORY, with Lynn's photo alongside both",
-          "left": [
-            {
-              "type": "group",
-              "id": "mission",
-              "heading": "Our Mission",
-              "prose": "Big Apple Greeter&rsquo;s mission is to <b>enhance New York City&rsquo;s worldwide image</b> and <b>enrich the New York experience</b> by connecting visitors with knowledgeable and enthusiastic volunteers. We work toward a <b>friendlier</b> New York, showing the world the city we actually live in: welcoming, generous, and glad you came. A <b>stronger</b> New York, bolstering tourism and supporting the city&rsquo;s economic development, one good visit at a time. And a <b>prouder</b> New York, giving New Yorkers a way to volunteer that starts with the thing they already do best: loving where they live, out loud."
-            },
-            {
-              "type": "group",
-              "note": "HISTORY",
-              "id": "history",
-              "heading": "The Story",
-              "rows": {
-                "items": [
-                  {
-                    "term": "1992",
-                    "def": "Lynn Brooks founds Big Apple Greeter, the world&rsquo;s first free welcome-visitor program. No tickets, no scripts, no tips. Just a New Yorker and a visitor, walking."
-                  },
-                  {
-                    "term": "The idea",
-                    "def": "Lynn kept meeting people who wanted to see New York but felt intimidated by its size. Her answer: stop selling the skyline and start sharing the neighborhoods. The city gets small when a local shows you their block."
-                  },
-                  {
-                    "term": "The movement",
-                    "def": "The idea traveled. Volunteers in Australia, Argentina, Canada, and across the U.S. started programs of their own, and in 2005 the growing network held its founding roundtable right here in New York."
-                  },
-                  {
-                    "term": "Today",
-                    "def": "Our volunteers welcome about 5,000 visitors a year, across more than 100 neighborhoods, in more than 20 languages. Guests have come from all 50 states and over 100 countries. We&rsquo;re a proud partner of NYC Tourism + Conventions."
-                  }
-                ]
-              }
-            }
-          ],
-          "photo": {
-            "src": "assets/lynn-brooks-mem.png",
-            "alt": "Archival photo of founder Lynn Brooks at a computer in the Big Apple Greeter office, 1993, with a green apple badge marking 35 years"
-          }
-        },
-        {
-          "type": "photo-banner",
-          "note": "BANNER: GREETERS AT YANKEE STADIUM",
-          "src": "assets/yankee-group.jpg",
-          "alt": "Longtime Big Apple Greeter volunteers honored on the field at Yankee Stadium, with the scoreboards showing the organization's stats: 5,000 visitors a year, 100+ neighborhoods, 20+ languages, 100+ countries",
-          "caption": "Greeters who have been here since the early days, honored at Yankee Stadium."
+          "type": "group",
+          "id": "mission",
+          "heading": "Our Mission",
+          "prose": "Big Apple Greeter&rsquo;s mission is to <b>enhance New York City&rsquo;s worldwide image</b> and <b>enrich the New York experience</b> by connecting visitors with knowledgeable and enthusiastic volunteers. We work toward a <b>friendlier</b> New York, showing the world the city we actually live in: welcoming, generous, and glad you came. A <b>stronger</b> New York, bolstering tourism and supporting the city&rsquo;s economic development, one good visit at a time. And a <b>prouder</b> New York, giving New Yorkers a way to volunteer that starts with the thing they already do best: loving where they live, out loud."
         },
         {
           "type": "group",
-          "note": "BOARD",
-          "id": "board",
-          "heading": "Board Leadership",
-          "asof": "As of January 2025",
+          "note": "HISTORY",
+          "id": "history",
+          "heading": "The Story",
           "rows": {
             "items": [
               {
-                "term": "Patty Clark",
-                "role": "Co-Chair",
-                "def": "CEO, Project Gestalt, Inc."
+                "term": "1992",
+                "def": "Lynn Brooks founds Big Apple Greeter, the world&rsquo;s first free welcome-visitor program. No tickets, no scripts, no tips. Just a New Yorker and a visitor, walking."
               },
               {
-                "term": "Patrick W. Condren",
-                "role": "Co-Chair",
-                "def": "President, Patcon Associates, Ltd."
+                "term": "The idea",
+                "def": "Lynn kept meeting people who wanted to see New York but felt intimidated by its size. Her answer: stop selling the skyline and start sharing the neighborhoods. The city gets small when a local shows you their block."
               },
               {
-                "term": "Dan Morrison",
-                "role": "Co-Chair",
-                "def": "Greeter Representative, Big Apple Greeter."
+                "term": "The movement",
+                "def": "The idea traveled. Volunteers in Australia, Argentina, Canada, and across the U.S. started programs of their own, and in 2005 the growing network held its founding roundtable right here in New York."
               },
               {
-                "term": "Alicia Pierro",
-                "role": "Executive Director",
-                "def": "Executive Director, Big Apple Greeter."
-              }
-            ]
-          }
-        },
-        {
-          "type": "group",
-          "heading": "Directors",
-          "rows": {
-            "two_col": true,
-            "items": [
-              {
-                "term": "Howard Becker",
-                "def": "Vice President Membership, The Business Council of New York State, Inc."
-              },
-              {
-                "term": "Kamal Bhatia, CFA",
-                "def": "President and CEO of Principal Funds, Principal Global."
-              },
-              {
-                "term": "Garrett R. Bowden",
-                "def": "Managing Director, Chesterfield Faring, Ltd."
-              },
-              {
-                "term": "Christopher P. Boylan",
-                "def": "Immediate Past Co-Chair. Director, Governmental &amp; Strategic Partnerships, General Contractors Association."
-              },
-              {
-                "term": "Bennett Brooks",
-                "def": "Senior Mediator, Consensus Building Institute, Inc."
-              },
-              {
-                "term": "Kelly Ann Curtin",
-                "def": "Executive Vice President, Membership, NYC Tourism + Conventions."
-              },
-              {
-                "term": "Vijay Dandapani",
-                "def": "President &amp; CEO, Hotel Association of New York City, Inc."
-              },
-              {
-                "term": "Merrie L. Davis",
-                "def": "Producer &amp; CEO, Next Act 2 Follow, LLC."
-              },
-              {
-                "term": "Albert Fernandez",
-                "role": "Treasurer",
-                "def": "CFO/Controller, Hotel Association of New York City, Inc."
-              },
-              {
-                "term": "Rebecca Howard-Cooper",
-                "def": "Communications Strategist."
-              },
-              {
-                "term": "Avik Kabessa",
-                "def": "CEO, Carmel Car &amp; Limousine Service."
-              },
-              {
-                "term": "Peter Kohlmann",
-                "def": "Founder, PeKo Creative."
-              },
-              {
-                "term": "Phil Phillips",
-                "def": "Greeter Representative, Big Apple Greeter."
-              },
-              {
-                "term": "David Rothfeld, Esq.",
-                "def": "Partner, Ellenoff, Grossman &amp; Schole, LLP."
-              },
-              {
-                "term": "John J. Ruzich, OBE",
-                "def": "President &amp; CEO, The TIMM Group, LLC."
-              },
-              {
-                "term": "Markly Wilson",
-                "def": "Director, International Marketing, New York State Division of Tourism."
-              },
-              {
-                "term": "Peter Wright",
-                "def": "Greeter Representative, Big Apple Greeter."
-              },
-              {
-                "term": "Honorary lifetime members",
-                "def": "Including founding board member Douglas Durst and former chairs from MasterCard, AIG, and Con Edison."
-              },
-              {
-                "term": "Ex-officio",
-                "def": "The Mayor of New York City and the borough presidents."
-              }
-            ]
-          }
-        },
-        {
-          "type": "group",
-          "note": "IGA",
-          "id": "iga",
-          "heading": "The International Greeter Association",
-          "link": {
-            "href": "https://internationalgreeter.org",
-            "label": "internationalgreeter.org &rarr;"
-          },
-          "rows": {
-            "items": [
-              {
-                "term": "What it is",
-                "def": "A worldwide association of free greeter programs: more than 150 member programs in 40 countries on six continents, formally incorporated in 2019 after years as the informal Global Greeter Network."
-              },
-              {
-                "term": "Where it started",
-                "def": "Right here. The greeter idea began with Big Apple Greeter in 1992, and when the growing movement held its founding roundtable in 2005, New York was the host."
-              },
-              {
-                "term": "What every member promises",
-                "def": "Greets are always free. Volunteers offer real local hospitality. Every visitor and volunteer is welcome, without discrimination. Greeters promote tourism that&rsquo;s sustainable for their cities, and person-to-person connections that make a better world."
-              },
-              {
-                "term": "Why it matters",
-                "def": "One New Yorker&rsquo;s idea now welcomes visitors on six continents. When you&rsquo;re greeted anywhere from Paris to Buenos Aires, you&rsquo;re meeting Lynn&rsquo;s idea, translated."
+                "term": "Today",
+                "def": "Our volunteers welcome about 5,000 visitors a year, across more than 100 neighborhoods, in more than 20 languages. Guests have come from all 50 states and over 100 countries. We&rsquo;re a proud partner of NYC Tourism + Conventions."
               }
             ]
           }
         }
       ]
+    },
+    {
+      "type": "photo-banner",
+      "note": "BANNER: GREETERS AT YANKEE STADIUM",
+      "src": "assets/yankee-group.jpg",
+      "alt": "Longtime Big Apple Greeter volunteers honored on the field at Yankee Stadium, with the scoreboards showing the organization's stats: 5,000 visitors a year, 100+ neighborhoods, 20+ languages, 100+ countries",
+      "caption": "Greeters who have been here since the early days, honored at Yankee Stadium."
+    },
+    {
+      "type": "group",
+      "note": "BOARD",
+      "id": "board",
+      "heading": "Board Leadership",
+      "asof": "As of January 2025",
+      "rows": {
+        "items": [
+          {
+            "term": "Patty Clark",
+            "role": "Co-Chair",
+            "def": "CEO, Project Gestalt, Inc."
+          },
+          {
+            "term": "Patrick W. Condren",
+            "role": "Co-Chair",
+            "def": "President, Patcon Associates, Ltd."
+          },
+          {
+            "term": "Dan Morrison",
+            "role": "Co-Chair",
+            "def": "Greeter Representative, Big Apple Greeter."
+          },
+          {
+            "term": "Alicia Pierro",
+            "role": "Executive Director",
+            "def": "Executive Director, Big Apple Greeter."
+          }
+        ]
+      }
+    },
+    {
+      "type": "group",
+      "heading": "Directors",
+      "rows": {
+        "two_col": true,
+        "items": [
+          {
+            "term": "Howard Becker",
+            "def": "Vice President Membership, The Business Council of New York State, Inc."
+          },
+          {
+            "term": "Kamal Bhatia, CFA",
+            "def": "President and CEO of Principal Funds, Principal Global."
+          },
+          {
+            "term": "Garrett R. Bowden",
+            "def": "Managing Director, Chesterfield Faring, Ltd."
+          },
+          {
+            "term": "Christopher P. Boylan",
+            "def": "Immediate Past Co-Chair. Director, Governmental &amp; Strategic Partnerships, General Contractors Association."
+          },
+          {
+            "term": "Bennett Brooks",
+            "def": "Senior Mediator, Consensus Building Institute, Inc."
+          },
+          {
+            "term": "Kelly Ann Curtin",
+            "def": "Executive Vice President, Membership, NYC Tourism + Conventions."
+          },
+          {
+            "term": "Vijay Dandapani",
+            "def": "President &amp; CEO, Hotel Association of New York City, Inc."
+          },
+          {
+            "term": "Merrie L. Davis",
+            "def": "Producer &amp; CEO, Next Act 2 Follow, LLC."
+          },
+          {
+            "term": "Albert Fernandez",
+            "role": "Treasurer",
+            "def": "CFO/Controller, Hotel Association of New York City, Inc."
+          },
+          {
+            "term": "Rebecca Howard-Cooper",
+            "def": "Communications Strategist."
+          },
+          {
+            "term": "Avik Kabessa",
+            "def": "CEO, Carmel Car &amp; Limousine Service."
+          },
+          {
+            "term": "Peter Kohlmann",
+            "def": "Founder, PeKo Creative."
+          },
+          {
+            "term": "Phil Phillips",
+            "def": "Greeter Representative, Big Apple Greeter."
+          },
+          {
+            "term": "David Rothfeld, Esq.",
+            "def": "Partner, Ellenoff, Grossman &amp; Schole, LLP."
+          },
+          {
+            "term": "John J. Ruzich, OBE",
+            "def": "President &amp; CEO, The TIMM Group, LLC."
+          },
+          {
+            "term": "Markly Wilson",
+            "def": "Director, International Marketing, New York State Division of Tourism."
+          },
+          {
+            "term": "Peter Wright",
+            "def": "Greeter Representative, Big Apple Greeter."
+          },
+          {
+            "term": "Honorary lifetime members",
+            "def": "Including founding board member Douglas Durst and former chairs from MasterCard, AIG, and Con Edison."
+          },
+          {
+            "term": "Ex-officio",
+            "def": "The Mayor of New York City and the borough presidents."
+          }
+        ]
+      }
+    },
+    {
+      "type": "group",
+      "note": "IGA",
+      "id": "iga",
+      "heading": "The International Greeter Association",
+      "link": {
+        "href": "https://internationalgreeter.org",
+        "label": "internationalgreeter.org &rarr;"
+      },
+      "rows": {
+        "items": [
+          {
+            "term": "What it is",
+            "def": "A worldwide association of free greeter programs: more than 150 member programs in 40 countries on six continents, formally incorporated in 2019 after years as the informal Global Greeter Network."
+          },
+          {
+            "term": "Where it started",
+            "def": "Right here. The greeter idea began with Big Apple Greeter in 1992, and when the growing movement held its founding roundtable in 2005, New York was the host."
+          },
+          {
+            "term": "What every member promises",
+            "def": "Greets are always free. Volunteers offer real local hospitality. Every visitor and volunteer is welcome, without discrimination. Greeters promote tourism that&rsquo;s sustainable for their cities, and person-to-person connections that make a better world."
+          },
+          {
+            "term": "Why it matters",
+            "def": "One New Yorker&rsquo;s idea now welcomes visitors on six continents. When you&rsquo;re greeted anywhere from Paris to Buenos Aires, you&rsquo;re meeting Lynn&rsquo;s idea, translated."
+          }
+        ]
+      }
     },
     {
       "type": "cta",

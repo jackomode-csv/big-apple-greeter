@@ -47,3 +47,8 @@
 @media (max-width:560px){
   .logo-svg{height:38px}
 }
+
+/* The page content column. Applied by the renderer around any run of
+   content blocks, so it is not owned by any one block. */
+/* ---------- Wide container, shared with the other hubs ---------- */
+    .wide{max-width:1800px;margin:0 auto;padding:0 clamp(24px,4vw,64px)}

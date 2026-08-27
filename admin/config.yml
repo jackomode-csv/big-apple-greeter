@@ -70,7 +70,9 @@ collections:
               - name: group
                 label: Content section
                 summary: "{{fields.heading}}"
-                fields:
+                # Anchored so the same field list can be reused inside
+                # "Sections beside a photo" without being written twice.
+                fields: &section_fields
                   - { name: note, widget: hidden, required: false }
                   - { name: heading, label: Heading, widget: string }
                   - { name: id, label: Anchor name, widget: string, required: false, hint: "Lets other pages link straight here, e.g. #board" }
@@ -96,6 +98,24 @@ collections:
                           - { name: term, label: Name or label, widget: string }
                           - { name: role, label: Role, widget: string, required: false }
                           - { name: def, label: Description, widget: text }
+
+              - name: sections-with-photo
+                label: Sections beside a photo
+                summary: "Sections beside a photo"
+                fields:
+                  - { name: note, widget: hidden, required: false }
+                  - name: photo
+                    label: Photo on the right
+                    widget: object
+                    fields:
+                      - { name: src, label: Image, widget: image }
+                      - { name: alt, label: Description for screen readers, widget: string }
+                  - name: sections
+                    label: Sections in the left column
+                    label_singular: section
+                    widget: list
+                    summary: "{{fields.heading}}"
+                    fields: *section_fields
 
               - name: photo-banner
                 label: Full-width photo
@@ -140,13 +160,7 @@ collections:
                           - { name: label, widget: string }
                           - { name: href, widget: string }
 
-              # NOT YET EDITABLE. `wide` and `split` are layout containers that
-              # hold other blocks. A variable-type list nested inside another
-              # one is legal here but miserable to use, so they are left out
-              # rather than shipped as something confusing.
-              #
-              # The fix is to flatten them in the content model: make "two
-              # columns with a photo beside them" a property of a group rather
-              # than a wrapper block. That is a change to the JSON schema and
-              # the templates, not to this file, and it should happen before
-              # anyone is asked to use this.
+              # Every block type on the page is editable. There are no layout
+              # containers left in the content model: the old `wide` wrapper is
+              # applied by the renderer, and `split` became the content block
+              # above. Nothing here asks the client to think about a div.

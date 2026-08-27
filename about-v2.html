@@ -60,6 +60,11 @@
   .logo-svg{height:38px}
 }
 
+/* The page content column. Applied by the renderer around any run of
+   content blocks, so it is not owned by any one block. */
+/* ---------- Wide container, shared with the other hubs ---------- */
+    .wide{max-width:1800px;margin:0 auto;padding:0 clamp(24px,4vw,64px)}
+
 /* cta.css -- styles for the cta block.
    Lifted from about.html verbatim; media queries regrouped by block. */
 
@@ -230,11 +235,14 @@
 
 .photo-banner figcaption{margin-top:10px;font-size:.78rem;color:var(--ink-soft)}
 
-/* split.css -- styles for the split block.
+/* sections-with-photo.css -- styles for the sections-with-photo block.
+
+   The selectors still say .split. The class names in the markup are
+   deliberately unchanged; only the name the content file calls this block by
+   has changed, so nothing renders differently.
+
    Lifted from about.html verbatim; media queries regrouped by block. */
 
-/* ---------- Wide container, shared with the other hubs ---------- */
-    .wide{max-width:1800px;margin:0 auto;padding:0 clamp(24px,4vw,64px)}
 
 /* ---------- Photo-beside layout, like the homepage feature split ---------- */
     .split{
