@@ -1,0 +1,152 @@
+# Sveltia CMS configuration.
+#
+# Sveltia reads Decap's config format, so this file works with either. Sveltia
+# is the one to use: Decap is barely maintained now, and Sveltia is a drop-in
+# replacement with a faster UI and working media handling.
+#
+# The important line in here is `types:` under `blocks`. That is a variable-type
+# list: each item picks a block type and gets that block's fields, and the
+# editor can drag items to reorder them. It writes a `type` key to identify
+# which block an item is - which is exactly the shape content/about-v2.json is
+# already in. That was not planned; it is just what a block model looks like.
+
+backend:
+  name: github
+  repo: jackomode-csv/big-apple-greeter
+  branch: main
+  # Sveltia needs an OAuth relay so the browser can log in to GitHub. Deploy
+  # sveltia-cms-auth as a Cloudflare Worker (free) and put its URL here.
+  base_url: https://REPLACE-ME.workers.dev
+
+media_folder: assets
+public_folder: assets
+
+collections:
+  - name: pages
+    label: Pages
+    files:
+      - name: about
+        label: About Us
+        file: content/about-v2.json
+        description: >
+          Everything on the About page. Drag blocks to reorder them, click one
+          to edit its text, use the + button to add a new one.
+        fields:
+          - { name: title, label: Browser tab title, widget: string }
+          - { name: description, label: Search-result description, widget: text }
+
+          - name: blocks
+            label: Blocks on this page
+            label_singular: block
+            widget: list
+            types:
+
+              - name: header
+                label: Site header
+                summary: Site header (navigation)
+                fields:
+                  - { name: note, widget: hidden, default: HEADER }
+                  - { name: home, label: Logo links to, widget: string }
+                  - name: menu
+                    label: Navigation
+                    widget: list
+                    summary: "{{fields.label}}"
+                    fields:
+                      - { name: label, widget: string }
+                      - { name: href, widget: string }
+                      - { name: here, label: This is the current page, widget: boolean, default: false, required: false }
+
+              - name: hero-photo
+                label: Hero with background photo
+                summary: "Hero: {{fields.heading}}"
+                fields:
+                  - { name: note, widget: hidden, default: HERO }
+                  - { name: eyebrow, label: Small line above, widget: string }
+                  - { name: heading, label: Headline, widget: string }
+                  - { name: intro, label: Opening paragraph, widget: text }
+                  - { name: cue_href, label: Scroll arrow jumps to, widget: string, default: "#mission" }
+                  - { name: cue_label, label: Scroll arrow description, widget: string }
+
+              - name: group
+                label: Content section
+                summary: "{{fields.heading}}"
+                fields:
+                  - { name: note, widget: hidden, required: false }
+                  - { name: heading, label: Heading, widget: string }
+                  - { name: id, label: Anchor name, widget: string, required: false, hint: "Lets other pages link straight here, e.g. #board" }
+                  - { name: asof, label: Date stamp, widget: string, required: false }
+                  - name: link
+                    label: Link in the heading row
+                    widget: object
+                    required: false
+                    fields:
+                      - { name: label, widget: string }
+                      - { name: href, widget: string }
+                  - { name: prose, label: Paragraph, widget: text, required: false, hint: "Use this OR the list below, not both" }
+                  - name: rows
+                    label: List
+                    widget: object
+                    required: false
+                    fields:
+                      - { name: two_col, label: Two columns, widget: boolean, default: false, required: false }
+                      - name: items
+                        widget: list
+                        summary: "{{fields.term}}"
+                        fields:
+                          - { name: term, label: Name or label, widget: string }
+                          - { name: role, label: Role, widget: string, required: false }
+                          - { name: def, label: Description, widget: text }
+
+              - name: photo-banner
+                label: Full-width photo
+                summary: "Photo: {{fields.caption}}"
+                fields:
+                  - { name: note, widget: hidden, required: false }
+                  - { name: src, label: Image, widget: image }
+                  - { name: alt, label: Description for screen readers, widget: string }
+                  - { name: caption, label: Caption, widget: string }
+
+              - name: cta
+                label: Closing call to action
+                summary: "CTA: {{fields.heading}}"
+                fields:
+                  - { name: note, widget: hidden, default: CLOSING CTA }
+                  - { name: heading, widget: string }
+                  - { name: body, widget: text }
+                  - name: buttons
+                    widget: list
+                    summary: "{{fields.label}}"
+                    fields:
+                      - { name: label, widget: string }
+                      - { name: href, widget: string }
+                      - { name: outline, label: Outline style, widget: boolean, default: false, required: false }
+
+              - name: footer
+                label: Site footer
+                summary: Site footer
+                fields:
+                  - { name: note, widget: hidden, default: FOOTER }
+                  - { name: blurb, label: Line under the logo, widget: string }
+                  - name: columns
+                    label: Link columns
+                    widget: list
+                    summary: "{{fields.heading}}"
+                    fields:
+                      - { name: heading, widget: string }
+                      - name: links
+                        widget: list
+                        summary: "{{fields.label}}"
+                        fields:
+                          - { name: label, widget: string }
+                          - { name: href, widget: string }
+
+              # NOT YET EDITABLE. `wide` and `split` are layout containers that
+              # hold other blocks. A variable-type list nested inside another
+              # one is legal here but miserable to use, so they are left out
+              # rather than shipped as something confusing.
+              #
+              # The fix is to flatten them in the content model: make "two
+              # columns with a photo beside them" a property of a group rather
+              # than a wrapper block. That is a change to the JSON schema and
+              # the templates, not to this file, and it should happen before
+              # anyone is asked to use this.

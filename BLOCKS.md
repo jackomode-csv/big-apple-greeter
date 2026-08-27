@@ -128,6 +128,75 @@ the same block under a second name.
 
 ---
 
+## How someone edits the site
+
+Three levels, in increasing order of effort.
+
+### 1. Edit the JSON (works today, no infrastructure)
+
+Open `content/about-v2.json`, change the text, run:
+
+```
+python tools-render.py about-v2
+```
+
+Reordering the page is moving an entry in the `blocks` list. Adding a board
+member is appending to `rows.items`. Changing a headline is changing a string.
+No HTML involved.
+
+This is a developer workflow, not a client one, but it is the thing everything
+else is built on: the CMS below writes this same file.
+
+### 2. Sveltia CMS at /admin (the realistic client answer)
+
+`admin/config.yml` is written and ready. Sveltia gives a login screen, a form
+per block, and drag handles to reorder blocks. Clicking Publish commits the
+JSON back to GitHub; the workflow in `.github/workflows/build.yml` re-renders
+and deploys.
+
+The reason this fits so neatly is a coincidence worth stating: Sveltia's
+variable-type list widget stores which block an item is in a key called `type`,
+and lists its options under `types`. That is the exact shape
+`content/about-v2.json` already has. The content model was not designed for the
+CMS; it is just what a block model looks like from both ends.
+
+Sveltia rather than Decap because Decap is barely maintained now. The config
+format is the same, so switching later costs nothing.
+
+**Still needed before this works:**
+
+- Somewhere to host the site. It is not hosted anywhere at the moment.
+- An OAuth relay so the browser can log in to GitHub. `sveltia-cms-auth` as a
+  Cloudflare Worker, free, about ten minutes.
+- The video moved to R2. `assets/*.mp4` is gitignored, so any deploy today
+  ships a site with 13 dead reels.
+- `wide` and `split` flattened out of the content model. They are layout
+  containers, and asking a client to think about them is asking them to think
+  about HTML. "Two columns with a photo beside them" should be a property of a
+  content section, not a wrapper block.
+
+**What this gives them:** reorder blocks, edit any text, swap images, add and
+remove sections, add rows to a list.
+
+**What it does not give them:** free-form drag-anywhere layout. They cannot
+drag a text box to arbitrary coordinates the way Squarespace allows. That is a
+feature. It is what stops the site being wrecked by accident, and it is why the
+pages will still look designed in two years.
+
+### 3. In-page visual editing
+
+A `?edit=1` mode on the real page: click text to edit it where it sits, drag
+block handles to reorder, an add-block panel down one side. Saves back through
+the same JSON.
+
+This is buildable now specifically because the block model exists - the editor
+manipulates the block list and re-renders with a JavaScript port of the same
+forty-line template function. It is still a page builder, though, and page
+builders are weeks of work rather than days. Worth doing only if level 2 turns
+out not to be enough.
+
+---
+
 ## The constraint
 
 JavaScript. Per page: index 18.9 KB, register 21.3 KB, volunteer-register

@@ -151,7 +151,11 @@ def read_css(names):
 def build(page):
     data = json.load(io.open(os.path.join(ROOT, 'content', page + '.json'), encoding='utf-8'))
     body = stack(data['blocks'])
-    css = read_css(styles(data['blocks']))
+    # Sorted, not page order: reordering content must never be able to change
+    # which rule wins. _base stays first; the rest are alphabetical so the
+    # cascade is a property of the library, not of how a page is arranged.
+    used = styles(data['blocks'])
+    css = read_css(['_base'] + sorted(t for t in used if t != '_base'))
     html = render(template('_page'), dict(data, body=body, css=css))
     out = os.path.join(ROOT, page + '.html')
     io.open(out, 'w', encoding='utf-8', newline='').write(html)

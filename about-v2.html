@@ -60,96 +60,37 @@
   .logo-svg{height:38px}
 }
 
-/* header.css -- styles for the header block.
+/* cta.css -- styles for the cta block.
    Lifted from about.html verbatim; media queries regrouped by block. */
 
-.menu>li>a.is-here{color:var(--red);font-weight:600}
+/* ---------- Closing CTA ---------- */
+    .story-cta{text-align:center;padding:8px 24px 110px}
 
-/* hero-photo.css -- styles for the hero-photo block.
+.story-cta h2{font-size:clamp(1.9rem,3.4vw,2.7rem);font-weight:800;margin-bottom:14px}
+
+.story-cta p{color:var(--ink-soft);max-width:56ch;margin:0 auto 30px}
+
+.story-cta .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+.story-cta .btn{font-size:1.05rem;padding:17px 44px}
+
+.story-cta .btn-outline{font-size:1.05rem;padding:15px 36px}
+
+/* footer.css -- styles for the footer block.
    Lifted from about.html verbatim; media queries regrouped by block. */
 
-/* ---------- Hero: the founder's motto over the photobombing apple ---------- */
-    .about-hero{
-      position:relative;overflow:hidden;
-      min-height:calc(100vh - 84px);
-      min-height:calc(100svh - 84px);
-      display:flex;flex-direction:column;align-items:center;justify-content:space-between;
-      padding:56px 0 84px;
-      color:#fff;text-align:center;
-      text-shadow:0 1px 12px rgba(0,0,0,.55);
-    }
-
-.about-hero::before{
-      content:"";position:absolute;inset:0;
-      background:linear-gradient(rgba(20,0,0,.45),rgba(20,0,0,.1) 46%,rgba(20,0,0,.12) 62%,rgba(20,0,0,.3)),url('assets/photobomb.png') center/cover no-repeat;
-    }
-
-.about-hero>*{position:relative;z-index:1}
-
-.page-head{padding:0 clamp(24px,4vw,64px)}
-
-.eyebrow{
-      font-size:.8rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
-      color:rgba(255,255,255,.78);margin-bottom:12px;
-    }
-
-.page-head h1{
-      font-size:clamp(2.2rem,4.6vw,3.7rem);font-weight:800;line-height:1.12;
-      text-shadow:0 2px 22px rgba(0,0,0,.65);max-width:22ch;margin:0 auto;
-    }
-
-.page-head .intro{
-      color:rgba(255,255,255,.9);max-width:56ch;margin:20px auto 0;font-size:1.12rem;
-    }
-
-.scroll-cue{
-      position:absolute;left:50%;bottom:26px;z-index:3;
-      width:26px;height:26px;margin-left:-13px;
-      border-right:2px solid #fff;border-bottom:2px solid #fff;
-      transform:rotate(45deg);opacity:.55;
-      animation:cue 1.8s ease-in-out infinite;
-    }
-
-.scroll-cue:hover{opacity:.85}
-
-@media (prefers-reduced-motion:reduce){
-  .scroll-cue{animation:none}
-}
-
-.about-hero + .wide{padding-top:76px}
-
-/* split.css -- styles for the split block.
-   Lifted from about.html verbatim; media queries regrouped by block. */
-
-/* ---------- Wide container, shared with the other hubs ---------- */
-    .wide{max-width:1800px;margin:0 auto;padding:0 clamp(24px,4vw,64px)}
-
-/* ---------- Photo-beside layout, like the homepage feature split ---------- */
-    .split{
-      display:grid;grid-template-columns:minmax(0,5fr) minmax(300px,4fr);
-      gap:clamp(32px,5vw,90px);align-items:start;
-    }
-
-.split .photo-col{position:sticky;top:120px;display:grid;gap:28px;padding-bottom:40px}
-
-.split figure{margin:0}
-
-.split figure img{width:100%;display:block;border-radius:4px;box-shadow:0 18px 40px rgba(0,0,0,.14)}
-
-.split figure img.self-framed{border-radius:0;box-shadow:none}
-
-@media (min-width:901px){
-  .split figure img.self-framed{width:116%;max-width:116%;margin:-4% -8% 0}
-}
-
-.split figcaption{margin-top:10px;font-size:.78rem;color:var(--ink-soft)}
+.foot-bottom{margin-top:4px;padding-top:24px;border-top:1px solid #3a3a3a;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:.8rem}
 
 @media (max-width:900px){
-  .split{grid-template-columns:1fr}
+  .foot-top{grid-template-columns:1fr 1fr}
 }
 
 @media (max-width:900px){
-  .split .photo-col{position:static;order:-1}
+  .foot-brand{grid-column:1/-1}
+}
+
+@media (max-width:560px){
+  .foot-top{grid-template-columns:1fr}
 }
 
 /* group.css -- styles for the group block.
@@ -216,6 +157,64 @@
   .rows.two-col{grid-template-columns:1fr}
 }
 
+/* header.css -- styles for the header block.
+   Lifted from about.html verbatim; media queries regrouped by block. */
+
+.menu>li>a.is-here{color:var(--red);font-weight:600}
+
+/* hero-photo.css -- styles for the hero-photo block.
+   Lifted from about.html verbatim; media queries regrouped by block. */
+
+/* ---------- Hero: the founder's motto over the photobombing apple ---------- */
+    .about-hero{
+      position:relative;overflow:hidden;
+      min-height:calc(100vh - 84px);
+      min-height:calc(100svh - 84px);
+      display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+      padding:56px 0 84px;
+      color:#fff;text-align:center;
+      text-shadow:0 1px 12px rgba(0,0,0,.55);
+    }
+
+.about-hero::before{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(rgba(20,0,0,.45),rgba(20,0,0,.1) 46%,rgba(20,0,0,.12) 62%,rgba(20,0,0,.3)),url('assets/photobomb.png') center/cover no-repeat;
+    }
+
+.about-hero>*{position:relative;z-index:1}
+
+.page-head{padding:0 clamp(24px,4vw,64px)}
+
+.eyebrow{
+      font-size:.8rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+      color:rgba(255,255,255,.78);margin-bottom:12px;
+    }
+
+.page-head h1{
+      font-size:clamp(2.2rem,4.6vw,3.7rem);font-weight:800;line-height:1.12;
+      text-shadow:0 2px 22px rgba(0,0,0,.65);max-width:22ch;margin:0 auto;
+    }
+
+.page-head .intro{
+      color:rgba(255,255,255,.9);max-width:56ch;margin:20px auto 0;font-size:1.12rem;
+    }
+
+.scroll-cue{
+      position:absolute;left:50%;bottom:26px;z-index:3;
+      width:26px;height:26px;margin-left:-13px;
+      border-right:2px solid #fff;border-bottom:2px solid #fff;
+      transform:rotate(45deg);opacity:.55;
+      animation:cue 1.8s ease-in-out infinite;
+    }
+
+.scroll-cue:hover{opacity:.85}
+
+@media (prefers-reduced-motion:reduce){
+  .scroll-cue{animation:none}
+}
+
+.about-hero + .wide{padding-top:76px}
+
 /* photo-banner.css -- styles for the photo-banner block.
    Lifted from about.html verbatim; media queries regrouped by block. */
 
@@ -231,37 +230,38 @@
 
 .photo-banner figcaption{margin-top:10px;font-size:.78rem;color:var(--ink-soft)}
 
-/* cta.css -- styles for the cta block.
+/* split.css -- styles for the split block.
    Lifted from about.html verbatim; media queries regrouped by block. */
 
-/* ---------- Closing CTA ---------- */
-    .story-cta{text-align:center;padding:8px 24px 110px}
+/* ---------- Wide container, shared with the other hubs ---------- */
+    .wide{max-width:1800px;margin:0 auto;padding:0 clamp(24px,4vw,64px)}
 
-.story-cta h2{font-size:clamp(1.9rem,3.4vw,2.7rem);font-weight:800;margin-bottom:14px}
+/* ---------- Photo-beside layout, like the homepage feature split ---------- */
+    .split{
+      display:grid;grid-template-columns:minmax(0,5fr) minmax(300px,4fr);
+      gap:clamp(32px,5vw,90px);align-items:start;
+    }
 
-.story-cta p{color:var(--ink-soft);max-width:56ch;margin:0 auto 30px}
+.split .photo-col{position:sticky;top:120px;display:grid;gap:28px;padding-bottom:40px}
 
-.story-cta .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.split figure{margin:0}
 
-.story-cta .btn{font-size:1.05rem;padding:17px 44px}
+.split figure img{width:100%;display:block;border-radius:4px;box-shadow:0 18px 40px rgba(0,0,0,.14)}
 
-.story-cta .btn-outline{font-size:1.05rem;padding:15px 36px}
+.split figure img.self-framed{border-radius:0;box-shadow:none}
 
-/* footer.css -- styles for the footer block.
-   Lifted from about.html verbatim; media queries regrouped by block. */
+@media (min-width:901px){
+  .split figure img.self-framed{width:116%;max-width:116%;margin:-4% -8% 0}
+}
 
-.foot-bottom{margin-top:4px;padding-top:24px;border-top:1px solid #3a3a3a;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:.8rem}
+.split figcaption{margin-top:10px;font-size:.78rem;color:var(--ink-soft)}
 
 @media (max-width:900px){
-  .foot-top{grid-template-columns:1fr 1fr}
+  .split{grid-template-columns:1fr}
 }
 
 @media (max-width:900px){
-  .foot-brand{grid-column:1/-1}
-}
-
-@media (max-width:560px){
-  .foot-top{grid-template-columns:1fr}
+  .split .photo-col{position:static;order:-1}
 }
 
   </style>
