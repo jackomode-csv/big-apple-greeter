@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Block library | Big Apple Greeter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+
+<!-- The whole point: these two files, and nothing else. -->
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/blocks.css">
+
+<style>
+  /* Chrome for this page only. Nothing here ships. */
+  .pl-head { padding: 64px 24px 40px; max-width: 1120px; margin: 0 auto; }
+  .pl-head h1 { font-size: 2.4rem; font-weight: 700; margin-bottom: .6rem; }
+  .pl-head p { color: var(--ink-soft); max-width: 62ch; margin-bottom: .8rem; }
+  .pl-note { background: var(--panel); border-left: 3px solid var(--red);
+             padding: 16px 20px; margin-top: 24px; font-size: .92rem;
+             color: var(--ink-soft); max-width: 70ch; }
+  .pl-label { position: sticky; top: 84px; z-index: 900;
+              background: var(--ink); color: #fff; padding: 10px 24px;
+              font-size: .72rem; font-weight: 600; letter-spacing: .16em;
+              text-transform: uppercase; }
+  .pl-label span { color: var(--muted); text-transform: none; letter-spacing: 0;
+                   font-weight: 400; margin-left: 12px; }
+  .pl-block { border-bottom: 1px solid var(--line); }
+  .pl-missing { padding: 40px 24px; color: var(--muted); font-style: italic; }
+
+  /* The site fades content in on scroll: .reveal starts at opacity 0 and the
+     script adds .in. No script here, so without this every block would be
+     blank. Forced visible for the library only. */
+  .reveal, .reveal * { opacity: 1 !important; transition: none !important; }
+
+  /* Blocks are a full viewport tall by design, which makes twelve of them
+     impossible to survey. Compact caps each one so you can scan the set;
+     True size shows them as a visitor gets them. */
+  .pl-bar { position: sticky; top: 0; z-index: 950; display: flex; gap: 18px;
+            align-items: center; background: #fff; border-bottom: 1px solid var(--line);
+            padding: 12px 24px; font-size: .8rem; }
+  .pl-bar button { font: inherit; font-weight: 600; cursor: pointer; padding: 8px 16px;
+                   border: 1px solid var(--line); border-radius: 999px; background: #fff;
+                   color: var(--ink); }
+  .pl-bar button.on { background: var(--red); border-color: var(--red); color: #fff; }
+  .pl-bar nav { display: flex; gap: 2px; flex-wrap: wrap; margin-left: auto; }
+  .pl-bar nav a { padding: 6px 9px; border-radius: 4px; color: var(--ink-soft); font-size: .72rem; }
+  .pl-bar nav a:hover { background: var(--panel); color: var(--red); }
+  /* A fixed cap, not a vh one: the blocks are viewport-tall by design, so a
+     vh cap would just reproduce the problem it is meant to solve. */
+  body.compact .pl-block { max-height: 520px; overflow: hidden; position: relative; }
+  body.compact .pl-block::after { content: ""; position: absolute; left: 0; right: 0;
+    bottom: 0; height: 90px; background: linear-gradient(to bottom, transparent, #fff); }
+  body.compact .pl-label { top: 49px; }
+</style>
+</head>
+<body>
+
+<div class="pl-bar">
+  <button id="fit" class="on" type="button">Compact</button>
+  <button id="real" type="button">True size</button>
+  <nav id="jump"></nav>
+</div>
+
+<div class="pl-head">
+  <h1>Block library</h1>
+  <p>Every block below is the real markup, lifted from the page that owns it and
+     rendered against <code>assets/site.css</code> and <code>assets/blocks.css</code>.
+     No page has been migrated. This is what the library looks like on its own.</p>
+  <div class="pl-note">
+    <strong>What is not here:</strong> JavaScript. The reels, the cross-fade, the
+    interactive map, the form stepper and the scroll-reveal all sit still on this
+    page, because none of their scripts are loaded. Blocks that depend on script
+    show their resting state, which is the state a visitor sees before anything runs.
+  </div>
+</div>
+<div class="pl-label">Hero <span>index.html  &mdash;  Four pages share this exactly. The reel, the overlay copy, the two buttons and the scroll cue.</span></div>
+<div class="pl-block">
+<section class="hero">
+    <video class="hero-video" id="heroVideo" autoplay loop muted playsinline poster="assets/hero-poster.jpg">
+      <source src="assets/hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero-cta">
+      <a class="btn" href="register.html">Request a Greeter</a>
+    </div>
+    <div class="hero-controls">
+      <button class="hero-btn" id="heroSound" aria-label="Unmute video" title="Unmute video">&#128263;</button>
+      <button class="hero-btn" id="heroToggle" aria-label="Pause video" title="Pause video">&#10073;&#10073;</button>
+    </div>
+    <a class="scroll-cue" href="#feature" aria-label="Scroll to content"></a>
+  </section>
+</div>
+
+<div class="pl-label">Hero, photo variant <span>about.html  &mdash;  The only hero that differs: a column layout with white type over a photo.</span></div>
+<div class="pl-block">
+<section class="about-hero">
+    <div class="page-head">
+      <p class="eyebrow">About Us &middot; Since 1992</p>
+      <h1>&ldquo;Unite the world in friendship. One person at a time.&rdquo;</h1>
+      <p class="intro">That was Lynn Brooks&rsquo;s promise when she founded Big Apple Greeter, the world&rsquo;s first free welcome-visitor program. Thirty-five years later, it still runs the place.</p>
+    </div>
+    <a class="scroll-cue" href="#mission" aria-label="Scroll to our mission"></a>
+  </section>
+</div>
+
+<div class="pl-label">Feature band <span>index.html  &mdash;  Media on one side, copy on the other. The landmark reel cross-fades here.</span></div>
+<div class="pl-block">
+<section class="feature" id="feature">
+    <div class="media">
+      <video id="mediaVideo" autoplay muted playsinline poster="assets/astor_apple.jpg"
+             aria-label="Big Apple Greeter landmarks: the Astor Place cube and the Unisphere"></video>
+      <video id="mediaVideoB" class="standby" muted playsinline preload="auto" aria-hidden="true"></video>
+    </div>
+    <div class="body">
+      <h2>Big Apple Greeter, New York Icon.</h2>
+      <p>Stroll above Manhattan streets on the High Line. Poke into the happening shops of Brooklyn. Savor the ethnic murals and delicious foods of the Bronx or Queens. Ferry your way past Lady Liberty to a new point of view.</p>
+      <p>Spend two to four hours getting the insider scoop from volunteers who actually live here. We&rsquo;re not professional tour guides. We&rsquo;re the people of New York, proudly representing our city and sharing it with you.</p>
+      <a class="btn btn-outline" href="#">Learn More</a>
+    </div>
+  </section>
+</div>
+
+<div class="pl-label">News + reviews <span>index.html  &mdash;  Press feed on the left, review pull-quotes on the right.</span></div>
+<div class="pl-block">
+<section class="quotes">
+    <div class="wrap">
+      <div class="qn-grid">
+
+        <!-- Left: news feed -->
+        <div>
+          <h3 class="qcol-head">In the News</h3>
+          <ul class="feed">
+            <li>
+              <span class="feed-date">April 2025 &middot; Bronx Times</span>
+              <a href="https://www.bxtimes.com/big-apple-greeter-shows-tourists-the-best-of-little-italy-and-beyond/" target="_blank" rel="noopener">Big Apple Greeter shows tourists the best of Little Italy and beyond</a>
+              <p>A profile of volunteer Ellen Gasnick, greeting visitors since the early 1990s.</p>
+            </li>
+            <li>
+              <span class="feed-date">NYC Tourism + Conventions</span>
+              <a href="https://www.nyctourism.com/articles/big-apple-greeter-helps-visitors-explore-nyc/" target="_blank" rel="noopener">Big Apple Greeter helps visitors explore New York City</a>
+              <p>The city&rsquo;s official tourism site on why a free walk with a local beats any bus tour.</p>
+            </li>
+            <li>
+              <span class="feed-date">amNewYork</span>
+              <a href="https://www.amny.com/news/big-apple-greeters-volunteer-to-bring-back-tourism-to-chinatown/" target="_blank" rel="noopener">Big Apple Greeter volunteers bring tourism back to Chinatown</a>
+              <p>Volunteers rally foot traffic for Chinatown and Little Italy businesses hit by the tourism slump.</p>
+            </li>
+            <li>
+              <span class="feed-date">CityPASS</span>
+              <a href="https://www.citypass.com/articles/new-york/big-apple-greeters-give-visitors-better-bite" target="_blank" rel="noopener">Big Apple Greeters give visitors a better bite</a>
+              <p>Why a free walk with a New Yorker beats the guidebook, from the sightseeing-pass company.</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Right: TripAdvisor pull quotes -->
+        <div>
+          <h3 class="qcol-head">Reviews from TripAdvisor</h3>
+          <span class="stars stars-lg" role="img" aria-label="Rated 5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <p class="headline">&ldquo;The cream of the crop.&rdquo;</p>
+          <p class="attr">&mdash; Jon L, July 2026</p>
+          <div class="quote-grid">
+            <blockquote><span class="stars" role="img" aria-label="Rated 5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span>&ldquo;Book it!&rdquo;<cite>&mdash; Emma D, Glasgow, United Kingdom &middot; July 2026</cite></blockquote>
+            <blockquote><span class="stars" role="img" aria-label="Rated 5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span>&ldquo;One of the best travel experiences ever.&rdquo;<cite>&mdash; Troy H, Melbourne, Australia &middot; June 2026</cite></blockquote>
+            <blockquote><span class="stars" role="img" aria-label="Rated 5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span>&ldquo;Tips and tricks that only true locals know.&rdquo;<cite>&mdash; Zorica V, Novi Sad, Serbia &middot; February 2026</cite></blockquote>
+            <blockquote><span class="stars" role="img" aria-label="Rated 5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span>&ldquo;Our greeter Karen was lovely and showed us some wonderful places.&rdquo;<cite>&mdash; TripAdvisor reviewer &middot; February 2026</cite></blockquote>
+            <blockquote><span class="stars" role="img" aria-label="Rated 5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span>&ldquo;An essential part of each visit.&rdquo;<cite>&mdash; Tom L, Ottawa, Canada &middot; November 2025</cite></blockquote>
+            <blockquote><span class="stars" role="img" aria-label="Rated 5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span>&ldquo;The most wonderful introduction to New York City.&rdquo;<cite>&mdash; TripAdvisor reviewer &middot; 2025</cite></blockquote>
+            <blockquote><span class="stars" role="img" aria-label="Rated 5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span>&ldquo;The fact that it is free is amazing!&rdquo;<cite>&mdash; TripAdvisor reviewer &middot; 2025</cite></blockquote>
+            <blockquote><span class="stars" role="img" aria-label="Rated 5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</span>&ldquo;The walk along the promenade with the Lower Manhattan skyline as a backdrop is wonderful.&rdquo;<cite>&mdash; TripAdvisor reviewer &middot; 2025</cite></blockquote>
+          </div>
+          <a class="btn" href="https://www.tripadvisor.com/Attraction_Review-g60763-d276231-Reviews-Big_Apple_Greeter-New_York_City_New_York.html#REVIEWS" target="_blank" rel="noopener">Read More on TripAdvisor</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="pl-label">Content group <span>visitors.html  &mdash;  The workhorse. A heading and a list of rows. 46 uses across four pages.</span></div>
+<div class="pl-block">
+<div class="group">
+        <div class="group-head">
+          <h2>The Five Boroughs</h2>
+        </div>
+        <ul class="rows">
+          <li><b>The Bronx</b><p>Where Edgar Allan Poe, Lauren Bacall, and Billy Joel once lived, and where hip hop and salsa were born. Eat your way down Arthur Avenue, catch the Yankees, or wander the Bronx Zoo and the New York Botanical Garden.</p></li>
+          <li><b>Brooklyn</b><p>Big in size, population, and character. Grab a Nathan&rsquo;s hot dog at Coney Island, a slice of Junior&rsquo;s cheesecake downtown, and an afternoon at the Brooklyn Museum and Botanic Garden.</p></li>
+          <li><b>Manhattan</b><p>Broadway, the history of Lower Manhattan, Central Park, world-class museums, plus thousands of restaurants and shops packed onto one island.</p></li>
+          <li><b>Queens</b><p>One of the most culturally diverse urban areas on the globe. Eat around the world in a single afternoon, see the Mets at Citi Field or the U.S. Open, and visit the Louis Armstrong House Museum.</p></li>
+          <li><b>Staten Island</b><p>Start with the free ferry and its harbor views of Lady Liberty. Then explore museums, Revolutionary War sites, parks, botanical gardens, and the Empire Outlets.</p></li>
+        </ul>
+      </div>
+</div>
+
+<div class="pl-label">FAQ <span>visitors.html  &mdash;  Native details/summary, so it works with no JavaScript at all.</span></div>
+<div class="pl-block">
+<div class="faq">
+        <details open>
+          <summary>How is a Greeter different from a professional tour guide or walking tour?</summary>
+          <div class="faq-a">
+            <p>You&rsquo;ll be shown around the city the way a good friend would do it. Greeters aren&rsquo;t professional guides. They&rsquo;re New Yorkers sharing what it&rsquo;s like to live here, drawing on their own neighborhoods, experiences, and favorite spots. Your interests set the agenda, and the goal is simply that you enjoy the city the way locals do.</p>
+          </div>
+        </details>
+        <details>
+          <summary>How will I be paired with a Greeter?</summary>
+          <div class="faq-a">
+            <p>We match primarily by language and by the neighborhoods you request. Whenever possible, we also consider your personal interests, so the more you tell us on the request form, the better your match.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Am I guaranteed to be matched with a Greeter?</summary>
+          <div class="faq-a">
+            <p>We wish we could say yes. We receive far more requests than our volunteers can fulfill, and availability is especially limited during peak season, April through October. Requesting early, and being flexible on dates and neighborhoods, gives you the best chance.</p>
+          </div>
+        </details>
+        <details>
+          <summary>When and how will I receive information about my Greeter?</summary>
+          <div class="faq-a">
+            <p>Once your visit is confirmed, you&rsquo;ll get an email with your Greeter&rsquo;s name and contact details. Add our office email to your safe-sender list and check your spam folder so nothing slips past you.</p>
+            <p>One important step: after you arrive in New York, you must contact your Greeter again to reconfirm your visit.</p>
+          </div>
+        </details>
+        <details>
+          <summary>If no Greeter is available to me, may I join another group?</summary>
+          <div class="faq-a">
+            <p>No. Each volunteer meets with one visitor or traveling group at a time. It&rsquo;s what keeps a greet personal instead of feeling like a tour.</p>
+          </div>
+        </details>
+        </div>
+</div>
+
+<div class="pl-label">Invited band <span>volunteers.html</span></div>
+<div class="pl-block">
+<section class="invited">
+    <h2>Everyone&rsquo;s invited. Always have been.</h2>
+    <p>Volunteer opportunities are open to everyone without regard to race, ethnicity, color, creed, country of origin, gender identity, sexual orientation, age, marital status, or disability.</p>
+    <p>New Yorkers with disabilities are warmly welcomed as volunteers, and our office at 1 Centre Street is ADA compliant.</p>
+  </section>
+</div>
+
+<div class="pl-label">Pull quote <span>support.html</span></div>
+<div class="pl-block">
+<section class="story-quote">
+    <div class="wrap">
+      <p class="sq-eyebrow">Why We Greet &middot; Lester Barnett</p>
+      <blockquote class="sq-body">
+        He recalled a couple who wanted to have a glass of wine at each of a series of New York bars. &ldquo;They wanted a rich bar, they wanted a poor bar, they wanted an Irish bar,&rdquo; he said. Toward the end of the night, the woman went to the ladies&rsquo; room and her husband told Barnett that she had a terminal illness. &ldquo;All she wanted to do was go to New York and toast each other all over the city,&rdquo; Barnett said.
+        <span class="sq-final">&ldquo;That&rsquo;s why I&rsquo;m a Greeter. You enter people&rsquo;s lives in a way that is astounding.&rdquo;</span>
+        <cite class="sq-cite">As published in The New Yorker</cite>
+      </blockquote>
+    </div>
+  </section>
+</div>
+
+<div class="pl-label">Tax band <span>support.html</span></div>
+<div class="pl-block">
+<section class="tax-band">
+    <p>Big Apple Greeter is tax-exempt under section 501(c)(3) of the Internal Revenue Code. Donations to Big Apple Greeter are tax deductible to the extent allowed by law.</p>
+  </section>
+</div>
+
+<div class="pl-label">Photo banner <span>about.html</span></div>
+<div class="pl-block">
+<figure class="photo-banner">
+      <img src="assets/yankee-group.jpg" alt="Longtime Big Apple Greeter volunteers honored on the field at Yankee Stadium, with the scoreboards showing the organization's stats: 5,000 visitors a year, 100+ neighborhoods, 20+ languages, 100+ countries">
+      <figcaption>Greeters who have been here since the early days, honored at Yankee Stadium.</figcaption>
+    </figure>
+</div>
+
+<div class="pl-label">CTA band <span>about.html  &mdash;  Identical to .reunion-cta on the volunteers page; one block, two names kept.</span></div>
+<div class="pl-block">
+<section class="story-cta">
+    <h2>Thirty-five years in, the door&rsquo;s still open.</h2>
+    <p>Visit with a New Yorker who loves this city, or become the New Yorker someone remembers forever.</p>
+    <div class="cta-row">
+      <a class="btn" href="register.html">Request a Greeter</a>
+      <a class="btn btn-outline" href="volunteers.html">Become a Greeter</a>
+    </div>
+  </section>
+</div>
+
+<div class="pl-label">Form panel <span>register.html  &mdash;  One step of the registration form. The kit is shared by both register pages.</span></div>
+<div class="pl-block">
+<section class="panel" data-panel="0">
+    <div class="station"><span class="bullet">1</span><h2>Contact information</h2><span class="sub">How we reach you</span></div>
+    <p class="lede">A volunteer will use these details to confirm your visit and answer any questions before you arrive in New York City.</p>
+
+    <fieldset>
+      <legend>Your name</legend>
+      <div class="grid g3">
+        <div class="field">
+          <label for="title">Title</label>
+          <select id="title" name="title">
+            <option value="">&mdash;</option><option>Mr.</option><option>Mrs.</option><option>Ms.</option><option>Mx.</option>
+          </select>
+        </div>
+        <div class="field" data-required>
+          <label for="firstName">First name <span class="req">*</span></label>
+          <input type="text" id="firstName" name="firstName" autocomplete="given-name">
+          <p class="err">Please enter your first name.</p>
+        </div>
+        <div class="field" data-required>
+          <label for="lastName">Last name <span class="req">*</span></label>
+          <input type="text" id="lastName" name="lastName" autocomplete="family-name">
+          <p class="err">Please enter your last name.</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Email</legend>
+      <div class="grid g2">
+        <div class="field" data-required data-type="email">
+          <label for="email">Email <span class="req">*</span></label>
+          <input type="email" id="email" name="email" autocomplete="email" inputmode="email">
+          <p class="err">Please enter a valid email address.</p>
+        </div>
+        <div class="field" data-required data-match="email">
+          <label for="emailConfirm">Confirm email <span class="req">*</span></label>
+          <input type="email" id="emailConfirm" name="emailConfirm" inputmode="email">
+          <p class="err">This doesn't match the email above.</p>
+        </div>
+      </div>
+      <p class="note">After you submit, a confirmation will arrive from our team. If it doesn't show up, <span class="spam">check your junk or spam folder</span> and add us to your safe-sender list.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Home address</legend>
+      <div class="grid">
+        <div class="field" data-required>
+          <label for="addr1">Address line 1 <span class="req">*</span></label>
+          <input type="text" id="addr1" name="addr1" autocomplete="address-line1">
+          <p class="err">Please enter your address.</p>
+        </div>
+        <div class="field">
+          <label for="addr2">Address line 2</label>
+          <input type="text" id="addr2" name="addr2" autocomplete="address-line2">
+        </div>
+      </div>
+      <div class="grid g3" style="margin-top:14px">
+        <div class="field" data-required>
+          <label for="city">City <span class="req">*</span></label>
+          <input type="text" id="city" name="city" autocomplete="address-level2">
+          <p class="err">Please enter your city.</p>
+        </div>
+        <div class="field">
+          <label for="region">State / region</label>
+          <input type="text" id="region" name="region" autocomplete="address-level1">
+        </div>
+        <div class="field" data-required>
+          <label for="postal">Postal code <span class="req">*</span></label>
+          <input type="text" id="postal" name="postal" autocomplete="postal-code">
+          <p class="err">Please enter your postal code.</p>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px" data-required>
+        <label for="country">Country <span class="req">*</span></label>
+        <select id="country" name="country" autocomplete="country-name"><option value="">&mdash; Select country &mdash;</option></select>
+        <p class="err">Please select your country.</p>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Phone</legend>
+      <div class="grid g2">
+        <div class="field" data-required>
+          <label for="phone1">Phone number <span class="req">*</span></label>
+          <input type="tel" id="phone1" name="phone1" autocomplete="tel" inputmode="tel">
+          <p class="err">Please enter at least one phone number.</p>
+          <p class="hint">A number where we can reach you with questions before your visit.</p>
+        </div>
+        <div class="field">
+          <label for="phone1Type">Type</label>
+          <select id="phone1Type" name="phone1Type">
+            <option>Mobile</option><option>Home</option><option>Work</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid g2" style="margin-top:14px">
+        <div class="field">
+          <label for="whatsapp">WhatsApp number</label>
+          <input type="tel" id="whatsapp" name="whatsapp" inputmode="tel">
+          <p class="hint">Optional, and often the easiest way to coordinate on the day.</p>
+        </div>
+      </div>
+    </fieldset>
+  </section>
+</div>
+
+
+<script>
+  // Compact by default: twelve full-height blocks are otherwise unscannable.
+  document.body.classList.add('compact');
+  var fit = document.getElementById('fit'), real = document.getElementById('real');
+  fit.onclick  = function () { document.body.classList.add('compact');
+                               fit.classList.add('on'); real.classList.remove('on'); };
+  real.onclick = function () { document.body.classList.remove('compact');
+                               real.classList.add('on'); fit.classList.remove('on'); };
+  // Jump links built from the labels, so they cannot drift out of sync.
+  var jump = document.getElementById('jump');
+  document.querySelectorAll('.pl-label').forEach(function (el, i) {
+    el.id = 'b' + i;
+    var a = document.createElement('a');
+    a.href = '#b' + i;
+    a.textContent = el.firstChild.textContent.trim();
+    jump.appendChild(a);
+  });
+</script>
+</body>
+</html>
