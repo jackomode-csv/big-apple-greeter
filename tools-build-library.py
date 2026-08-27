@@ -1,10 +1,9 @@
 # Build site.css and blocks.css by lifting rules out of the seven pages
-# verbatim. Nothing is retyped or "improved": every declaration came from the
-# pages as-is, so adopting these files cannot change how anything renders.
+# verbatim. Every declaration came from the pages as-is.
 #
-#   site.css   the rules already byte-identical on all seven pages
-#   blocks.css the block library, grouped by the class vocabulary the markup
-#              actually uses (.group/.rows, the hero family, the form kit)
+# Run this BEFORE migrating any page. It decides what is shared by comparing
+# the seven inline stylesheets, so once a page has been migrated its rules are
+# gone from the comparison and the result collapses.
 import io, os, re, collections
 
 SITE = r'C:\Users\Jack Murray\OneDrive\Documents\big-apple-greeter'
@@ -47,11 +46,16 @@ for p in PAGES:
 universal, seen = [], set()
 for i, c in enumerate(normed['index']):
     if count[c] == len(PAGES) and c not in seen and not c.startswith(':root'):
-        universal.append(raw['index'][i]); seen.add(c)
+        universal.append(raw['index'][i])
+        seen.add(c)
+
+assert len(universal) > 30, (
+    'only %d universal rules - has a page already been migrated? '
+    'Restore the pages before rebuilding the library.' % len(universal))
 
 # :root varies slightly per page: index omits --panel/--radius, register adds
 # --green. Union them so one sheet serves every page and no page loses a token.
-# Comments are stripped first, or a trailing /* note */ ends up parsed as a key.
+# Comments are stripped first, or a trailing /* note */ parses as a key.
 tokens, notes = {}, {}
 for p in PAGES:
     m = re.search(r':root\s*\{(.*?)\}', read(p), re.S)
@@ -61,37 +65,58 @@ for p in PAGES:
     for decl in strip_comments(body).split(';'):
         if ':' in decl:
             k, v = decl.split(':', 1)
-            k = k.strip()
-            if k.startswith('--'):
-                tokens.setdefault(k, v.strip())
+            if k.strip().startswith('--'):
+                tokens.setdefault(k.strip(), v.strip())
     for k, note in re.findall(r'(--[\w-]+)\s*:[^;]*;\s*/\*(.*?)\*/', body, re.S):
         notes.setdefault(k, ' '.join(note.split()))
 
-site = ["""/* ==========================================================================
+# .btn is the one near-miss, and it matters. Six pages write
+# border-radius:var(--radius); index writes 2px, because index is the one page
+# whose :root never declared --radius. So .btn fails the byte-identical test
+# and would stay inline everywhere while .btn-outline moves into this file.
+# Inline loads last, so .btn's red fill would then beat .btn-outline and every
+# ghost button on the site would render solid. The var() form goes in here,
+# and this file declares --radius, so it resolves wherever it is linked.
+BTN = ('.btn{ display:inline-block; background:var(--red); color:#fff;'
+       ' font-weight:600; font-size:.95rem; letter-spacing:.02em;'
+       ' padding:14px 30px; border-radius:var(--radius); white-space:nowrap;'
+       ' transition:background .2s ease; }')
+
+HEADER = '''/* ==========================================================================
    Big Apple Greeter - site.css
    Shared foundation: tokens, reset, base type, header, footer, buttons.
 
-   Every rule below was already present, byte for byte, on all seven pages.
-   Nothing has been added, renamed or tidied, so a page that links this file
-   and drops its own copy of these rules renders exactly as it does today.
+   Every rule below was already present, byte for byte, on all seven pages,
+   with one documented exception (.btn - see the note in the build script).
+   Nothing has been renamed, so a page that links this file and drops its own
+   copy of these rules renders exactly as it does today.
 
    Deliberately absent: a global type scale. The pages size headings per
    component and share only letter-spacing, so declaring h1/h2/h3 sizes here
    would change rendering rather than preserve it.
    ========================================================================== */
 
-:root {
-"""]
+'''
+
+site = [HEADER, ':root {\n']
 for k, v in tokens.items():
-    site.append('  %-14s %s;%s\n' % (k + ':', v, ('   /* %s */' % notes[k]) if k in notes else ''))
-site.append('}\n\n/* ---- reset, base, header, footer: identical on all seven pages ---- */\n\n')
-site += [c.strip() + '\n\n' for c in universal]
+    tail = ('   /* %s */' % notes[k]) if k in notes else ''
+    site.append('  %-14s %s;%s\n' % (k + ':', v, tail))
+site.append('}\n\n')
+site.append('/* ---- reset, base, header, footer: identical on all seven pages ---- */\n\n')
+
+placed = False
+for c in universal:
+    if not placed and sel_of(c).startswith('.btn'):
+        site.append(BTN + '\n\n')
+        placed = True
+    site.append(c.strip() + '\n\n')
+if not placed:
+    site.append(BTN + '\n\n')
+
 io.open(os.path.join(OUT, 'site.css'), 'w', encoding='utf-8', newline='').write(''.join(site))
 
 # -------------------------------------------------------------- blocks.css --
-# Families are the class names the markup actually uses. Order matters: the
-# first family to claim a rule keeps it, so the specific bands come before the
-# general .group/.rows content block.
 FAMILIES = [
     ('Hero', 'index', ['hero', 'hero-overlay', 'hero-video', 'hero-media', 'hero-cta',
                        'hero-btn', 'hero-controls', 'btn-watch', 'scroll-cue', 'eyebrow'],
@@ -121,7 +146,7 @@ FAMILIES = [
 
 def claims(sel, names):
     """A name ending in '-' is a prefix (clip- matches .clip-video); anything
-    else must match the whole class, so .sub never swallows .subway."""
+    else must match a whole class, so .sub never swallows .subway."""
     for n in names:
         pat = r'[.#]' + re.escape(n) + ('' if n.endswith('-') else r'(?![\w-])')
         if re.search(pat, sel):
@@ -129,7 +154,7 @@ def claims(sel, names):
     return False
 
 
-blocks = ["""/* ==========================================================================
+blocks = ['''/* ==========================================================================
    Big Apple Greeter - blocks.css
    The block library. Each rule set is lifted verbatim from the page that owns
    it, grouped by the class vocabulary the markup actually uses.
@@ -144,7 +169,8 @@ blocks = ["""/* ================================================================
    them - so every original class name is kept exactly as it is today.
    ========================================================================== */
 
-"""]
+''']
+
 used, stats = set(), []
 for title, src, names, note in FAMILIES:
     hits = []
@@ -153,9 +179,10 @@ for title, src, names, note in FAMILIES:
         if s.startswith('@') or normed[src][i] in used:
             continue
         if claims(s, names):
-            hits.append(c.strip()); used.add(normed[src][i])
+            hits.append(c.strip())
+            used.add(normed[src][i])
     if hits:
-        blocks.append('/* ---- %s%s ---- */\n' % (title.upper(), '  (from %s.html)' % src))
+        blocks.append('/* ---- %s  (from %s.html) ---- */\n' % (title.upper(), src))
         if note:
             blocks.append('/* %s */\n' % note)
         blocks.append('\n' + '\n\n'.join(hits) + '\n\n')
@@ -163,9 +190,9 @@ for title, src, names, note in FAMILIES:
 
 io.open(os.path.join(OUT, 'blocks.css'), 'w', encoding='utf-8', newline='').write(''.join(blocks))
 
-print('site.css    %6.1f KB   %d universal rules, %d tokens'
+print('site.css    %6.1f KB   %d universal rules (+ .btn), %d tokens'
       % (os.path.getsize(os.path.join(OUT, 'site.css')) / 1024, len(universal), len(tokens)))
-print('blocks.css  %6.1f KB   %d rules across %d blocks\n'
+print('blocks.css  %6.1f KB   %d rules across %d blocks'
       % (os.path.getsize(os.path.join(OUT, 'blocks.css')) / 1024, len(used), len(stats)))
 for t, n in stats:
-    print('   %-22s %3d rules' % (t, n))
+    print('   %-22s %3d' % (t, n))
