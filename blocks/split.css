@@ -1,0 +1,33 @@
+/* split.css -- styles for the split block.
+   Lifted from about.html verbatim; media queries regrouped by block. */
+
+/* ---------- Wide container, shared with the other hubs ---------- */
+    .wide{max-width:1800px;margin:0 auto;padding:0 clamp(24px,4vw,64px)}
+
+/* ---------- Photo-beside layout, like the homepage feature split ---------- */
+    .split{
+      display:grid;grid-template-columns:minmax(0,5fr) minmax(300px,4fr);
+      gap:clamp(32px,5vw,90px);align-items:start;
+    }
+
+.split .photo-col{position:sticky;top:120px;display:grid;gap:28px;padding-bottom:40px}
+
+.split figure{margin:0}
+
+.split figure img{width:100%;display:block;border-radius:4px;box-shadow:0 18px 40px rgba(0,0,0,.14)}
+
+.split figure img.self-framed{border-radius:0;box-shadow:none}
+
+@media (min-width:901px){
+  .split figure img.self-framed{width:116%;max-width:116%;margin:-4% -8% 0}
+}
+
+.split figcaption{margin-top:10px;font-size:.78rem;color:var(--ink-soft)}
+
+@media (max-width:900px){
+  .split{grid-template-columns:1fr}
+}
+
+@media (max-width:900px){
+  .split .photo-col{position:static;order:-1}
+}

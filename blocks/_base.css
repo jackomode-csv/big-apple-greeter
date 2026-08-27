@@ -1,0 +1,49 @@
+/* _base.css -- styles for the _base block.
+   Lifted from about.html verbatim; media queries regrouped by block. */
+
+, so
+     page-specific rules still win, exactly as before. -->
+<link rel="stylesheet" href="assets/site.css">
+<style>
+    :root{
+      --red:#de5447;
+      --red-bright:#c23a2d;
+      --ink:#292929;
+      --ink-soft:#464646;
+      --muted:#b1b1b1;
+      --line:#e6e6e6;
+      --panel:#fafafa;
+      --bg:#ffffff;
+      --maxw:1120px;
+      --radius:2px;
+    }
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+
+@keyframes cue{
+      0%,100%{transform:rotate(45deg) translate(0,0);opacity:.4}
+      50%{transform:rotate(45deg) translate(5px,5px);opacity:.75}
+    }
+
+/* ---------- Scroll fade-in, same cascade as the homepage ---------- */
+    .reveal{opacity:0;transition:opacity .9s ease;transition-delay:var(--fade-delay,0s)}
+
+.reveal.in{opacity:1}
+
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1 !important;transition:none}
+}
+
+@media (max-width:560px){
+  .logo-video{height:54px}
+}
+
+@media (max-width:560px){
+  .logo-svg{height:38px}
+}

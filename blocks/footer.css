@@ -1,0 +1,16 @@
+/* footer.css -- styles for the footer block.
+   Lifted from about.html verbatim; media queries regrouped by block. */
+
+.foot-bottom{margin-top:4px;padding-top:24px;border-top:1px solid #3a3a3a;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:.8rem}
+
+@media (max-width:900px){
+  .foot-top{grid-template-columns:1fr 1fr}
+}
+
+@media (max-width:900px){
+  .foot-brand{grid-column:1/-1}
+}
+
+@media (max-width:560px){
+  .foot-top{grid-template-columns:1fr}
+}

@@ -1,0 +1,14 @@
+/* photo-banner.css -- styles for the photo-banner block.
+   Lifted from about.html verbatim; media queries regrouped by block. */
+
+/* ---------- Full-width photo banner ---------- */
+    .photo-banner{
+      margin:0 0 84px;
+    }
+
+.photo-banner img{
+      width:100%;aspect-ratio:16/9;object-fit:cover;object-position:top;
+      border-radius:4px;box-shadow:0 18px 40px rgba(0,0,0,.14);
+    }
+
+.photo-banner figcaption{margin-top:10px;font-size:.78rem;color:var(--ink-soft)}

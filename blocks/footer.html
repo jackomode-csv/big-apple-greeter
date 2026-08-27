@@ -1,0 +1,21 @@
+  <footer>
+    <div class="wrap">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <img src="assets/iga-logo.png" alt="International Greeter Association">
+          <p>{{blurb}}</p>
+        </div>
+{{#columns}}        <div>
+          <h5>{{heading}}</h5>
+          <ul>
+{{#links}}            <li><a href="{{href}}">{{label}}</a></li>
+{{/links}}          </ul>
+        </div>
+{{/columns}}      </div>
+
+      <div class="foot-bottom">
+        <span>&copy; Big Apple Greeter. All rights reserved.</span>
+        <span><a href="#">Greeter Log-In</a> &nbsp;&middot;&nbsp; <a href="#">Visitor Log-In</a></span>
+      </div>
+    </div>
+  </footer>

@@ -1,0 +1,11 @@
+    <div class="group"{{#id}} id="{{id}}"{{/id}}>
+      <div class="group-head">
+        <h2>{{heading}}</h2>
+{{#asof}}        <span class="asof">{{asof}}</span>
+{{/asof}}{{#link}}        <a href="{{link.href}}" target="_blank" rel="noopener">{{link.label}}</a>
+{{/link}}      </div>
+{{#prose}}      <p class="mission-copy">{{prose}}</p>
+{{/prose}}{{#rows}}      <ul class="rows{{#two_col}} two-col{{/two_col}}">
+{{#items}}        <li><b>{{term}}{{#role}}<span class="role">{{role}}</span>{{/role}}</b><p>{{def}}</p></li>
+{{/items}}      </ul>
+{{/rows}}    </div>

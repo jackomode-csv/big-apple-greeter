@@ -1,0 +1,4 @@
+/* header.css -- styles for the header block.
+   Lifted from about.html verbatim; media queries regrouped by block. */
+
+.menu>li>a.is-here{color:var(--red);font-weight:600}

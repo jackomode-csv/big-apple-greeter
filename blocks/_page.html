@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}}</title>
+  <meta name="description" content="{{description}}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+  <!-- Shared foundation. Linked ahead of this page's own <style>
+{{{css}}}  </style>
+</head>
+<body>
+{{{body}}}
+<script>
+  // Mobile menu toggle
+  document.getElementById('hamburger').addEventListener('click', function(){
+    document.getElementById('menu').classList.toggle('open');
+  });
+
+  // Scroll fade-in: hero cascades, groups fade in on scroll
+  (function(){
+    var heroItems = document.querySelectorAll('.page-head .eyebrow, .page-head h1, .page-head .intro');
+    heroItems.forEach(function(el, i){
+      el.classList.add('reveal');
+      el.style.setProperty('--fade-delay', (i * 0.12) + 's');
+    });
+    document.querySelectorAll('.group, .photo-banner, .story-cta').forEach(function(el){
+      el.classList.add('reveal');
+    });
+
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -8% 0px' });
+      document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+    } else {
+      document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+    }
+  })();
+</script>
+<script>
+  // Nav logo: play one full cycle on load, then animate only while hovering the nav.
+  // No loop attribute, so every cycle parks on the last frame.
+  (function(){
+    var v = document.querySelector('.logo-video');
+    var bar = document.querySelector('header');
+    if (!v || !bar) return;
+    var over = false;
+    bar.addEventListener('mouseenter', function(){ over = true; if (v.ended) v.play(); });
+    bar.addEventListener('mouseleave', function(){ over = false; });
+    v.addEventListener('ended', function(){ if (over) v.play(); });
+  })();
+</script>
+</body>
+</html>
