@@ -4,6 +4,13 @@
 # repo should not carry it either. Masters stay in this folder locally.
 assets/*.mp4
 
+# The delivery encodes, built from those masters: 48MB across 13 clips, a
+# quarter the size and what the site actually serves. They go to the R2
+# bucket big-apple-greeter-content via tools-upload-video.py, so they do not
+# belong here either. The folder name starts with an underscore, which is
+# also why .nojekyll has to be committed.
+assets/_web/
+
 # ---- Client review artifacts ----
 # 70MB of before/after screenshots, generated for review rather than shipped.
 comparison/
