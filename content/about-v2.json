@@ -3,7 +3,7 @@
   "description": "Big Apple Greeter's mission and history, our board of directors, and the International Greeter Association that grew from one New Yorker's idea in 1992.",
   "hero_reveal": ".page-head .eyebrow, .page-head h1, .page-head .intro",
   "block_reveal": ".group, .photo-banner, .story-cta",
-  "asset_base": "https://pub-cce1ff52191541289291cb54a0c00642.r2.dev",
+  "asset_base": "https://pub-cce1ff52191541289291cb54a0c00642.r2.dev/_web",
   "blocks": [
     {
       "type": "header",
