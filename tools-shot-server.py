@@ -11,7 +11,7 @@
 #     frame each run happened to land on.
 import http.server, io, os, re, socketserver, sys
 
-ROOT = r'C:\Users\Jack Murray\OneDrive\Documents\big-apple-greeter'
+ROOT = os.path.dirname(os.path.abspath(__file__))
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8100
 
 SHOT = b"""<style id="shot-mode">

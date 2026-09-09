@@ -6,7 +6,7 @@
 # gone from the comparison and the result collapses.
 import io, os, re, collections
 
-SITE = r'C:\Users\Jack Murray\OneDrive\Documents\big-apple-greeter'
+SITE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(SITE, 'assets')
 PAGES = ['index', 'about', 'visitors', 'volunteers', 'support',
          'register', 'volunteer-register']

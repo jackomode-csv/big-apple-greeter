@@ -10,7 +10,7 @@
 # Two vetoes below catch it.
 import io, os, re, sys
 
-SITE = r'C:\Users\Jack Murray\OneDrive\Documents\big-apple-greeter'
+SITE = os.path.dirname(os.path.abspath(__file__))
 PAGE = sys.argv[1] if len(sys.argv) > 1 else 'support'
 
 

@@ -4,7 +4,7 @@
 # before any page is migrated onto it.
 import io, os, re
 
-SITE = r'C:\Users\Jack Murray\OneDrive\Documents\big-apple-greeter'
+SITE = os.path.dirname(os.path.abspath(__file__))
 
 
 def page(p):
