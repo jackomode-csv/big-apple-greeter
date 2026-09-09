@@ -22,12 +22,12 @@
 
   // Scroll fade-in: hero cascades, groups fade in on scroll
   (function(){
-    var heroItems = document.querySelectorAll('.page-head .eyebrow, .page-head h1, .page-head .intro');
+    var heroItems = document.querySelectorAll('{{hero_reveal}}');
     heroItems.forEach(function(el, i){
       el.classList.add('reveal');
       el.style.setProperty('--fade-delay', (i * 0.12) + 's');
     });
-    document.querySelectorAll('.group, .photo-banner, .story-cta').forEach(function(el){
+    document.querySelectorAll('{{block_reveal}}').forEach(function(el){
       el.classList.add('reveal');
     });
 
@@ -56,5 +56,5 @@
     v.addEventListener('ended', function(){ if (over) v.play(); });
   })();
 </script>
-</body>
+{{{scripts}}}</body>
 </html>

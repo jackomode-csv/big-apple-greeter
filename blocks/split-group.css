@@ -1,0 +1,17 @@
+/* split-group.css -- styles for the split-group block.
+   Lifted from volunteers.html verbatim; media queries regrouped by block. */
+
+    /* ---------- Photo-beside layout, like the homepage feature split ---------- */
+    .split{
+      display:grid;grid-template-columns:minmax(0,3fr) minmax(280px,2fr);
+      gap:clamp(32px,5vw,90px);align-items:start;
+    }
+    .split.flip{grid-template-columns:minmax(280px,2fr) minmax(0,3fr)}
+    .split .photo-col{position:sticky;top:120px;display:grid;gap:28px}
+    .split figure{margin:0}
+    .split figure img{width:100%;display:block;border-radius:4px;box-shadow:0 18px 40px rgba(0,0,0,.14)}
+    .split figcaption{margin-top:10px;font-size:.78rem;color:var(--ink-soft)}
+    @media (max-width:900px){
+      .split,.split.flip{grid-template-columns:1fr}
+      .split .photo-col{position:static;order:-1}
+    }

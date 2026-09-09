@@ -1,0 +1,10 @@
+    <div class="group"{{#id}} id="{{id}}"{{/id}}>
+      <div class="group-head">
+        <h2>{{heading}}</h2>
+      </div>
+      <div class="split{{#flip}} flip{{/flip}}">
+        <ul class="rows">
+{{#items}}          <li><b>{{term}}</b><p>{{def}}</p></li>
+{{/items}}        </ul>
+      </div>
+    </div>

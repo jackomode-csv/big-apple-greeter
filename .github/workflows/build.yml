@@ -21,8 +21,10 @@
 name: Build and deploy
 
 on:
-  push:
-    branches: [main]
+  # Manual only, deliberately. The header above says this pipeline is not
+  # enabled yet, and a push trigger would have contradicted that by running
+  # on every commit and failing the deploy step against a Pages site that
+  # does not exist. Run it from the Actions tab when the pipeline is wanted.
   workflow_dispatch:
 
 permissions:

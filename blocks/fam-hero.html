@@ -1,0 +1,22 @@
+  <section class="fam-hero">
+    <video class="hero-img" id="famVideo" src="{{video}}" playsinline preload="metadata"
+           poster="{{poster}}"
+           aria-label="{{video_label}}"></video>
+
+    <div class="hero-overlay" id="famOverlay">
+      <h1 class="hero-title">{{heading}}</h1>
+      <div class="hero-pitch">
+        <p class="free-line">{{pitch}}</p>
+        <div class="cta-row">
+{{#buttons}}          <a class="btn" href="{{href}}">{{label}}</a>
+{{/buttons}}          <button class="btn-watch" id="watchBtn" type="button">{{watch_label}}</button>
+        </div>
+      </div>
+      <a class="scroll-cue" href="{{cue_href}}" aria-label="{{cue_label}}"></a>
+    </div>
+
+    <div class="hero-controls">
+      <button class="hero-btn" id="heroSound" aria-label="Mute video" title="Mute video">&#128266;</button>
+      <button class="hero-btn" id="heroToggle" aria-label="Play video" title="Play video">&#9654;</button>
+    </div>
+  </section>

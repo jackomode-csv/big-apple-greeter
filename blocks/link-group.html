@@ -1,0 +1,12 @@
+    <div class="group"{{#id}} id="{{id}}"{{/id}}>
+      <div class="group-head">
+        <h2>{{heading}}</h2>
+{{#link}}        <a href="{{link.href}}" target="_blank" rel="noopener">{{link.label}}</a>
+{{/link}}      </div>
+      <ul class="rows">
+{{#items}}        <li class="linkrow"><a href="{{href}}" target="_blank" rel="noopener">
+          <span><b>{{term}}</b><time>{{date}}</time></span>
+          <p>{{def}} <span class="more">{{more}}</span></p>
+        </a></li>
+{{/items}}      </ul>
+    </div>

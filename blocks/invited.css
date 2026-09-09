@@ -1,0 +1,16 @@
+/* invited.css -- styles for the invited block.
+   Lifted from volunteers.html verbatim; media queries regrouped by block. */
+
+    /* ---------- Everyone's invited: full-bleed greet photo behind ---------- */
+    .invited{
+      position:relative;overflow:hidden;
+      padding:110px 24px;text-align:center;margin-bottom:84px;
+      color:#fff;
+    }
+    .invited::before{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(165deg,#330707 0%,#1e0303 100%);
+    }
+    .invited>*{position:relative;z-index:1}
+    .invited h2{font-size:clamp(1.9rem,3.2vw,2.6rem);font-weight:800;margin-bottom:14px;text-shadow:0 2px 18px rgba(0,0,0,.4)}
+    .invited p{color:rgba(255,255,255,.9);max-width:72ch;margin:0 auto 10px;font-size:.98rem}

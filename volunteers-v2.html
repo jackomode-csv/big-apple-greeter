@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Become a Greeter - Big Apple Greeter</title>
+  <meta name="description" content="Proud New Yorker? You're already one of us. Join Big Apple Greeter's volunteer family and show visitors the city the way you live it.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+  <!-- Shared foundation. Linked ahead of this page's own <style>
+/* _base.css -- styles for the _base block.
+   Lifted from about.html verbatim; media queries regrouped by block. */
+
+, so
+     page-specific rules still win, exactly as before. -->
+<link rel="stylesheet" href="assets/site.css">
+<style>
+    :root{
+      --red:#de5447;
+      --red-bright:#c23a2d;
+      --ink:#292929;
+      --ink-soft:#464646;
+      --muted:#b1b1b1;
+      --line:#e6e6e6;
+      --panel:#fafafa;
+      --bg:#ffffff;
+      --maxw:1120px;
+      --radius:2px;
+    }
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+
+@keyframes cue{
+      0%,100%{transform:rotate(45deg) translate(0,0);opacity:.4}
+      50%{transform:rotate(45deg) translate(5px,5px);opacity:.75}
+    }
+
+/* ---------- Scroll fade-in, same cascade as the homepage ---------- */
+    .reveal{opacity:0;transition:opacity .9s ease;transition-delay:var(--fade-delay,0s)}
+
+.reveal.in{opacity:1}
+
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1 !important;transition:none}
+}
+
+@media (max-width:560px){
+  .logo-video{height:54px}
+}
+
+@media (max-width:560px){
+  .logo-svg{height:38px}
+}
+
+/* The page content column. Applied by the renderer around any run of
+   content blocks, so it is not owned by any one block. */
+/* ---------- Wide container, shared with the other hubs ---------- */
+    .wide{max-width:1800px;margin:0 auto;padding:0 clamp(24px,4vw,64px)}
+
+/* fam-hero.css -- styles for the fam-hero block.
+   Lifted from volunteers.html verbatim; media queries regrouped by block. */
+
+    /* ---------- Hero: full-screen title frame, visitors-page format ----------
+       The artwork carries the headline; the pitch sits in a left-aligned
+       band below it, sized to the 16:9 frame exactly like the visitor page */
+    .fam-hero{
+      position:relative;overflow:hidden;
+      min-height:calc(100vh - 84px);
+      min-height:calc(100svh - 84px);
+      display:flex;align-items:center;justify-content:center;
+      background:#fff;
+    }
+    .hero-img{
+      width:100%;height:100%;
+      position:absolute;inset:0;
+      object-fit:contain;display:block;
+    }
+    /* Overlay matches the visitors-page reel: pitch is the paused state,
+       box spans the reel's displayed 16:9 frame, content sits bottom-left */
+    .hero-overlay{
+      position:absolute;inset:0;z-index:2;cursor:pointer;
+      margin:0 auto;
+      width:min(100%, calc((100vh - 84px) * 1.7778));
+      width:min(100%, calc((100svh - 84px) * 1.7778));
+      display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;
+      padding:0 6% 104px;
+      text-align:left;
+      transition:opacity .45s ease,visibility .45s ease;
+    }
+    /* Pitch (tagline + buttons): hidden the whole time the reel is playing */
+    .hero-pitch{transition:opacity .45s ease,visibility .45s ease}
+    .fam-hero.is-playing .hero-pitch,
+    .fam-hero.is-playing .scroll-cue{opacity:0;visibility:hidden;pointer-events:none}
+    /* Title: follows its own frame-timed fade (out at 28, back at 325) */
+    .hero-title{transition:opacity .45s ease,visibility .45s ease}
+    .fam-hero.is-watching .hero-title{opacity:0;visibility:hidden}
+    /* Positioned to match the visitors poster title: left edge at 7% of the
+       frame, top of the text block at 39% of the frame height */
+    .hero-title{
+      position:absolute;left:7%;top:39%;margin:0;
+      font-size:clamp(2.1rem,4.4vw,3.5rem);font-weight:800;letter-spacing:-.015em;
+      line-height:1.2;max-width:46%;
+    }
+    @media (max-width:900px){
+      .hero-title{position:static;max-width:none;margin-bottom:16px}
+    }
+    .btn-watch{
+      display:inline-flex;align-items:center;gap:11px;
+      background:transparent;color:var(--red);border:2px solid var(--red);
+      font:inherit;font-weight:600;font-size:1.05rem;letter-spacing:.02em;
+      padding:15px 36px;border-radius:var(--radius);cursor:pointer;
+      white-space:nowrap;
+      transition:background .2s,color .2s;
+    }
+    .btn-watch::before{
+      content:"";display:block;
+      border-left:12px solid currentColor;
+      border-top:8px solid transparent;border-bottom:8px solid transparent;
+    }
+    .btn-watch:hover{background:var(--red);color:#fff}
+    .hero-controls{position:absolute;right:20px;bottom:20px;z-index:3;display:flex;gap:8px}
+    .hero-btn{
+      width:40px;height:40px;border-radius:50%;cursor:pointer;
+      border:1px solid rgba(0,0,0,.15);background:rgba(255,255,255,.85);
+      color:var(--ink);font-size:.75rem;line-height:1;
+      display:grid;place-items:center;transition:background .2s,transform .2s;
+      backdrop-filter:blur(4px);
+    }
+    .hero-btn:hover{background:#fff;transform:scale(1.06)}
+    .free-line{
+      font-size:clamp(1.35rem,2.6vw,2rem);font-weight:800;letter-spacing:-.015em;
+      line-height:1.2;margin-bottom:28px;
+    }
+    .free-line em{font-style:normal;color:var(--red-bright)}
+    .cta-row{display:flex;gap:14px;justify-content:flex-start;flex-wrap:wrap}
+    .cta-row .btn{font-size:1.05rem;padding:17px 44px}
+    .cta-row .btn-outline{font-size:1.05rem;padding:15px 36px}
+    .fam-facts{
+      list-style:none;display:flex;justify-content:flex-start;flex-wrap:wrap;
+      margin-top:40px;
+    }
+    .fam-facts li{padding:2px 56px 2px 0}
+    .fam-facts b{display:block;font-size:1.6rem;font-weight:800;letter-spacing:-.015em}
+    .fam-facts span{font-size:.82rem;color:var(--ink-soft)}
+    @media (max-width:640px){
+      .fam-facts{flex-direction:column;gap:18px}
+      .fam-facts li{padding:0}
+    }
+    .scroll-cue{
+      position:absolute;left:50%;bottom:26px;z-index:3;
+      width:26px;height:26px;margin-left:-13px;
+      border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);
+      transform:rotate(45deg);opacity:.45;
+      animation:cue 1.8s ease-in-out infinite;
+    }
+    .scroll-cue:hover{opacity:.8}
+    @keyframes cue{
+      0%,100%{transform:rotate(45deg) translate(0,0);opacity:.35}
+      50%{transform:rotate(45deg) translate(5px,5px);opacity:.7}
+    }
+    @media (prefers-reduced-motion:reduce){ .scroll-cue{animation:none} }
+    /* first section clears the full-screen hero with the visitors-page rhythm */
+    .fam-hero + .wide{padding-top:76px}
+
+/* footer.css -- styles for the footer block.
+   Lifted from about.html verbatim; media queries regrouped by block. */
+
+.foot-bottom{margin-top:4px;padding-top:24px;border-top:1px solid #3a3a3a;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:.8rem}
+
+@media (max-width:900px){
+  .foot-top{grid-template-columns:1fr 1fr}
+}
+
+@media (max-width:900px){
+  .foot-brand{grid-column:1/-1}
+}
+
+@media (max-width:560px){
+  .foot-top{grid-template-columns:1fr}
+}
+
+/* group.css -- styles for the group block.
+   Lifted from about.html verbatim; media queries regrouped by block. */
+
+/* ---------- Groups & rows (same ledger as the other hubs) ---------- */
+    .group{margin-bottom:84px;scroll-margin-top:110px}
+
+.group-head{
+      display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+      border-bottom:2px solid var(--ink);padding-bottom:14px;
+    }
+
+.group-head h2{
+      font-size:.82rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+      line-height:1.3;
+    }
+
+.group-head a{font-size:.85rem;font-weight:600;color:var(--red);white-space:nowrap}
+
+.group-head a:hover{color:var(--red-bright)}
+
+.group-head .asof{font-size:.78rem;font-weight:600;color:var(--ink-soft);white-space:nowrap}
+
+.mission-copy{
+      padding:30px 0 6px;font-size:1.22rem;line-height:1.75;
+      color:var(--ink-soft);max-width:72ch;
+    }
+
+.mission-copy b{color:var(--ink);font-weight:700}
+
+.rows{list-style:none}
+
+.rows>li{
+      display:grid;grid-template-columns:minmax(200px,340px) minmax(0,1fr);
+      gap:clamp(24px,4vw,72px);
+      padding:26px 0;border-bottom:1px solid var(--line);
+    }
+
+.rows b{display:block;font-size:1.1rem;font-weight:700;letter-spacing:-.01em;line-height:1.35}
+
+.rows p{color:var(--ink-soft);font-size:.95rem;max-width:80ch}
+
+.rows p a{color:var(--red);font-weight:600}
+
+.rows p a:hover{color:var(--red-bright)}
+
+.rows .role{
+      display:block;margin-top:4px;
+      font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--red-bright);
+    }
+
+@media (max-width:760px){
+  .rows>li{grid-template-columns:1fr;gap:8px}
+}
+
+/* Two-column variant: entries stack name over description */
+    .rows.two-col{display:grid;grid-template-columns:1fr 1fr;column-gap:clamp(32px,5vw,90px)}
+
+.rows.two-col>li{grid-template-columns:1fr;gap:6px;align-content:start}
+
+@media (max-width:760px){
+  .rows.two-col{grid-template-columns:1fr}
+}
+
+/* header.css -- styles for the header block.
+   Lifted from about.html verbatim; media queries regrouped by block. */
+
+.menu>li>a.is-here{color:var(--red);font-weight:600}
+
+/* invited.css -- styles for the invited block.
+   Lifted from volunteers.html verbatim; media queries regrouped by block. */
+
+    /* ---------- Everyone's invited: full-bleed greet photo behind ---------- */
+    .invited{
+      position:relative;overflow:hidden;
+      padding:110px 24px;text-align:center;margin-bottom:84px;
+      color:#fff;
+    }
+    .invited::before{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(165deg,#330707 0%,#1e0303 100%);
+    }
+    .invited>*{position:relative;z-index:1}
+    .invited h2{font-size:clamp(1.9rem,3.2vw,2.6rem);font-weight:800;margin-bottom:14px;text-shadow:0 2px 18px rgba(0,0,0,.4)}
+    .invited p{color:rgba(255,255,255,.9);max-width:72ch;margin:0 auto 10px;font-size:.98rem}
+
+/* link-group.css -- styles for the link-group block.
+   Lifted from volunteers.html verbatim; media queries regrouped by block. */
+
+    .rows time{
+      display:block;margin-top:6px;
+      font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--red-bright);
+    }
+    .rows .more{font-size:.82rem;font-weight:600;color:var(--red);white-space:nowrap}
+    .rows>li.linkrow{display:block;padding:0}
+    .linkrow a{
+      display:grid;grid-template-columns:minmax(200px,340px) minmax(0,1fr);
+      gap:clamp(24px,4vw,72px);
+      padding:26px 0;
+    }
+    .linkrow a:hover b{color:var(--red)}
+
+    @media (max-width:760px){
+      .linkrow a{grid-template-columns:1fr;gap:8px}
+    }
+
+/* reunion-cta.css -- styles for the reunion-cta block.
+   Lifted from volunteers.html verbatim; media queries regrouped by block. */
+
+    /* ---------- Final RSVP ---------- */
+    .reunion-cta{text-align:center;padding:8px 24px 110px}
+    .reunion-cta h2{font-size:clamp(1.9rem,3.4vw,2.7rem);font-weight:800;margin-bottom:14px}
+    .reunion-cta p{color:var(--ink-soft);max-width:56ch;margin:0 auto 30px}
+    .reunion-cta .contact{
+      margin-top:26px;font-size:.85rem;color:var(--ink-soft);
+    }
+    .reunion-cta .contact a{color:var(--red);font-weight:600}
+    .reunion-cta .contact a:hover{color:var(--red-bright)}
+
+/* split-group.css -- styles for the split-group block.
+   Lifted from volunteers.html verbatim; media queries regrouped by block. */
+
+    /* ---------- Photo-beside layout, like the homepage feature split ---------- */
+    .split{
+      display:grid;grid-template-columns:minmax(0,3fr) minmax(280px,2fr);
+      gap:clamp(32px,5vw,90px);align-items:start;
+    }
+    .split.flip{grid-template-columns:minmax(280px,2fr) minmax(0,3fr)}
+    .split .photo-col{position:sticky;top:120px;display:grid;gap:28px}
+    .split figure{margin:0}
+    .split figure img{width:100%;display:block;border-radius:4px;box-shadow:0 18px 40px rgba(0,0,0,.14)}
+    .split figcaption{margin-top:10px;font-size:.78rem;color:var(--ink-soft)}
+    @media (max-width:900px){
+      .split,.split.flip{grid-template-columns:1fr}
+      .split .photo-col{position:static;order:-1}
+    }
+
+  </style>
+</head>
+<body>
+  <!-- ============ HEADER ============ -->
+  <header>
+    <nav class="wrap nav">
+      <a class="logo" href="index.html" aria-label="Big Apple Greeter home">
+        <video class="logo-video" src="assets/logo-nav.mp4" autoplay muted playsinline aria-hidden="true"></video>
+        <svg class="logo-svg" viewBox="0 0 2693.39 624.82" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Big Apple Greeter — A Welcoming Friend in New York City">
+          <text class="lg-name" x="553.78" y="326.31" textLength="2068" lengthAdjust="spacing">Big Apple Greeter</text>
+          <text class="lg-tag" x="595.64" y="521.7" textLength="1990" lengthAdjust="spacing">A Welcoming Friend in New York City</text>
+          <g>
+            <path fill="#d1483d" d="M344.52,405.78c3.95,3.69,3.85,9.81.78,14.2-2.59,3.7-10.17,6.45-14.48,2.78l-15.51-13.19-9.31,9.91,13.82,12.74c3.85,3.55,3.89,10.14,1.54,13.81-3.13,4.89-10.89,7.17-15.65,2.98-7.5-6.6-17.17-13.55-22.72-21.71-5.92-8.71-11.02-15.52-21.22-17.85.9-7.69-.42-16.77-5.43-22.29-5.03-5.55-12.23-8.34-20.72-9.07-1.4-14.19-12.52-24.69-26.95-24.01-.38-12.69-9.14-21.37-19.18-23.84-13.15-3.24-22.01,4.56-30.27,13.66-8.12,8.95-15.42,17.42-12.15,30.27,2.72,10.66,12.27,19.5,25.98,19.12.99,14.34,11.91,24.97,26.87,24.25.4,14.24,11.48,24.67,26.44,24.56,1.1,8.99,5.36,17,12.29,20.8,17.52,9.6,30.17-.08,42.35-17.2l12.11,11.31c8.15,7.61,18.45,10.56,29,5.94,9.04-3.96,15.21-12.99,14.9-24.52,14.34-1.04,24.95-11.77,24.22-26.8,15.01-.53,24.59-12.13,24.48-26.56,9.33-1.17,18.84-6.18,22.42-15.01,4.1-10.11,2.59-21.01-5.91-28.77l-90.42-82.59c-8.04-7.34-22.93-7.08-30.41.16-19.96,19.32-33.16,42.9-44.63,29.47-4.68-5.48-2.52-11.78,2.17-17.32,23.19-27.38,45.2-54.58,71.12-79.42,38.36-36.76,90.02-49,131.35-11.41,25.13,22.85,35.75,51.83,36.01,86.01.44,58.33-4.7,116.02-23.74,171.29-8.66,25.15-18.6,47.81-33.5,69.16-25.79,36.95-69.52,50.58-112.17,34.36-22.8-11.17-47.21-10.07-68.38,5.78-32.77,11.72-71.26,1.16-94.27-25.36-14.13-16.29-26.39-32.75-36.54-51.84-35.44-66.69-64.9-166.61-43.74-239.63,12.86-44.38,57.26-71.05,102.03-65.82,15.92,1.86,28.89,8.65,40.2,19.26l48.72,45.66-30.56,36.69c-8.72,10.47-6.46,25.86,3.53,34.4s25.32,8.02,34.96-2.44l25.41-27.57c4.34-4.7,11.82-2.54,16.04,1.34l89.25,81.97c4.15,3.81.62,13.29-2.73,15.36-4.42,2.74-11.06,2.19-15.24-1.65l-11.3-10.42-9.89,9.68,12.99,12.16c4.35,4.08,4.21,11.23.52,15.45-3.65,4.18-10.88,4.81-15.25.93l-14.07-12.5-9.17,10.26,13.99,13.05Z"/>
+            <path fill="#d1483d" d="M179.16,376.06c-4.05,4.62-11.57,3.6-15.24.48-3.59-3.05-5.15-11.27-1.68-15.02l13.34-14.43c3.71-4.01,10.35-4.51,14.82-1.54,3.57,2.37,6.27,10.57,2.91,14.4l-14.15,16.11Z"/>
+            <path fill="#d1483d" d="M233.69,424.03c-4.63,5.08-11.78,4.96-16.03,1.45-4.49-3.71-5.02-11.64-.94-16.06l12.36-13.4c4.47-4.85,12.33-4.42,16.42.15,4.44,4.97,3.02,11.61-1.36,16.41l-10.45,11.46Z"/>
+            <path fill="#d1483d" d="M206.41,400.08c-4.4,4.79-11.58,4.02-15.35.86-4.99-4.19-5.58-11.52-.81-16.44l14.24-14.68c3.58-3.69,12.74-.8,14.96,2.7,3,4.71,2.24,10.92-1.73,15.24l-11.31,12.34Z"/>
+            <path fill="#d1483d" d="M268.45,431.26c2.71,9.25-9.39,21.68-17.73,21.41-3.89-.12-8.94-4.16-9.84-8.15-2.12-9.4,10.41-20.68,16.29-21.06,5.14-.33,10.08,3.73,11.27,7.8Z"/>
+            <path fill="#6baa64" d="M161.18,35.76c4.72,6.25,11.84,10.02,19.84,12.76,21.45,7.29,45.93,16.23,63.24,30.36,22.12,21.37,30.81,47.83,32.84,78.15l51.89-51.11,10.39,9.28-34.58,34.21c-10.56,10.44-18.35,22.49-26.59,34.79-5.59,8.32-9.9,16.94-14.66,26.34-4.76-7.54-11.26-13.71-18.76-19.13l-33.13-24.19c-19.3-14.08-34.87-30.44-45.8-51.85-7.04-13.83-10.73-28.91-12.96-44.19-1.74-12.13.33-24.19,3.48-35.37h4.76l.04-.04ZM258.54,181.2c6.13-22.24,4.35-45.18-6.25-65.19-15.99-30.11-50.73-48.12-83.78-55.7-3.93,15.12,3.98,33.63,11.68,47.09,6.25,10.89,13.54,20.5,21.37,30.32,15.86,17.27,36.32,30.65,56.99,43.53v-.04Z"/>
+          </g>
+        </svg>
+      </a>
+
+      <ul class="menu" id="menu">
+        <li>
+          <a href="visitors.html">Visitors</a>
+        </li>
+        <li>
+          <a class="is-here" href="volunteers.html">Volunteers</a>
+        </li>
+        <li>
+          <a href="about.html">About Us</a>
+        </li>
+        <li>
+          <a href="support.html">Support Us</a>
+        </li>
+      </ul>
+
+      <div class="nav-actions">
+        <a class="btn btn-outline" href="register.html">Request a Greeter</a>
+        <a class="btn" href="https://bigapplegreeter.kindful.com" target="_blank" rel="noopener">Donate</a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Open menu">&#9776;</button>
+    </nav>
+    <a class="credit-link" href="https://jkmry.com" target="_blank" rel="noopener">JKMRY.COM</a>
+  </header>
+
+  <!-- ============ HERO: FULL-SCREEN TITLE FRAME ============ -->
+  <section class="fam-hero">
+    <video class="hero-img" id="famVideo" src="assets/volunteer.mp4" playsinline preload="metadata"
+           poster="assets/volunteer-poster.jpg"
+           aria-label="The Big Apple Greeter apple with a handshake at its heart"></video>
+
+    <div class="hero-overlay" id="famOverlay">
+      <h1 class="hero-title">You&rsquo;re already one of us.</h1>
+      <div class="hero-pitch">
+        <p class="free-line">The only thing left is making it <em>official</em>.</p>
+        <div class="cta-row">
+          <a class="btn" href="volunteer-register.html">Pull Up a Chair</a>
+          <button class="btn-watch" id="watchBtn" type="button">Meet the Family</button>
+        </div>
+      </div>
+      <a class="scroll-cue" href="#how" aria-label="Scroll to how we do things"></a>
+    </div>
+
+    <div class="hero-controls">
+      <button class="hero-btn" id="heroSound" aria-label="Mute video" title="Mute video">&#128266;</button>
+      <button class="hero-btn" id="heroToggle" aria-label="Play video" title="Play video">&#9654;</button>
+    </div>
+  </section>
+
+  <div class="wide">
+
+    <!-- ============ HOW WE DO THINGS ============ -->
+    <div class="group" id="how">
+      <div class="group-head">
+        <h2>How We Do Things Around Here</h2>
+      </div>
+      <div class="split">
+        <ul class="rows">
+          <li><b>Your neighborhood, your rules</b><p>You take up to six guests on an informal, unscripted walk through the streets you know cold. No script, no flag to hold, no memorized dates.</p></li>
+          <li><b>Your schedule</b><p>We pair you with visitors based on when you&rsquo;re free, plus your language, neighborhoods, and interests. Greet once a month or once a week. Family shows up when it can.</p></li>
+          <li><b>Your spots</b><p>The hidden places New Yorkers love and the tourist books miss. You share them like you would with a cousin in town. Yes, even that one.</p></li>
+          <li><b>Any borough</b><p>All five, proudly. The more corners of the city the family covers, the better.</p></li>
+          <li><b>Any language</b><p>English is all you need. A second language is a superpower here, and a great excuse to use it.</p></li>
+          <li><b>What you get back</b><p>A good walk, new friends from all over the world, and the particular joy of watching someone fall for your city. It makes the world a little smaller and happier.</p></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============ THE EXTENDED FAMILY ============ -->
+    <div class="group" id="family">
+      <div class="group-head">
+        <h2>The Extended Family</h2>
+        <a href="https://bigapplegreeter.org/blog" target="_blank" rel="noopener">More family stories &rarr;</a>
+      </div>
+      <ul class="rows">
+        <li class="linkrow"><a href="https://bigapplegreeter.org/blog/the-meta-greeter" target="_blank" rel="noopener">
+          <span><b>Gail&rsquo;s 22 years at Big Apple Greeter</b><time>March 2026</time></span>
+          <p>Two decades of greets, and a hand in building the international network. This is what staying in the family looks like. <span class="more">Read &rarr;</span></p>
+        </a></li>
+        <li class="linkrow"><a href="https://bigapplegreeter.org/blog/greet-in-malegno-italy" target="_blank" rel="noopener">
+          <span><b>Greeter to Greeter: Malegno, Italy</b><time>June 2026</time></span>
+          <p>Volunteer Jerry Rumain and his husband visited local Greeters in a Northern Italian village. Cousins abroad, and the door is always open. <span class="more">Read &rarr;</span></p>
+        </a></li>
+        <li class="linkrow"><a href="https://bigapplegreeter.org/blog/greeted-in-london" target="_blank" rel="noopener">
+          <span><b>Greeted in London: Discovering Fitzrovia</b><time>January 2026</time></span>
+          <p>One of ours gets shown around by one of theirs. Greeters in more than 130 cities host each other like relatives. <span class="more">Read &rarr;</span></p>
+        </a></li>
+      </ul>
+    </div>
+
+    <!-- ============ A SEAT AT THE TABLE ============ -->
+    <div class="group">
+      <div class="group-head">
+        <h2>Not a Walker? There&rsquo;s Still a Seat at the Table</h2>
+      </div>
+      <ul class="rows">
+        <li><b>Communications Assistant</b><p>Help tell the family&rsquo;s stories from the lower Manhattan office at 1 Centre Street.</p></li>
+        <li><b>Government Relations Coordinator</b><p>Be our voice with the city. Somebody has to talk to the relatives downtown.</p></li>
+        <li><b>Greeter / Visitor Matchmaker</b><p>The best job title in the building: pair visitors with the Greeter they were always meant to meet.</p></li>
+        <li><b>Get in touch</b><p>Cara Ng, Director of Volunteers &amp; Communications: <a href="tel:+12126698198" style="color:var(--red);font-weight:600">212-669-8198</a> or <a href="mailto:cara@bigapplegreeter.org" style="color:var(--red);font-weight:600">cara@bigapplegreeter.org</a></p></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ============ EVERYONE'S INVITED ============ -->
+  <section class="invited">
+    <h2>Everyone&rsquo;s invited. Always have been.</h2>
+    <p>Volunteer opportunities are open to everyone without regard to race, ethnicity, color, creed, country of origin, gender identity, sexual orientation, age, marital status, or disability.</p>
+    <p>New Yorkers with disabilities are warmly welcomed as volunteers, and our office at 1 Centre Street is ADA compliant.</p>
+  </section>
+
+  <!-- ============ FINAL RSVP ============ -->
+  <section class="reunion-cta">
+    <h2>Join us.</h2>
+    <p>The application takes a few minutes. The stories you&rsquo;ll tell on your greets took you a lifetime in this city. You&rsquo;re ready.</p>
+    <a class="btn" style="font-size:1.05rem;padding:17px 44px" href="volunteer-register.html">Be a Greeter</a>
+    <p class="contact">Questions first? <a href="mailto:opportunities@bigapplegreeter.org">opportunities@bigapplegreeter.org</a> &nbsp;&middot;&nbsp; <a href="tel:+12126698198">212-669-8198</a></p>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <img src="assets/iga-logo.png" alt="International Greeter Association">
+          <p>A free welcome-visitor service from NYC volunteers.</p>
+        </div>
+        <div>
+          <h5>Visitors</h5>
+          <ul>
+            <li><a href="register.html">Request a Greeter</a></li>
+            <li><a href="visitors.html#faqs">Visitor FAQs</a></li>
+            <li><a href="visitors.html#nyc">About NYC</a></li>
+            <li><a href="visitors.html#blog">Blog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Get Involved</h5>
+          <ul>
+            <li><a href="volunteers.html">Become a Greeter</a></li>
+            <li><a href="#">Volunteer FAQs</a></li>
+            <li><a href="support.html#why">Why Give</a></li>
+            <li><a href="support.html#ways">Ways to Give</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>About</h5>
+          <ul>
+            <li><a href="about.html#mission">Our Mission &amp; History</a></li>
+            <li><a href="about.html#board">Board of Directors</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="about.html#iga">International Greeter Association</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="foot-bottom">
+        <span>&copy; Big Apple Greeter. All rights reserved.</span>
+        <span><a href="#">Greeter Log-In</a> &nbsp;&middot;&nbsp; <a href="#">Visitor Log-In</a></span>
+      </div>
+    </div>
+  </footer>
+
+<script>
+  // Mobile menu toggle
+  document.getElementById('hamburger').addEventListener('click', function(){
+    document.getElementById('menu').classList.toggle('open');
+  });
+
+  // Scroll fade-in: hero cascades, groups fade in on scroll
+  (function(){
+    var heroItems = document.querySelectorAll('.hero-title, .free-line, .cta-row .btn, .cta-row .btn-watch, .fam-facts li');
+    heroItems.forEach(function(el, i){
+      el.classList.add('reveal');
+      el.style.setProperty('--fade-delay', (i * 0.12) + 's');
+    });
+    document.querySelectorAll('.group, .invited, .reunion-cta').forEach(function(el){
+      el.classList.add('reveal');
+    });
+
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -8% 0px' });
+      document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+    } else {
+      document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+    }
+  })();
+</script>
+<script>
+  // Nav logo: play one full cycle on load, then animate only while hovering the nav.
+  // No loop attribute, so every cycle parks on the last frame.
+  (function(){
+    var v = document.querySelector('.logo-video');
+    var bar = document.querySelector('header');
+    if (!v || !bar) return;
+    var over = false;
+    bar.addEventListener('mouseenter', function(){ over = true; if (v.ended) v.play(); });
+    bar.addEventListener('mouseleave', function(){ over = false; });
+    v.addEventListener('ended', function(){ if (over) v.play(); });
+  })();
+</script>
+<script>
+  // Family reel: same player as the visitors page (pitch overlay = paused
+  // state, corner controls), with the overlay fading out at frame 28 and
+  // back in at frame 325 (29.97 fps: 0.934s / 10.844s).
+  (function(){
+    var hero = document.querySelector('.fam-hero');
+    var v = document.getElementById('famVideo');
+    var overlay = document.getElementById('famOverlay');
+    var watch = document.getElementById('watchBtn');
+    var ht = document.getElementById('heroToggle');
+    var hs = document.getElementById('heroSound');
+    if (!hero || !v || !overlay) return;
+
+    var FPS = 30000 / 1001;
+    var OUT = 28 / FPS, IN = 325 / FPS;
+
+    var syncPlay = function(){
+      var paused = v.paused;
+      hero.classList.toggle('is-playing', !paused);
+      ht.innerHTML = paused ? '&#9654;' : '&#10073;&#10073;';
+      var label = (paused ? 'Play' : 'Pause') + ' video';
+      ht.setAttribute('aria-label', label);
+      ht.setAttribute('title', label);
+    };
+    var syncSound = function(){
+      hs.innerHTML = v.muted ? '&#128263;' : '&#128266;';
+      var label = (v.muted ? 'Unmute' : 'Mute') + ' video';
+      hs.setAttribute('aria-label', label);
+      hs.setAttribute('title', label);
+    };
+
+    watch.addEventListener('click', function(){ v.play(); });
+    // The whole overlay starts the reel, but links and buttons keep their jobs
+    overlay.addEventListener('click', function(e){
+      if (e.target.closest('a,button')) return;
+      v.play();
+    });
+    ht.addEventListener('click', function(){
+      if (v.paused) { v.play(); } else { v.pause(); }
+    });
+    hs.addEventListener('click', function(){
+      v.muted = !v.muted;
+      syncSound();
+    });
+
+    // When the reel finishes, bring the pitch back with its full cascade
+    v.addEventListener('ended', function(){
+      var items = overlay.querySelectorAll('.reveal');
+      items.forEach(function(el){ el.classList.remove('in'); });
+      void overlay.offsetWidth;
+      items.forEach(function(el){ el.classList.add('in'); });
+    });
+
+    v.addEventListener('play', syncPlay);
+    v.addEventListener('pause', syncPlay);
+    v.addEventListener('ended', syncPlay);
+    v.addEventListener('volumechange', syncSound);
+    syncPlay(); syncSound();
+
+    // Frame-timed overlay: hidden between frames 28 and 325 while playing
+    var tick = function(){
+      var t = v.currentTime;
+      hero.classList.toggle('is-watching', !v.paused && t > OUT && t < IN);
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  })();
+</script>
+</body>
+</html>

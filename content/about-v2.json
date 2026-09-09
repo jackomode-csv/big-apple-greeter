@@ -1,6 +1,8 @@
 {
   "title": "About Us - Big Apple Greeter",
   "description": "Big Apple Greeter's mission and history, our board of directors, and the International Greeter Association that grew from one New Yorker's idea in 1992.",
+  "hero_reveal": ".page-head .eyebrow, .page-head h1, .page-head .intro",
+  "block_reveal": ".group, .photo-banner, .story-cta",
   "blocks": [
     {
       "type": "header",

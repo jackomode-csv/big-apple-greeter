@@ -1,0 +1,237 @@
+{
+  "title": "Become a Greeter - Big Apple Greeter",
+  "description": "Proud New Yorker? You're already one of us. Join Big Apple Greeter's volunteer family and show visitors the city the way you live it.",
+  "hero_reveal": ".hero-title, .free-line, .cta-row .btn, .cta-row .btn-watch, .fam-facts li",
+  "block_reveal": ".group, .invited, .reunion-cta",
+  "blocks": [
+    {
+      "type": "header",
+      "note": "HEADER",
+      "home": "index.html",
+      "menu": [
+        {
+          "href": "visitors.html",
+          "label": "Visitors",
+          "here": false
+        },
+        {
+          "href": "volunteers.html",
+          "label": "Volunteers",
+          "here": true
+        },
+        {
+          "href": "about.html",
+          "label": "About Us",
+          "here": false
+        },
+        {
+          "href": "support.html",
+          "label": "Support Us",
+          "here": false
+        }
+      ]
+    },
+    {
+      "type": "fam-hero",
+      "note": "HERO: FULL-SCREEN TITLE FRAME",
+      "video": "assets/volunteer.mp4",
+      "poster": "assets/volunteer-poster.jpg",
+      "video_label": "The Big Apple Greeter apple with a handshake at its heart",
+      "heading": "You&rsquo;re already one of us.",
+      "pitch": "The only thing left is making it <em>official</em>.",
+      "buttons": [
+        {
+          "href": "volunteer-register.html",
+          "label": "Pull Up a Chair"
+        }
+      ],
+      "watch_label": "Meet the Family",
+      "cue_href": "#how",
+      "cue_label": "Scroll to how we do things"
+    },
+    {
+      "type": "split-group",
+      "note": "HOW WE DO THINGS",
+      "id": "how",
+      "heading": "How We Do Things Around Here",
+      "items": [
+        {
+          "term": "Your neighborhood, your rules",
+          "def": "You take up to six guests on an informal, unscripted walk through the streets you know cold. No script, no flag to hold, no memorized dates."
+        },
+        {
+          "term": "Your schedule",
+          "def": "We pair you with visitors based on when you&rsquo;re free, plus your language, neighborhoods, and interests. Greet once a month or once a week. Family shows up when it can."
+        },
+        {
+          "term": "Your spots",
+          "def": "The hidden places New Yorkers love and the tourist books miss. You share them like you would with a cousin in town. Yes, even that one."
+        },
+        {
+          "term": "Any borough",
+          "def": "All five, proudly. The more corners of the city the family covers, the better."
+        },
+        {
+          "term": "Any language",
+          "def": "English is all you need. A second language is a superpower here, and a great excuse to use it."
+        },
+        {
+          "term": "What you get back",
+          "def": "A good walk, new friends from all over the world, and the particular joy of watching someone fall for your city. It makes the world a little smaller and happier."
+        }
+      ]
+    },
+    {
+      "type": "link-group",
+      "note": "THE EXTENDED FAMILY",
+      "id": "family",
+      "heading": "The Extended Family",
+      "link": {
+        "href": "https://bigapplegreeter.org/blog",
+        "label": "More family stories &rarr;"
+      },
+      "items": [
+        {
+          "href": "https://bigapplegreeter.org/blog/the-meta-greeter",
+          "term": "Gail&rsquo;s 22 years at Big Apple Greeter",
+          "date": "March 2026",
+          "def": "Two decades of greets, and a hand in building the international network. This is what staying in the family looks like.",
+          "more": "Read &rarr;"
+        },
+        {
+          "href": "https://bigapplegreeter.org/blog/greet-in-malegno-italy",
+          "term": "Greeter to Greeter: Malegno, Italy",
+          "date": "June 2026",
+          "def": "Volunteer Jerry Rumain and his husband visited local Greeters in a Northern Italian village. Cousins abroad, and the door is always open.",
+          "more": "Read &rarr;"
+        },
+        {
+          "href": "https://bigapplegreeter.org/blog/greeted-in-london",
+          "term": "Greeted in London: Discovering Fitzrovia",
+          "date": "January 2026",
+          "def": "One of ours gets shown around by one of theirs. Greeters in more than 130 cities host each other like relatives.",
+          "more": "Read &rarr;"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "note": "A SEAT AT THE TABLE",
+      "heading": "Not a Walker? There&rsquo;s Still a Seat at the Table",
+      "rows": {
+        "items": [
+          {
+            "term": "Communications Assistant",
+            "def": "Help tell the family&rsquo;s stories from the lower Manhattan office at 1 Centre Street."
+          },
+          {
+            "term": "Government Relations Coordinator",
+            "def": "Be our voice with the city. Somebody has to talk to the relatives downtown."
+          },
+          {
+            "term": "Greeter / Visitor Matchmaker",
+            "def": "The best job title in the building: pair visitors with the Greeter they were always meant to meet."
+          },
+          {
+            "term": "Get in touch",
+            "def": "Cara Ng, Director of Volunteers &amp; Communications: <a href=\"tel:+12126698198\" style=\"color:var(--red);font-weight:600\">212-669-8198</a> or <a href=\"mailto:cara@bigapplegreeter.org\" style=\"color:var(--red);font-weight:600\">cara@bigapplegreeter.org</a>"
+          }
+        ]
+      }
+    },
+    {
+      "type": "invited",
+      "note": "EVERYONE'S INVITED",
+      "heading": "Everyone&rsquo;s invited. Always have been.",
+      "paragraphs": [
+        {
+          "text": "Volunteer opportunities are open to everyone without regard to race, ethnicity, color, creed, country of origin, gender identity, sexual orientation, age, marital status, or disability."
+        },
+        {
+          "text": "New Yorkers with disabilities are warmly welcomed as volunteers, and our office at 1 Centre Street is ADA compliant."
+        }
+      ]
+    },
+    {
+      "type": "reunion-cta",
+      "note": "FINAL RSVP",
+      "heading": "Join us.",
+      "body": "The application takes a few minutes. The stories you&rsquo;ll tell on your greets took you a lifetime in this city. You&rsquo;re ready.",
+      "button": {
+        "href": "volunteer-register.html",
+        "label": "Be a Greeter"
+      },
+      "contact": "Questions first? <a href=\"mailto:opportunities@bigapplegreeter.org\">opportunities@bigapplegreeter.org</a> &nbsp;&middot;&nbsp; <a href=\"tel:+12126698198\">212-669-8198</a>"
+    },
+    {
+      "type": "footer",
+      "note": "FOOTER",
+      "blurb": "A free welcome-visitor service from NYC volunteers.",
+      "columns": [
+        {
+          "heading": "Visitors",
+          "links": [
+            {
+              "href": "register.html",
+              "label": "Request a Greeter"
+            },
+            {
+              "href": "visitors.html#faqs",
+              "label": "Visitor FAQs"
+            },
+            {
+              "href": "visitors.html#nyc",
+              "label": "About NYC"
+            },
+            {
+              "href": "visitors.html#blog",
+              "label": "Blog"
+            }
+          ]
+        },
+        {
+          "heading": "Get Involved",
+          "links": [
+            {
+              "href": "volunteers.html",
+              "label": "Become a Greeter"
+            },
+            {
+              "href": "#",
+              "label": "Volunteer FAQs"
+            },
+            {
+              "href": "support.html#why",
+              "label": "Why Give"
+            },
+            {
+              "href": "support.html#ways",
+              "label": "Ways to Give"
+            }
+          ]
+        },
+        {
+          "heading": "About",
+          "links": [
+            {
+              "href": "about.html#mission",
+              "label": "Our Mission &amp; History"
+            },
+            {
+              "href": "about.html#board",
+              "label": "Board of Directors"
+            },
+            {
+              "href": "#",
+              "label": "Contact Us"
+            },
+            {
+              "href": "about.html#iga",
+              "label": "International Greeter Association"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

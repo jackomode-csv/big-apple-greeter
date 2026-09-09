@@ -1,0 +1,20 @@
+/* link-group.css -- styles for the link-group block.
+   Lifted from volunteers.html verbatim; media queries regrouped by block. */
+
+    .rows time{
+      display:block;margin-top:6px;
+      font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--red-bright);
+    }
+    .rows .more{font-size:.82rem;font-weight:600;color:var(--red);white-space:nowrap}
+    .rows>li.linkrow{display:block;padding:0}
+    .linkrow a{
+      display:grid;grid-template-columns:minmax(200px,340px) minmax(0,1fr);
+      gap:clamp(24px,4vw,72px);
+      padding:26px 0;
+    }
+    .linkrow a:hover b{color:var(--red)}
+
+    @media (max-width:760px){
+      .linkrow a{grid-template-columns:1fr;gap:8px}
+    }
