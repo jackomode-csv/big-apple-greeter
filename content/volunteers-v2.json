@@ -3,6 +3,7 @@
   "description": "Proud New Yorker? You're already one of us. Join Big Apple Greeter's volunteer family and show visitors the city the way you live it.",
   "hero_reveal": ".hero-title, .free-line, .cta-row .btn, .cta-row .btn-watch, .fam-facts li",
   "block_reveal": ".group, .invited, .reunion-cta",
+  "asset_base": "https://pub-cce1ff52191541289291cb54a0c00642.r2.dev",
   "blocks": [
     {
       "type": "header",
