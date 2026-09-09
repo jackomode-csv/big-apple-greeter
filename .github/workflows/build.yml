@@ -5,26 +5,24 @@
 # push, so an edit made through admin/ (which commits JSON, not HTML) turns
 # into a live page without anyone running anything locally.
 #
-# NOT ENABLED YET. Two things have to be true first:
+# ENABLED. Both preconditions are met:
 #
-#   1. GitHub Pages has to be switched on for this repo, with the source set
-#      to "GitHub Actions" in Settings > Pages.
+#   1. GitHub Pages is on, with the source set to GitHub Actions.
 #
-#   2. The video has to move. assets/*.mp4 is gitignored - 206 MB across 13
-#      clips - so a Pages deploy right now would ship a site whose reels are
-#      all 404. Those files belong on Cloudflare R2, the way the portfolio
-#      serves its reels, and the 42 path references need rewriting to point
-#      at them.
-#
-# Until then this file is documentation of the intended pipeline.
+#   2. The video has moved. The web encodes live in the Cloudflare R2 bucket
+#      big-apple-greeter-content, under a _web/ prefix. The block-rendered
+#      pages take that host from asset_base in their content file; the seven
+#      hand-written pages take it from tools-set-video-host.py.
 
 name: Build and deploy
 
 on:
-  # Manual only, deliberately. The header above says this pipeline is not
-  # enabled yet, and a push trigger would have contradicted that by running
-  # on every commit and failing the deploy step against a Pages site that
-  # does not exist. Run it from the Actions tab when the pipeline is wanted.
+  # Every push to main deploys. That is the point of the pipeline: an edit
+  # made through admin/ commits JSON, not HTML, and should reach the live
+  # site without anyone running anything by hand. The drift check in the
+  # build job is what makes leaving this on safe.
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
