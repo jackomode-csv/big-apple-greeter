@@ -9,6 +9,12 @@
 # editor can drag items to reorder them. It writes a `type` key to identify
 # which block an item is - which is exactly the shape content/about-v2.json is
 # already in. That was not planned; it is just what a block model looks like.
+#
+# Every field a content file holds has to be described here. Anything missing
+# is dropped on save, silently. That is why asset_base and the two reveal
+# selectors appear as hidden fields below: they are page settings nobody should
+# be typing into, but leaving them out would strip them the first time anyone
+# hit Publish, and the site's video would go with them.
 
 backend:
   name: github
@@ -16,6 +22,10 @@ backend:
   branch: main
   # Sveltia needs an OAuth relay so the browser can log in to GitHub. Deploy
   # sveltia-cms-auth as a Cloudflare Worker (free) and put its URL here.
+  #
+  # This cannot be removed to make the editor open to everyone. The login is
+  # the permission to commit to the repo; without it there is nothing to write
+  # with. "No login" would mean a GitHub write token sitting in a public page.
   base_url: https://REPLACE-ME.workers.dev
 
 media_folder: assets
@@ -35,11 +45,17 @@ collections:
           - { name: title, label: Browser tab title, widget: string }
           - { name: description, label: Search-result description, widget: text }
 
+          # Page plumbing. Hidden so nobody edits it by accident, present so
+          # nobody loses it by saving.
+          - { name: hero_reveal, widget: hidden }
+          - { name: block_reveal, widget: hidden }
+          - { name: asset_base, widget: hidden }
+
           - name: blocks
             label: Blocks on this page
             label_singular: block
             widget: list
-            types:
+            types: &block_types
 
               - name: header
                 label: Site header
@@ -66,6 +82,29 @@ collections:
                   - { name: intro, label: Opening paragraph, widget: text }
                   - { name: cue_href, label: Scroll arrow jumps to, widget: string, default: "#mission" }
                   - { name: cue_label, label: Scroll arrow description, widget: string }
+
+              - name: fam-hero
+                label: Hero with background video
+                summary: "Video hero: {{fields.heading}}"
+                fields:
+                  - { name: note, widget: hidden, default: "HERO: FULL-SCREEN TITLE FRAME" }
+                  - { name: heading, label: Headline, widget: string }
+                  - { name: pitch, label: Line under the headline, widget: string }
+                  - name: buttons
+                    label: Buttons
+                    widget: list
+                    summary: "{{fields.label}}"
+                    fields:
+                      - { name: label, widget: string }
+                      - { name: href, widget: string }
+                  - { name: watch_label, label: Play-video button text, widget: string }
+                  - { name: cue_href, label: Scroll arrow jumps to, widget: string, default: "#how" }
+                  - { name: cue_label, label: Scroll arrow description, widget: string }
+                  # Video lives on Cloudflare, not in this repo, so these are
+                  # plain text rather than an upload. Ask Jack to change them.
+                  - { name: video, label: Video file (ask Jack), widget: string }
+                  - { name: poster, label: Still shown before it plays (ask Jack), widget: string }
+                  - { name: video_label, label: Video description for screen readers, widget: string }
 
               - name: group
                 label: Content section
@@ -99,6 +138,47 @@ collections:
                           - { name: role, label: Role, widget: string, required: false }
                           - { name: def, label: Description, widget: text }
 
+              - name: split-group
+                label: Content section, narrower column
+                summary: "{{fields.heading}}"
+                fields:
+                  - { name: note, widget: hidden, required: false }
+                  - { name: heading, label: Heading, widget: string }
+                  - { name: id, label: Anchor name, widget: string, required: false }
+                  - { name: flip, label: Put the narrow side on the left, widget: boolean, default: false, required: false }
+                  - name: items
+                    label: List
+                    widget: list
+                    summary: "{{fields.term}}"
+                    fields:
+                      - { name: term, label: Name or label, widget: string }
+                      - { name: def, label: Description, widget: text }
+
+              - name: link-group
+                label: List of links with dates
+                summary: "{{fields.heading}}"
+                fields:
+                  - { name: note, widget: hidden, required: false }
+                  - { name: heading, label: Heading, widget: string }
+                  - { name: id, label: Anchor name, widget: string, required: false }
+                  - name: link
+                    label: Link in the heading row
+                    widget: object
+                    required: false
+                    fields:
+                      - { name: label, widget: string }
+                      - { name: href, widget: string }
+                  - name: items
+                    label: Links
+                    widget: list
+                    summary: "{{fields.term}}"
+                    fields:
+                      - { name: term, label: Title, widget: string }
+                      - { name: date, label: Date, widget: string, hint: "Written out, e.g. March 2026" }
+                      - { name: def, label: Description, widget: text }
+                      - { name: href, label: Goes to, widget: string }
+                      - { name: more, label: Read-more text, widget: string, default: "Read &rarr;" }
+
               - name: sections-with-photo
                 label: Sections beside a photo
                 summary: "Sections beside a photo"
@@ -126,6 +206,19 @@ collections:
                   - { name: alt, label: Description for screen readers, widget: string }
                   - { name: caption, label: Caption, widget: string }
 
+              - name: invited
+                label: Statement band
+                summary: "Statement: {{fields.heading}}"
+                fields:
+                  - { name: note, widget: hidden, required: false }
+                  - { name: heading, label: Heading, widget: string }
+                  - name: paragraphs
+                    label: Paragraphs
+                    widget: list
+                    summary: "{{fields.text}}"
+                    fields:
+                      - { name: text, label: Paragraph, widget: text }
+
               - name: cta
                 label: Closing call to action
                 summary: "CTA: {{fields.heading}}"
@@ -140,6 +233,21 @@ collections:
                       - { name: label, widget: string }
                       - { name: href, widget: string }
                       - { name: outline, label: Outline style, widget: boolean, default: false, required: false }
+
+              - name: reunion-cta
+                label: Closing invitation, one button
+                summary: "Invitation: {{fields.heading}}"
+                fields:
+                  - { name: note, widget: hidden, default: "FINAL RSVP" }
+                  - { name: heading, label: Heading, widget: string }
+                  - { name: body, label: Paragraph, widget: text }
+                  - name: button
+                    label: Button
+                    widget: object
+                    fields:
+                      - { name: label, widget: string }
+                      - { name: href, widget: string }
+                  - { name: contact, label: Contact line underneath, widget: text, required: false }
 
               - name: footer
                 label: Site footer
@@ -164,3 +272,23 @@ collections:
               # containers left in the content model: the old `wide` wrapper is
               # applied by the renderer, and `split` became the content block
               # above. Nothing here asks the client to think about a div.
+
+      - name: volunteers
+        label: Become a Greeter
+        file: content/volunteers-v2.json
+        description: >
+          Everything on the volunteers page. Drag blocks to reorder them, click
+          one to edit its text, use the + button to add a new one.
+        fields:
+          - { name: title, label: Browser tab title, widget: string }
+          - { name: description, label: Search-result description, widget: text }
+          - { name: hero_reveal, widget: hidden }
+          - { name: block_reveal, widget: hidden }
+          - { name: asset_base, widget: hidden }
+          - name: blocks
+            label: Blocks on this page
+            label_singular: block
+            widget: list
+            # The same library both pages draw from. A block built for one page
+            # is available to the other the day it exists.
+            types: *block_types

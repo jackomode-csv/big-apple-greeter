@@ -46,8 +46,12 @@ Go to your website address and add `/admin` to the end:
 https://jackomode-csv.github.io/big-apple-greeter/admin/
 ```
 
-Sign in when it asks. You will see the page listed down the left. Click it, and
-the blocks that make up that page appear.
+Sign in when it asks. You will see the pages listed down the left. Click one,
+and the blocks that make up it appear.
+
+Two pages can be edited this way today: **About Us** and **Become a Greeter**.
+The rest of the site is being moved across to the same system, a page at a
+time. Until a page appears in that list, changes to it go through Jack.
 
 ### Changing words
 
